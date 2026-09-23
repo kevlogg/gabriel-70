@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { Copy, Check, Sparkles, Lock, LockOpen } from "lucide-react";
+import { Copy, Check, Lock, LockOpen, Sparkles } from "lucide-react";
 import type { GiftConfig } from "@/config/event";
 
 interface TreasureChestProps {
@@ -26,11 +26,10 @@ export default function TreasureChest({ gift }: TreasureChestProps) {
         const [entry] = entries;
         if (entry.isIntersecting && !hasAutoOpened) {
           setHasAutoOpened(true);
-          // Slight delay for magic effect when reaching section
           setTimeout(() => setIsOpen(true), 400);
         }
       },
-      { threshold: 0.35 }
+      { threshold: 0.3 }
     );
 
     observer.observe(node);
@@ -70,14 +69,14 @@ export default function TreasureChest({ gift }: TreasureChestProps) {
         width: "100%",
       }}
     >
-      {/* Header */}
+      {/* Section Header */}
       <div className="flex flex-col items-center text-center gap-2 max-w-lg">
         <span
           className="font-jakarta text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full"
           style={{
-            background: "linear-gradient(135deg, rgba(197,155,39,0.15), rgba(212,163,115,0.15))",
+            background: "linear-gradient(135deg, rgba(197,155,39,0.18), rgba(212,163,115,0.18))",
             color: "var(--gold)",
-            border: "1px solid rgba(197,155,39,0.3)",
+            border: "1px solid rgba(197,155,39,0.35)",
           }}
         >
           🎁 Mesa de Regalos
@@ -91,377 +90,385 @@ export default function TreasureChest({ gift }: TreasureChestProps) {
             lineHeight: 1.15,
           }}
         >
-          El cofre de los deseos
+          El cofre de los recuerdos
         </h3>
         <p
           className="font-jakarta text-sm sm:text-base"
           style={{ color: "var(--dark-brown-70)", lineHeight: 1.5 }}
         >
-          El mejor regalo es tu presencia. Pero si deseás hacernos un presente...
+          Tocá el cofre para abrirlo y descubrir los datos bancarios en su interior.
         </p>
       </div>
 
-      {/* Interactive 3D Treasure Chest SVG */}
-      <button
-        onClick={() => setIsOpen((prev) => !prev)}
-        type="button"
-        aria-label={isOpen ? "Cerrar cofre del tesoro" : "Abrir cofre del tesoro"}
-        className="group relative flex flex-col items-center cursor-pointer border-none bg-transparent focus:outline-none"
-        style={{ perspective: "1000px" }}
-      >
-        {/* Glow Aura when open */}
+      {/* Main Chest Stage Container */}
+      <div className="relative w-full max-w-xl flex flex-col items-center justify-center py-4">
+        {/* Glow & Sparkle Atmosphere */}
         <div
           aria-hidden="true"
-          className="absolute inset-0 rounded-full transition-all duration-700 pointer-events-none"
+          className="absolute inset-0 pointer-events-none transition-all duration-1000"
           style={{
             background: isOpen
-              ? "radial-gradient(circle, rgba(197,155,39,0.45) 0%, rgba(212,163,115,0.2) 50%, transparent 75%)"
-              : "radial-gradient(circle, rgba(197,155,39,0.1) 0%, transparent 60%)",
-            filter: "blur(20px)",
-            transform: isOpen ? "scale(1.4)" : "scale(0.9)",
-            opacity: isOpen ? 1 : 0.5,
+              ? "radial-gradient(ellipse at 50% 60%, rgba(212,163,115,0.4) 0%, rgba(197,155,39,0.25) 45%, transparent 75%)"
+              : "radial-gradient(ellipse at 50% 60%, rgba(197,155,39,0.1) 0%, transparent 60%)",
+            filter: "blur(30px)",
+            transform: isOpen ? "scale(1.2)" : "scale(0.8)",
+            opacity: isOpen ? 1 : 0.4,
           }}
         />
 
-        {/* Sparkles / Light rays container */}
+        {/* Floating Sparks when open */}
         {isOpen && (
           <div aria-hidden="true" className="absolute inset-0 pointer-events-none z-10 overflow-visible">
-            {[...Array(8)].map((_, i) => (
+            {[...Array(10)].map((_, i) => (
               <div
                 key={i}
                 className="absolute rounded-full animate-float"
                 style={{
-                  width: `${6 + (i % 4) * 3}px`,
-                  height: `${6 + (i % 4) * 3}px`,
-                  background: i % 2 === 0 ? "#C59B27" : "#F5EDD9",
-                  boxShadow: "0 0 10px #C59B27",
-                  top: `${15 + (i * 10)}%`,
-                  left: `${10 + i * 11}%`,
-                  animationDuration: `${2 + (i % 3)}s`,
-                  animationDelay: `${i * 0.15}s`,
+                  width: `${5 + (i % 4) * 3}px`,
+                  height: `${5 + (i % 4) * 3}px`,
+                  background: i % 2 === 0 ? "#FFD700" : "#FFF5D1",
+                  boxShadow: "0 0 12px #FFD700",
+                  top: `${10 + (i * 8)}%`,
+                  left: `${8 + i * 9}%`,
+                  animationDuration: `${2.2 + (i % 3)}s`,
+                  animationDelay: `${i * 0.1}s`,
                 }}
               />
             ))}
           </div>
         )}
 
-        {/* SVG Container */}
-        <div
-          className="relative transition-transform duration-300 group-hover:scale-105"
-          style={{
-            width: "min(300px, 75vw)",
-            filter: "drop-shadow(0 15px 30px rgba(43,33,24,0.25))",
-          }}
-        >
-          <svg
-            viewBox="0 0 300 220"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-full h-auto overflow-visible"
+        {/* Interactive Chest Graphic Container */}
+        <div className="relative w-full flex flex-col items-center">
+          
+          {/* TOP LID OF CHEST (PERSPECTIVE 3D) */}
+          <div
+            onClick={() => setIsOpen((prev) => !prev)}
+            role="button"
+            tabIndex={0}
+            aria-label={isOpen ? "Cerrar cofre" : "Abrir cofre"}
+            onKeyDown={(e) => e.key === "Enter" && setIsOpen((prev) => !prev)}
+            className="relative z-30 cursor-pointer select-none transition-transform duration-300 hover:scale-[1.02] focus:outline-none"
+            style={{
+              perspective: "1200px",
+              width: "min(340px, 85vw)",
+            }}
           >
-            <defs>
-              {/* Wood Gradients */}
-              <linearGradient id="woodBase" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor="#5C3119" />
-                <stop offset="50%" stopColor="#3E1F0E" />
-                <stop offset="100%" stopColor="#291307" />
-              </linearGradient>
-
-              <linearGradient id="woodLid" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor="#7A4324" />
-                <stop offset="60%" stopColor="#5C3119" />
-                <stop offset="100%" stopColor="#3E1F0E" />
-              </linearGradient>
-
-              <linearGradient id="goldStraps" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#F7E6A9" />
-                <stop offset="40%" stopColor="#C59B27" />
-                <stop offset="80%" stopColor="#8A6611" />
-                <stop offset="100%" stopColor="#D4A373" />
-              </linearGradient>
-
-              <linearGradient id="goldGlowInside" x1="0%" y1="100%" x2="0%" y2="0%">
-                <stop offset="0%" stopColor="#FFF2B2" stopOpacity="0.95" />
-                <stop offset="40%" stopColor="#C59B27" stopOpacity="0.85" />
-                <stop offset="100%" stopColor="#D4A373" stopOpacity="0" />
-              </linearGradient>
-
-              <radialGradient id="sunburst" cx="50%" cy="100%" r="90%">
-                <stop offset="0%" stopColor="#FFF7D6" stopOpacity="0.9" />
-                <stop offset="50%" stopColor="#C59B27" stopOpacity="0.5" />
-                <stop offset="100%" stopColor="#8A6611" stopOpacity="0" />
-              </radialGradient>
-            </defs>
-
-            {/* Glowing Light Burst when Open */}
-            {isOpen && (
-              <g className="animate-fade-in">
-                <circle cx="150" cy="90" r="85" fill="url(#sunburst)" />
-                {/* Light rays */}
-                <path d="M150 90 L110 10" stroke="#FDFBF7" strokeWidth="2.5" opacity="0.6" strokeDasharray="4 4" />
-                <path d="M150 90 L150 0" stroke="#FDFBF7" strokeWidth="3" opacity="0.7" />
-                <path d="M150 90 L190 10" stroke="#FDFBF7" strokeWidth="2.5" opacity="0.6" strokeDasharray="4 4" />
-                <path d="M150 90 L70 30" stroke="#FDFBF7" strokeWidth="2" opacity="0.4" />
-                <path d="M150 90 L230 30" stroke="#FDFBF7" strokeWidth="2" opacity="0.4" />
-              </g>
-            )}
-
-            {/* Inside Content Glow (Coins / Gold fill) */}
-            <rect x="25" y="85" width="250" height="25" rx="4" fill="url(#goldGlowInside)" opacity={isOpen ? 1 : 0} />
-            {isOpen && (
-              <g className="animate-scale-in">
-                {/* Gold coins stack inside */}
-                <ellipse cx="100" cy="95" rx="14" ry="6" fill="#F7E6A9" stroke="#C59B27" strokeWidth="1" />
-                <ellipse cx="120" cy="92" rx="16" ry="7" fill="#FFD700" stroke="#8A6611" strokeWidth="1" />
-                <ellipse cx="150" cy="90" rx="22" ry="9" fill="#FFF2B2" stroke="#C59B27" strokeWidth="1.5" />
-                <ellipse cx="180" cy="93" rx="16" ry="7" fill="#FFD700" stroke="#8A6611" strokeWidth="1" />
-                <ellipse cx="200" cy="96" rx="14" ry="6" fill="#F7E6A9" stroke="#C59B27" strokeWidth="1" />
-                {/* Sparkle star inside */}
-                <path d="M150 78 L152 84 L158 86 L152 88 L150 94 L148 88 L142 86 L148 84 Z" fill="#FFF" />
-              </g>
-            )}
-
-            {/* CHEST BASE */}
-            <rect x="20" y="95" width="260" height="110" rx="12" fill="url(#woodBase)" stroke="#1A0B04" strokeWidth="3" />
-            
-            {/* Wooden Planks details on Base */}
-            <line x1="20" y1="130" x2="280" y2="130" stroke="#291307" strokeWidth="1.5" opacity="0.6" />
-            <line x1="20" y1="165" x2="280" y2="165" stroke="#291307" strokeWidth="1.5" opacity="0.6" />
-
-            {/* Gold Straps on Base (Left, Center, Right) */}
-            <rect x="45" y="95" width="22" height="110" fill="url(#goldStraps)" stroke="#5C4208" strokeWidth="1" />
-            <rect x="233" y="95" width="22" height="110" fill="url(#goldStraps)" stroke="#5C4208" strokeWidth="1" />
-
-            {/* Gold Rivets / Bolts on Straps */}
-            <circle cx="56" cy="110" r="2.5" fill="#FFF" opacity="0.9" />
-            <circle cx="56" cy="148" r="2.5" fill="#FFF" opacity="0.9" />
-            <circle cx="56" cy="185" r="2.5" fill="#FFF" opacity="0.9" />
-            <circle cx="244" cy="110" r="2.5" fill="#FFF" opacity="0.9" />
-            <circle cx="244" cy="148" r="2.5" fill="#FFF" opacity="0.9" />
-            <circle cx="244" cy="185" r="2.5" fill="#FFF" opacity="0.9" />
-
-            {/* Keyhole / Lock Plate on Base */}
-            <rect x="132" y="115" width="36" height="42" rx="6" fill="url(#goldStraps)" stroke="#3E2B04" strokeWidth="1.5" />
-            <circle cx="150" cy="130" r="7" fill="#1A0B04" />
-            <path d="M147 132 L153 132 L155 148 L145 148 Z" fill="#1A0B04" />
-            <circle cx="150" cy="130" r="3" fill="#C59B27" opacity="0.5" />
-
-            {/* CHEST LID (ANIMATED 3D ROTATION) */}
-            <g
+            {/* Chest Lid SVG */}
+            <div
               style={{
-                transformOrigin: "150px 95px",
-                transformBox: "fill-box",
+                transformOrigin: "50% 100%",
                 transform: isOpen
-                  ? "rotateX(-110deg) translateY(-20px) scaleY(0.9)"
-                  : "rotateX(0deg) translateY(0px)",
-                transition: "transform 0.85s cubic-bezier(0.34, 1.45, 0.64, 1)",
+                  ? "rotateX(-120deg) translateY(-25px) translateZ(-20px)"
+                  : "rotateX(0deg) translateY(0)",
+                transition: "transform 0.9s cubic-bezier(0.34, 1.45, 0.64, 1)",
+                filter: "drop-shadow(0 10px 15px rgba(30,15,5,0.4))",
               }}
             >
-              {/* Domed Lid SVG Path */}
-              <path
-                d="M20 95 C20 35, 280 35, 280 95 Z"
-                fill="url(#woodLid)"
-                stroke="#1A0B04"
-                strokeWidth="3"
-              />
-              {/* Lid Wood grain curve */}
-              <path
-                d="M20 95 C20 60, 280 60, 280 95"
-                fill="none"
-                stroke="#3E1F0E"
-                strokeWidth="2"
-                opacity="0.5"
-              />
+              <svg viewBox="0 0 340 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
+                <defs>
+                  <linearGradient id="lidWood" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#7C4323" />
+                    <stop offset="50%" stopColor="#542B14" />
+                    <stop offset="100%" stopColor="#3B1C0B" />
+                  </linearGradient>
+                  <linearGradient id="lidGold" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="#FFF3B0" />
+                    <stop offset="40%" stopColor="#D4A373" />
+                    <stop offset="70%" stopColor="#966F17" />
+                    <stop offset="100%" stopColor="#E6B84C" />
+                  </linearGradient>
+                </defs>
 
-              {/* Gold Straps on Lid */}
-              <path
-                d="M45 95 C45 42, 67 42, 67 95 Z"
-                fill="url(#goldStraps)"
-                stroke="#5C4208"
-                strokeWidth="1"
-              />
-              <path
-                d="M233 95 C233 42, 255 42, 255 95 Z"
-                fill="url(#goldStraps)"
-                stroke="#5C4208"
-                strokeWidth="1"
-              />
+                {/* Main Lid Arch */}
+                <path d="M15 95 C15 30, 325 30, 325 95 Z" fill="url(#lidWood)" stroke="#241106" strokeWidth="3" />
+                
+                {/* Wood Grain Lines */}
+                <path d="M20 95 C20 48, 320 48, 320 95" stroke="#3B1C0B" strokeWidth="2.5" opacity="0.6" fill="none" />
+                <path d="M35 95 C35 62, 305 62, 305 95" stroke="#3B1C0B" strokeWidth="2" opacity="0.4" fill="none" />
 
-              {/* Gold Rivets on Lid */}
-              <circle cx="56" cy="65" r="2.5" fill="#FFF" opacity="0.9" />
-              <circle cx="244" cy="65" r="2.5" fill="#FFF" opacity="0.9" />
+                {/* Gold Straps Left / Center / Right */}
+                <path d="M50 95 C50 36, 75 36, 75 95 Z" fill="url(#lidGold)" stroke="#523907" strokeWidth="1.2" />
+                <path d="M152 95 C152 30, 188 30, 188 95 Z" fill="url(#lidGold)" stroke="#523907" strokeWidth="1.2" />
+                <path d="M265 95 C265 36, 290 36, 290 95 Z" fill="url(#lidGold)" stroke="#523907" strokeWidth="1.2" />
 
-              {/* Gold Latch on Lid (Overlaps keyhole when closed) */}
-              <rect
-                x="136"
-                y="80"
-                width="28"
-                height="24"
-                rx="4"
-                fill="url(#goldStraps)"
-                stroke="#3E2B04"
-                strokeWidth="1.5"
-              />
-              <circle cx="150" cy="92" r="3.5" fill="#3E2B04" />
-            </g>
-          </svg>
+                {/* Metallic Bolts */}
+                <circle cx="62.5" cy="58" r="3" fill="#FFF" opacity="0.9" />
+                <circle cx="170" cy="48" r="3" fill="#FFF" opacity="0.9" />
+                <circle cx="277.5" cy="58" r="3" fill="#FFF" opacity="0.9" />
+
+                {/* Front Latch Tongue */}
+                <rect x="150" y="80" width="40" height="20" rx="4" fill="url(#lidGold)" stroke="#3B2603" strokeWidth="1.5" />
+                <circle cx="170" cy="90" r="4.5" fill="#241106" />
+              </svg>
+            </div>
+          </div>
+
+          {/* INSIDE CHEST CAVITY & RISING SCROLL (WHERE THE MESSAGE & ALIAS LIVE) */}
+          <div
+            className="relative z-20 w-full flex flex-col items-center -mt-6"
+            style={{
+              width: "min(340px, 85vw)",
+            }}
+          >
+            {/* SVG CHEST BASE (INTERIOR CAVITY + FRONT WALL) */}
+            <div className="relative w-full">
+              <svg viewBox="0 0 340 160" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
+                <defs>
+                  <linearGradient id="interiorVelvet" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#2E0C06" />
+                    <stop offset="100%" stopColor="#120402" />
+                  </linearGradient>
+
+                  <linearGradient id="bodyWood" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#613318" />
+                    <stop offset="50%" stopColor="#44210E" />
+                    <stop offset="100%" stopColor="#2A1206" />
+                  </linearGradient>
+
+                  <linearGradient id="goldBand" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stopColor="#E6B84C" />
+                    <stop offset="50%" stopColor="#FFF3B0" />
+                    <stop offset="100%" stopColor="#966F17" />
+                  </linearGradient>
+
+                  <radialGradient id="insideLight" cx="50%" cy="30%" r="70%">
+                    <stop offset="0%" stopColor="#FFF7D6" stopOpacity="0.95" />
+                    <stop offset="45%" stopColor="#E6B84C" stopOpacity="0.75" />
+                    <stop offset="100%" stopColor="#966F17" stopOpacity="0" />
+                  </radialGradient>
+                </defs>
+
+                {/* Interior Cavity (Visible when open) */}
+                <rect x="20" y="5" width="300" height="40" rx="8" fill="url(#interiorVelvet)" />
+
+                {/* Gold Coins Inside Cavity */}
+                {isOpen && (
+                  <g className="animate-fade-in">
+                    <circle cx="150" cy="22" r="35" fill="url(#insideLight)" />
+                    {/* Gold coin stacks */}
+                    <ellipse cx="80" cy="28" rx="16" ry="6" fill="#FFD700" stroke="#8A6611" strokeWidth="1" />
+                    <ellipse cx="110" cy="24" rx="20" ry="8" fill="#FFF2B2" stroke="#C59B27" strokeWidth="1.2" />
+                    <ellipse cx="150" cy="20" rx="26" ry="10" fill="#FFD700" stroke="#8A6611" strokeWidth="1.5" />
+                    <ellipse cx="190" cy="24" rx="20" ry="8" fill="#FFF2B2" stroke="#C59B27" strokeWidth="1.2" />
+                    <ellipse cx="220" cy="28" rx="16" ry="6" fill="#FFD700" stroke="#8A6611" strokeWidth="1" />
+                    {/* Sparkle star */}
+                    <path d="M150 8 L152 16 L160 18 L152 20 L150 28 L148 20 L140 18 L148 16 Z" fill="#FFF" />
+                  </g>
+                )}
+
+                {/* CHEST FRONT BODY WALL */}
+                <rect x="15" y="25" width="310" height="130" rx="14" fill="url(#bodyWood)" stroke="#1A0A03" strokeWidth="3" />
+                
+                {/* Horizontal Plank Lines */}
+                <line x1="15" y1="68" x2="325" y2="68" stroke="#2A1206" strokeWidth="2" opacity="0.6" />
+                <line x1="15" y1="110" x2="325" y2="110" stroke="#2A1206" strokeWidth="2" opacity="0.6" />
+
+                {/* Gold Straps Left / Center / Right */}
+                <rect x="50" y="25" width="25" height="130" fill="url(#goldBand)" stroke="#4A3406" strokeWidth="1" />
+                <rect x="265" y="25" width="25" height="130" fill="url(#goldBand)" stroke="#4A3406" strokeWidth="1" />
+
+                {/* Metallic Studs */}
+                <circle cx="62.5" cy="45" r="3.5" fill="#FFF" opacity="0.9" />
+                <circle cx="62.5" cy="88" r="3.5" fill="#FFF" opacity="0.9" />
+                <circle cx="62.5" cy="130" r="3.5" fill="#FFF" opacity="0.9" />
+
+                <circle cx="277.5" cy="45" r="3.5" fill="#FFF" opacity="0.9" />
+                <circle cx="277.5" cy="88" r="3.5" fill="#FFF" opacity="0.9" />
+                <circle cx="277.5" cy="130" r="3.5" fill="#FFF" opacity="0.9" />
+
+                {/* Central Keyhole Lock Escutcheon */}
+                <rect x="145" y="45" width="50" height="55" rx="8" fill="url(#goldBand)" stroke="#3B2603" strokeWidth="2" />
+                <circle cx="170" cy="65" r="9" fill="#1A0A03" />
+                <path d="M166 67 L174 67 L177 86 L163 86 Z" fill="#1A0A03" />
+                <circle cx="170" cy="65" r="3" fill="#E6B84C" opacity="0.7" />
+              </svg>
+
+              {/* RISING SCROLL CARD FROM INSIDE THE CHEST */}
+              <div
+                className="absolute left-1/2 -translate-x-1/2 transition-all duration-800 ease-out z-10 w-[92%] sm:w-[88%]"
+                style={{
+                  top: isOpen ? "-160px" : "30px",
+                  opacity: isOpen ? 1 : 0,
+                  transform: isOpen
+                    ? "translateX(-50%) translateY(0) scale(1)"
+                    : "translateX(-50%) translateY(40px) scale(0.6)",
+                  pointerEvents: isOpen ? "auto" : "none",
+                  transition: "all 0.85s cubic-bezier(0.34, 1.4, 0.64, 1)",
+                }}
+              >
+                {/* Parchment Royal Scroll Card */}
+                <div
+                  className="rounded-3xl p-6 sm:p-8 flex flex-col gap-5 text-center shadow-2xl relative border-2"
+                  style={{
+                    background: "linear-gradient(165deg, #FFFDF8 0%, #FAF2E1 50%, #F5E6C4 100%)",
+                    borderColor: "#C59B27",
+                    boxShadow: "0 20px 40px rgba(43,33,24,0.3), 0 0 20px rgba(197,155,39,0.3)",
+                  }}
+                >
+                  {/* Decorative Scroll Crest */}
+                  <div className="flex items-center justify-center gap-2 text-[var(--gold)] mb-1">
+                    <span>✦</span>
+                    <span className="font-cormorant italic font-bold text-sm tracking-widest uppercase">
+                      Datos de Transferencia
+                    </span>
+                    <span>✦</span>
+                  </div>
+
+                  <p
+                    className="font-cormorant italic text-base sm:text-lg font-semibold"
+                    style={{ color: "var(--dark-brown)", lineHeight: 1.4 }}
+                  >
+                    “El mejor regalo es tu presencia y compartir este momento inolvidable junto a Gabriel.”
+                  </p>
+
+                  <div
+                    aria-hidden="true"
+                    style={{
+                      height: "1px",
+                      background: "linear-gradient(to right, transparent, rgba(197,155,39,0.5), transparent)",
+                    }}
+                  />
+
+                  {/* Bank & Holder Info */}
+                  <div className="flex flex-col items-center gap-1">
+                    <p
+                      className="font-jakarta text-xs font-bold tracking-widest uppercase"
+                      style={{ color: "var(--gold)", letterSpacing: "0.18em" }}
+                    >
+                      {gift.bankName}
+                    </p>
+                    <p className="font-jakarta text-xs sm:text-sm text-[var(--dark-brown-70)]">
+                      Titular: <span className="font-bold text-[var(--dark-brown)]">{gift.holderName}</span>
+                    </p>
+                  </div>
+
+                  {/* Alias Box */}
+                  <div
+                    className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-4 rounded-2xl w-full text-left"
+                    style={{
+                      background: "rgba(197,155,39,0.12)",
+                      border: "1.5px solid rgba(197,155,39,0.35)",
+                      boxSizing: "border-box",
+                    }}
+                  >
+                    <div className="flex-1 min-w-0 flex flex-col gap-0.5">
+                      <p
+                        className="font-jakarta font-bold text-[0.7rem] uppercase tracking-wider"
+                        style={{ color: "var(--gold)" }}
+                      >
+                        ALIAS
+                      </p>
+                      <p className="font-jakarta font-bold text-sm sm:text-base text-[var(--dark-brown)] break-all select-all">
+                        {gift.alias}
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => handleCopy(gift.alias, "alias")}
+                      type="button"
+                      aria-label={copied === "alias" ? "Alias copiado" : "Copiar Alias"}
+                      className="shrink-0 flex items-center justify-center gap-2 rounded-xl px-4 py-2 font-jakarta font-semibold text-xs transition-all duration-200 shadow-sm self-start sm:self-center"
+                      style={{
+                        background: copied === "alias" ? "#16a34a" : "linear-gradient(135deg, #C59B27, #D4A373)",
+                        color: "#fff",
+                        border: "none",
+                        cursor: "pointer",
+                      }}
+                    >
+                      {copied === "alias" ? (
+                        <>
+                          <Check size={14} aria-hidden="true" /> ¡Copiado!
+                        </>
+                      ) : (
+                        <>
+                          <Copy size={14} aria-hidden="true" /> Copiar Alias
+                        </>
+                      )}
+                    </button>
+                  </div>
+
+                  {/* CBU Box */}
+                  <div
+                    className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-4 rounded-2xl w-full text-left"
+                    style={{
+                      background: "rgba(197,155,39,0.12)",
+                      border: "1.5px solid rgba(197,155,39,0.35)",
+                      boxSizing: "border-box",
+                    }}
+                  >
+                    <div className="flex-1 min-w-0 flex flex-col gap-0.5">
+                      <p
+                        className="font-jakarta font-bold text-[0.7rem] uppercase tracking-wider"
+                        style={{ color: "var(--gold)" }}
+                      >
+                        CBU
+                      </p>
+                      <p className="font-jakarta font-bold text-xs sm:text-sm text-[var(--dark-brown)] break-all select-all tracking-wider">
+                        {gift.cbu}
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => handleCopy(gift.cbu, "cbu")}
+                      type="button"
+                      aria-label={copied === "cbu" ? "CBU copiado" : "Copiar CBU"}
+                      className="shrink-0 flex items-center justify-center gap-2 rounded-xl px-4 py-2 font-jakarta font-semibold text-xs transition-all duration-200 shadow-sm self-start sm:self-center"
+                      style={{
+                        background: copied === "cbu" ? "#16a34a" : "linear-gradient(135deg, #C59B27, #D4A373)",
+                        color: "#fff",
+                        border: "none",
+                        cursor: "pointer",
+                      }}
+                    >
+                      {copied === "cbu" ? (
+                        <>
+                          <Check size={14} aria-hidden="true" /> ¡Copiado!
+                        </>
+                      ) : (
+                        <>
+                          <Copy size={14} aria-hidden="true" /> Copiar CBU
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
         </div>
 
-        {/* Action Toggle Pill */}
-        <div className="mt-4 inline-flex items-center gap-2 px-5 py-2.5 rounded-full shadow-md transition-all duration-300 hover:scale-105"
+        {/* Action Toggle Button */}
+        <button
+          onClick={() => setIsOpen((prev) => !prev)}
+          type="button"
+          aria-label={isOpen ? "Cerrar cofre" : "Abrir cofre para ver datos"}
+          className="mt-6 z-30 inline-flex items-center gap-2.5 px-6 py-3 rounded-full shadow-lg transition-all duration-300 hover:scale-105 cursor-pointer"
           style={{
             background: isOpen
-              ? "linear-gradient(135deg, #C59B27, #D4A373)"
-              : "rgba(197,155,39,0.14)",
-            border: "1.5px solid rgba(197,155,39,0.45)",
-            color: isOpen ? "#FFF" : "var(--dark-brown)",
+              ? "linear-gradient(135deg, #8B4513, #A0522D)"
+              : "linear-gradient(135deg, #C59B27, #D4A373)",
+            color: "#FFF",
+            border: "none",
           }}
         >
           {isOpen ? (
             <>
-              <LockOpen size={16} aria-hidden="true" />
+              <LockOpen size={18} aria-hidden="true" />
               <span className="font-jakarta text-xs sm:text-sm font-semibold tracking-wide">
-                ¡Cofre abierto! Tocá para cerrar
+                Cerrar cofre
               </span>
             </>
           ) : (
             <>
-              <Lock size={16} aria-hidden="true" style={{ color: "var(--gold)" }} />
+              <Sparkles size={18} aria-hidden="true" />
               <span className="font-jakarta text-xs sm:text-sm font-semibold tracking-wide">
-                ✨ Hacé clic para abrir el cofre
+                ✨ Abrir cofre del tesoro
               </span>
             </>
           )}
-        </div>
-      </button>
-
-      {/* REVEALED GIFT DETAILS CARD (REVEALED WHEN OPEN) */}
-      <div
-        className="w-full flex flex-col gap-6 transition-all duration-700 overflow-hidden"
-        style={{
-          maxHeight: isOpen ? "800px" : "0px",
-          opacity: isOpen ? 1 : 0,
-          transform: isOpen ? "translateY(0)" : "translateY(24px)",
-          pointerEvents: isOpen ? "auto" : "none",
-        }}
-      >
-        <div
-          aria-hidden="true"
-          style={{
-            height: "1px",
-            background:
-              "linear-gradient(to right, transparent, rgba(197,155,39,0.4), transparent)",
-            margin: "0.5rem 0",
-          }}
-        />
-
-        {/* Bank info container */}
-        <div className="flex flex-col items-center gap-1.5 py-1 px-4 text-center">
-          <p
-            className="font-jakarta text-xs font-bold tracking-widest uppercase"
-            style={{ color: "var(--gold)", letterSpacing: "0.2em" }}
-          >
-            {gift.bankName}
-          </p>
-          <p
-            className="font-cormorant"
-            style={{
-              fontSize: "clamp(1.15rem, 2.5vw, 1.4rem)",
-              color: "var(--dark-brown-70)",
-              fontStyle: "italic",
-            }}
-          >
-            Titular: <span className="font-semibold not-italic" style={{ color: "var(--dark-brown)" }}>{gift.holderName}</span>
-          </p>
-        </div>
-
-        {/* Copy fields */}
-        <div className="flex flex-col gap-4">
-          <CopyRow
-            label="Alias"
-            value={gift.alias}
-            isCopied={copied === "alias"}
-            onCopy={() => handleCopy(gift.alias, "alias")}
-          />
-          <CopyRow
-            label="CBU"
-            value={gift.cbu}
-            isCopied={copied === "cbu"}
-            onCopy={() => handleCopy(gift.cbu, "cbu")}
-          />
-        </div>
+        </button>
       </div>
-    </div>
-  );
-}
-
-interface CopyRowProps {
-  label: string;
-  value: string;
-  isCopied: boolean;
-  onCopy: () => void;
-}
-
-function CopyRow({ label, value, isCopied, onCopy }: CopyRowProps) {
-  return (
-    <div
-      className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 rounded-2xl w-full"
-      style={{
-        padding: "1.25rem 1.5rem",
-        background: "rgba(197,155,39,0.08)",
-        border: "1.5px solid rgba(197,155,39,0.28)",
-        boxSizing: "border-box",
-      }}
-    >
-      <div className="flex-1 min-w-0 flex flex-col gap-1">
-        <p
-          className="font-jakarta font-bold"
-          style={{
-            fontSize: "0.75rem",
-            color: "var(--gold)",
-            letterSpacing: "0.14em",
-            textTransform: "uppercase",
-          }}
-        >
-          {label}
-        </p>
-        <p
-          className="font-jakarta font-semibold text-sm sm:text-base break-all select-all"
-          style={{
-            color: "var(--dark-brown)",
-            lineHeight: 1.4,
-            letterSpacing: label === "CBU" ? "0.05em" : "normal",
-          }}
-        >
-          {value}
-        </p>
-      </div>
-      <button
-        onClick={onCopy}
-        type="button"
-        aria-label={isCopied ? `${label} copiado` : `Copiar ${label}`}
-        aria-pressed={isCopied}
-        className="shrink-0 self-start sm:self-center flex items-center justify-center gap-2 rounded-xl font-jakarta font-semibold transition-all duration-200 shadow-sm mt-1 sm:mt-0"
-        style={{
-          padding: "0.65rem 1.25rem",
-          fontSize: "0.85rem",
-          background: isCopied ? "#16a34a" : "linear-gradient(135deg, #C59B27, #D4A373)",
-          color: "#fff",
-          border: "none",
-          cursor: "pointer",
-          transform: isCopied ? "scale(1.04)" : "scale(1)",
-        }}
-      >
-        {isCopied ? (
-          <>
-            <Check size={16} aria-hidden="true" /> ¡Copiado!
-          </>
-        ) : (
-          <>
-            <Copy size={16} aria-hidden="true" /> Copiar
-          </>
-        )}
-      </button>
     </div>
   );
 }
