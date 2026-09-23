@@ -15,8 +15,8 @@ export async function submitRsvp(
 ): Promise<RsvpActionState> {
   const raw = {
     name: formData.get("name"),
-    attending: formData.get("attending"),
-    companionsCount: formData.get("companionsCount"),
+    attending: formData.get("attending") ?? "yes",
+    companionsCount: formData.get("companionsCount") ?? 0,
     dietaryRestrictions: formData.get("dietaryRestrictions"),
     message: formData.get("message"),
   };

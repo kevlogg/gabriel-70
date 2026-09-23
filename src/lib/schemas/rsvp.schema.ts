@@ -25,14 +25,12 @@ export const RsvpFormSchema = z.object({
     .string()
     .min(2, "El nombre debe tener al menos 2 caracteres")
     .max(100, "El nombre es demasiado largo"),
-  attending: z.enum(["yes", "no"], {
-    error: "Por favor indicá si vas a asistir",
-  }),
+  attending: z.enum(["yes", "no"]).default("yes"),
   companionsCount: z.coerce
     .number()
     .int("Debe ser un número entero")
     .min(0, "No puede ser negativo")
-    .max(10, "Máximo 10 acompañantes"),
+    .max(10, "Máximo 10 integrantes"),
   dietaryRestrictions: DietaryRestriction,
   message: z.string().max(500, "El mensaje no puede superar los 500 caracteres").optional(),
 });

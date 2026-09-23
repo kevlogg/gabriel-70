@@ -35,7 +35,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es" className={`${cormorant.variable} ${plusJakarta.variable}`}>
-      <body className="font-jakarta antialiased">{children}</body>
+      <body className="font-jakarta antialiased min-h-screen w-full bg-[#FDFBF7] flex flex-col items-center justify-start overflow-x-hidden">
+        {children}
+      </body>
     </html>
   );
 }

@@ -38,11 +38,11 @@ export default function GiftCard({ gift }: GiftCardProps) {
   );
 
   return (
-    <div className="glass-card p-8 sm:p-12 md:p-14 flex flex-col gap-8">
+    <div className="glass-card p-6 sm:p-10 md:p-12 flex flex-col gap-6 sm:gap-8">
       {/* Header */}
-      <div className="flex items-center gap-5 sm:gap-6">
+      <div className="flex items-center gap-4 sm:gap-6">
         <div
-          className="shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center shadow-md"
+          className="shrink-0 w-12 h-12 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center shadow-md"
           style={{ background: "linear-gradient(135deg, #C59B27, #D4A373)" }}
           aria-hidden="true"
         >
@@ -61,7 +61,7 @@ export default function GiftCard({ gift }: GiftCardProps) {
             Regalos
           </h3>
           <p
-            className="font-jakarta text-base"
+            className="font-jakarta text-sm sm:text-base"
             style={{ color: "var(--dark-brown-70)", lineHeight: 1.5 }}
           >
             El mejor regalo es tu presencia. Pero si deseás hacernos un
@@ -80,15 +80,15 @@ export default function GiftCard({ gift }: GiftCardProps) {
       />
 
       {/* Bank info container */}
-      <div className="flex flex-col items-center gap-2 py-1">
+      <div className="flex flex-col items-center gap-1.5 py-1 px-4 text-center">
         <p
-          className="font-jakarta text-center text-xs font-bold tracking-widest uppercase"
+          className="font-jakarta text-xs font-bold tracking-widest uppercase"
           style={{ color: "var(--gold)", letterSpacing: "0.2em" }}
         >
           {gift.bankName}
         </p>
         <p
-          className="font-cormorant text-center"
+          className="font-cormorant"
           style={{
             fontSize: "clamp(1.15rem, 2.5vw, 1.4rem)",
             color: "var(--dark-brown-70)",
@@ -128,13 +128,14 @@ interface CopyRowProps {
 function CopyRow({ label, value, isCopied, onCopy }: CopyRowProps) {
   return (
     <div
-      className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl px-6 sm:px-8 py-5 sm:py-6"
+      className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 rounded-2xl p-5 sm:px-7 sm:py-5 w-full"
       style={{
         background: "rgba(197,155,39,0.08)",
-        border: "1.5px solid rgba(197,155,39,0.25)",
+        border: "1.5px solid rgba(197,155,39,0.28)",
+        boxSizing: "border-box",
       }}
     >
-      <div className="flex-1 min-w-0 flex flex-col gap-1 pr-2">
+      <div className="flex-1 min-w-0 flex flex-col gap-1">
         <p
           className="font-jakarta font-bold"
           style={{
@@ -142,13 +143,12 @@ function CopyRow({ label, value, isCopied, onCopy }: CopyRowProps) {
             color: "var(--gold)",
             letterSpacing: "0.14em",
             textTransform: "uppercase",
-            marginBottom: "0.1rem",
           }}
         >
           {label}
         </p>
         <p
-          className="font-jakarta font-semibold text-sm sm:text-base break-all"
+          className="font-jakarta font-semibold text-sm sm:text-base break-all select-all"
           style={{
             color: "var(--dark-brown)",
             lineHeight: 1.4,
@@ -160,11 +160,12 @@ function CopyRow({ label, value, isCopied, onCopy }: CopyRowProps) {
       </div>
       <button
         onClick={onCopy}
+        type="button"
         aria-label={isCopied ? `${label} copiado` : `Copiar ${label}`}
         aria-pressed={isCopied}
-        className="shrink-0 self-start sm:self-center flex items-center justify-center gap-2 rounded-xl px-5 py-3 font-jakarta font-semibold transition-all duration-200 shadow-sm"
+        className="shrink-0 self-start sm:self-center flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 sm:px-5 sm:py-3 font-jakarta font-semibold transition-all duration-200 shadow-sm mt-1 sm:mt-0"
         style={{
-          fontSize: "0.875rem",
+          fontSize: "0.85rem",
           background: isCopied ? "#16a34a" : "linear-gradient(135deg, #C59B27, #D4A373)",
           color: "#fff",
           border: "none",

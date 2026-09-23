@@ -7,9 +7,9 @@ interface VenueCardProps {
 
 export default function VenueCard({ venue }: VenueCardProps) {
   return (
-    <div className="glass-card p-8 sm:p-12 md:p-14 flex flex-col gap-8">
+    <div className="glass-card p-6 sm:p-10 md:p-12 flex flex-col gap-6 sm:gap-8">
       {/* Header */}
-      <div className="flex items-center gap-5 sm:gap-6">
+      <div className="flex items-center gap-4 sm:gap-6">
         <div
           className="shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center shadow-md"
           style={{ background: "linear-gradient(135deg, #C59B27, #D4A373)" }}

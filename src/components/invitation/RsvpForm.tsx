@@ -77,8 +77,8 @@ export default function RsvpForm() {
   }
 
   return (
-    <div className="glass-card p-8 sm:p-12 md:p-16">
-      <div className="flex flex-col gap-3 mb-10">
+    <div className="glass-card p-6 sm:p-10 md:p-12">
+      <div className="flex flex-col gap-3 mb-8">
         <h3
           className="font-cormorant"
           style={{
@@ -91,11 +91,36 @@ export default function RsvpForm() {
           Confirmá tu asistencia
         </h3>
         <p
-          className="font-jakarta text-base"
+          className="font-jakarta text-sm sm:text-base"
           style={{ color: "var(--dark-brown-70)", lineHeight: 1.5 }}
         >
           Por favor completá el formulario para poder reservarte un lugar especial.
         </p>
+      </div>
+
+      {/* Adult Event Highlight Callout */}
+      <div
+        className="flex items-start sm:items-center gap-3.5 p-4 sm:p-5 rounded-2xl mb-8 shadow-xs"
+        style={{
+          background: "linear-gradient(135deg, rgba(197,155,39,0.12), rgba(212,163,115,0.12))",
+          border: "1.5px solid rgba(197,155,39,0.35)",
+        }}
+      >
+        <span className="text-2xl shrink-0 leading-none pt-0.5 sm:pt-0" role="img" aria-label="Adultos">🔞</span>
+        <div className="flex flex-col gap-0.5">
+          <p
+            className="font-jakarta font-bold text-xs sm:text-sm uppercase tracking-wider"
+            style={{ color: "var(--gold)" }}
+          >
+            Evento exclusivo para adultos
+          </p>
+          <p
+            className="font-jakarta text-xs sm:text-sm font-medium"
+            style={{ color: "var(--dark-brown-70)", lineHeight: 1.4 }}
+          >
+            Para que todos podamos celebrar libremente, este evento está destinado únicamente a adultos.
+          </p>
+        </div>
       </div>
 
       {state.status === "error" && state.message && !state.errors && (
@@ -113,8 +138,11 @@ export default function RsvpForm() {
         </div>
       )}
 
-      <form ref={formRef} action={formAction} noValidate className="flex flex-col gap-7 sm:gap-8">
-        {/* Nombre */}
+      <form ref={formRef} action={formAction} noValidate className="flex flex-col gap-6 sm:gap-7">
+        {/* Hidden field for default attending status */}
+        <input type="hidden" name="attending" value="yes" />
+
+        {/* Nombre y Apellido */}
         <fieldset className="border-none p-0">
           <label htmlFor="rsvp-name" className="form-label">
             Nombre y Apellido <span aria-hidden="true" style={{ color: "#dc2626" }}>*</span>
@@ -137,63 +165,10 @@ export default function RsvpForm() {
           )}
         </fieldset>
 
-        {/* Asistencia */}
-        <fieldset className="border-none p-0">
-          <legend className="form-label mb-3">
-            ¿Vas a asistir? <span aria-hidden="true" style={{ color: "#dc2626" }}>*</span>
-          </legend>
-          <div className="flex gap-4">
-            {(["yes", "no"] as const).map((value) => (
-              <label
-                key={value}
-                className="flex items-center gap-2.5 cursor-pointer group"
-                style={{ flex: 1 }}
-              >
-                <input
-                  type="radio"
-                  name="attending"
-                  value={value}
-                  required
-                  className="sr-only"
-                  aria-required="true"
-                />
-                <span
-                  className="flex items-center justify-center w-full rounded-2xl py-4 px-4 font-jakarta font-semibold text-base transition-all duration-200 shadow-sm"
-                  style={{
-                    border: "1.5px solid rgba(197,155,39,0.4)",
-                    background: "var(--cream-2)",
-                    color: "var(--dark-brown)",
-                    cursor: "pointer",
-                  }}
-                  onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLSpanElement).style.background =
-                      value === "yes"
-                        ? "linear-gradient(135deg,#C59B27,#D4A373)"
-                        : "rgba(139,69,19,0.12)";
-                    (e.currentTarget as HTMLSpanElement).style.color =
-                      value === "yes" ? "#fff" : "var(--terracotta)";
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLSpanElement).style.background = "var(--cream-2)";
-                    (e.currentTarget as HTMLSpanElement).style.color = "var(--dark-brown)";
-                  }}
-                >
-                  {value === "yes" ? "✓ Sí, voy!" : "✗ No puedo"}
-                </span>
-              </label>
-            ))}
-          </div>
-          {state.errors?.attending && (
-            <p className="form-error" role="alert">
-              {state.errors.attending[0]}
-            </p>
-          )}
-        </fieldset>
-
-        {/* Acompañantes */}
+        {/* Integrantes del mismo hogar */}
         <fieldset className="border-none p-0">
           <label htmlFor="rsvp-companions" className="form-label">
-            Cantidad de acompañantes (sin contarte a vos)
+            Integrantes adicionales de tu mismo hogar
           </label>
           <input
             id="rsvp-companions"
@@ -204,8 +179,11 @@ export default function RsvpForm() {
             defaultValue="0"
             className={`form-input ${state.errors?.companionsCount ? "error" : ""}`}
             aria-invalid={!!state.errors?.companionsCount}
-            aria-describedby={state.errors?.companionsCount ? "rsvp-companions-error" : undefined}
+            aria-describedby={state.errors?.companionsCount ? "rsvp-companions-error" : "rsvp-companions-hint"}
           />
+          <p id="rsvp-companions-hint" className="font-jakarta text-xs opacity-60 mt-1.5 font-medium">
+            Ingresá la cantidad de integrantes que asistirán con vos (0 si venís solo/a)
+          </p>
           {state.errors?.companionsCount && (
             <p id="rsvp-companions-error" className="form-error" role="alert">
               {state.errors.companionsCount[0]}
@@ -221,7 +199,7 @@ export default function RsvpForm() {
           <select
             id="rsvp-dietary"
             name="dietaryRestrictions"
-            className="form-input"
+            className="form-input cursor-pointer"
             defaultValue="ninguna"
           >
             {Object.entries(DIETARY_LABELS).map(([value, label]) => (
@@ -232,7 +210,7 @@ export default function RsvpForm() {
           </select>
         </fieldset>
 
-        {/* Mensaje */}
+        {/* Mensaje / Dedicatoria */}
         <fieldset className="border-none p-0">
           <label htmlFor="rsvp-message" className="form-label">
             Dedicatoria o mensaje para Gabriel{" "}
@@ -252,11 +230,11 @@ export default function RsvpForm() {
           </p>
         </fieldset>
 
-        {/* Submit */}
+        {/* Submit Button */}
         <button
           type="submit"
           disabled={isPending}
-          className="btn-gold mt-4 py-4 text-base shadow-md"
+          className="btn-gold mt-2 py-4 text-base shadow-md"
           aria-label={isPending ? "Enviando tu confirmación..." : "Enviar confirmación"}
         >
           {isPending ? (

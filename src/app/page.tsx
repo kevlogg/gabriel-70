@@ -33,7 +33,7 @@ export default function InvitationPage() {
       {/* Main invitation content */}
       <main
         id="main-content"
-        className="min-h-screen"
+        className="min-h-screen w-full flex flex-col items-center justify-start"
         style={{
           background:
             "linear-gradient(180deg, #FDFBF7 0%, #FAF5EE 40%, #F5EDD9 80%, #FDFBF7 100%)",
@@ -45,14 +45,14 @@ export default function InvitationPage() {
         {/* ─── Decorative Top Flourish ─────────────────────── */}
         <div
           aria-hidden="true"
-          className="w-full h-2"
+          className="w-full h-2 shrink-0"
           style={{
             background:
               "linear-gradient(90deg, transparent, #C59B27 30%, #D4A373 50%, #C59B27 70%, transparent)",
           }}
         />
 
-        <div className="max-w-3xl mx-auto px-5 sm:px-8 py-20 md:py-32 flex flex-col gap-24 sm:gap-32 md:gap-40">
+        <div className="max-w-3xl w-full mx-auto px-6 sm:px-10 md:px-12 py-16 sm:py-24 md:py-32 flex flex-col gap-20 sm:gap-28 md:gap-36">
 
           {/* ─── HERO SECTION ────────────────────────────────── */}
           <section
