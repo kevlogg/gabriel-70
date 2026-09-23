@@ -77,23 +77,28 @@ export default function TreasureChest({ gift }: TreasureChestProps) {
       </div>
 
       {/* Lottie Animation Display */}
-      <div className="relative w-full flex flex-col items-center justify-center py-2">
+      <div className="relative w-full flex flex-col items-center justify-center py-6 sm:py-8 overflow-hidden">
         <div
           aria-hidden="true"
           className="absolute inset-0 rounded-full pointer-events-none"
           style={{
-            background: "radial-gradient(circle, rgba(197,155,39,0.25) 0%, rgba(212,163,115,0.1) 50%, transparent 70%)",
-            filter: "blur(25px)",
-            transform: "scale(1.1)",
+            background: "radial-gradient(circle, rgba(197,155,39,0.3) 0%, rgba(212,163,115,0.15) 50%, transparent 75%)",
+            filter: "blur(30px)",
+            transform: "scale(1.3)",
           }}
         />
 
-        <div className="relative z-10 w-full max-w-[280px] sm:max-w-[320px] flex justify-center">
+        <div className="relative z-10 w-full max-w-[460px] sm:max-w-[520px] flex justify-center items-center py-4">
           <DotLottieReact
             src="/treasure-chest.lottie"
             loop
             autoplay
-            style={{ width: "100%", height: "auto" }}
+            style={{
+              width: "100%",
+              height: "auto",
+              transform: "scale(1.85)",
+              transformOrigin: "center center",
+            }}
           />
         </div>
       </div>
