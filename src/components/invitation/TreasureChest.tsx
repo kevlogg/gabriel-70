@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { Copy, Check, Gift } from "lucide-react";
+import { Copy, Check, Sparkles, RefreshCw } from "lucide-react";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import type { GiftConfig } from "@/config/event";
 
@@ -12,7 +12,16 @@ interface TreasureChestProps {
 type CopyField = "alias" | "cbu" | null;
 
 export default function TreasureChest({ gift }: TreasureChestProps) {
+  const [isOpen, setIsOpen] = useState(false);
   const [copied, setCopied] = useState<CopyField>(null);
+
+  const handleOpen = useCallback(() => {
+    setIsOpen(true);
+  }, []);
+
+  const handleReset = useCallback(() => {
+    setIsOpen(false);
+  }, []);
 
   const handleCopy = useCallback(
     async (text: string, field: NonNullable<CopyField>) => {
@@ -39,117 +48,134 @@ export default function TreasureChest({ gift }: TreasureChestProps) {
 
   return (
     <div
-      className="glass-card flex flex-col items-center gap-6 sm:gap-8 w-full"
+      className="glass-card flex flex-col items-center justify-center w-full relative overflow-hidden"
       style={{
-        padding: "clamp(1.75rem, 5vw, 3rem)",
+        padding: "clamp(2rem, 6vw, 3.5rem)",
         boxSizing: "border-box",
+        minHeight: "380px",
       }}
     >
-      {/* Header */}
-      <div className="flex flex-col items-center text-center gap-2 max-w-lg w-full">
-        <span
-          className="font-jakarta text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full inline-block mb-1"
-          style={{
-            background: "linear-gradient(135deg, rgba(197,155,39,0.15), rgba(212,163,115,0.15))",
-            color: "var(--gold)",
-            border: "1px solid rgba(197,155,39,0.35)",
-          }}
-        >
-          🎁 Mesa de Regalos
-        </span>
-        <h3
-          className="font-cormorant"
-          style={{
-            fontSize: "clamp(1.75rem, 3.5vw, 2.25rem)",
-            fontWeight: 600,
-            color: "var(--dark-brown)",
-            lineHeight: 1.15,
-          }}
-        >
-          Mesa de Regalos
-        </h3>
-        <p
-          className="font-jakarta text-sm sm:text-base"
-          style={{ color: "var(--dark-brown-70)", lineHeight: 1.5 }}
-        >
-          El mejor regalo es tu presencia. Pero si deseás hacernos un presente...
-        </p>
-      </div>
+      {/* ─── STATE 1: CHEST CLOSED (ONLY THE BIG CHEST VISIBLE) ─── */}
+      {!isOpen && (
+        <div className="flex flex-col items-center justify-center w-full gap-6 animate-fade-in py-2">
+          {/* Subtle Glow Aura behind Chest */}
+          <div className="relative w-full flex flex-col items-center justify-center py-4">
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 rounded-full pointer-events-none"
+              style={{
+                background: "radial-gradient(circle, rgba(197,155,39,0.35) 0%, rgba(212,163,115,0.18) 55%, transparent 75%)",
+                filter: "blur(30px)",
+                transform: "scale(1.4)",
+              }}
+            />
 
-      {/* Lottie Animation Display */}
-      <div className="relative w-full flex flex-col items-center justify-center py-6 sm:py-8 overflow-hidden">
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 rounded-full pointer-events-none"
-          style={{
-            background: "radial-gradient(circle, rgba(197,155,39,0.3) 0%, rgba(212,163,115,0.15) 50%, transparent 75%)",
-            filter: "blur(30px)",
-            transform: "scale(1.3)",
-          }}
-        />
+            {/* Giant Interactive Lottie Chest */}
+            <button
+              onClick={handleOpen}
+              type="button"
+              aria-label="Abrir cofre para ver datos de regalo"
+              className="relative z-10 w-full max-w-[420px] sm:max-w-[500px] flex justify-center items-center cursor-pointer border-none bg-transparent focus:outline-none transition-transform duration-300 hover:scale-105"
+            >
+              <DotLottieReact
+                src="/treasure-chest.lottie"
+                loop
+                autoplay
+                style={{
+                  width: "100%",
+                  height: "auto",
+                  transform: "scale(2.1)",
+                  transformOrigin: "center center",
+                }}
+              />
+            </button>
+          </div>
 
-        <div className="relative z-10 w-full max-w-[460px] sm:max-w-[520px] flex justify-center items-center py-4">
-          <DotLottieReact
-            src="/treasure-chest.lottie"
-            loop
-            autoplay
+          {/* Action Call to Action Button */}
+          <button
+            onClick={handleOpen}
+            type="button"
+            className="btn-gold px-8 py-3.5 text-base shadow-lg animate-wax-pulse cursor-pointer"
+          >
+            <Sparkles size={18} aria-hidden="true" />
+            ✨ Tocá para abrir el cofre
+          </button>
+        </div>
+      )}
+
+      {/* ─── STATE 2: CHEST OPENED / DESVANECIDO (REVEALED MESSAGE & BANK DETAILS) ─── */}
+      {isOpen && (
+        <div className="flex flex-col items-center gap-6 w-full animate-scale-in">
+          {/* Main Phrase / Message */}
+          <div className="flex flex-col items-center text-center gap-3 max-w-lg px-2">
+            <p
+              className="font-cormorant italic font-semibold text-xl sm:text-2xl"
+              style={{ color: "var(--dark-brown)", lineHeight: 1.4 }}
+            >
+              “El mejor regalo es tu presencia y celebrar juntos este día tan especial.”
+            </p>
+          </div>
+
+          <div
+            aria-hidden="true"
+            className="w-full"
             style={{
-              width: "100%",
-              height: "auto",
-              transform: "scale(1.85)",
-              transformOrigin: "center center",
+              height: "1px",
+              background: "linear-gradient(to right, transparent, rgba(197,155,39,0.35), transparent)",
             }}
           />
-        </div>
-      </div>
 
-      <div
-        aria-hidden="true"
-        className="w-full"
-        style={{
-          height: "1px",
-          background: "linear-gradient(to right, transparent, rgba(197,155,39,0.35), transparent)",
-        }}
-      />
-
-      {/* Bank Info Container */}
-      <div
-        className="rounded-2xl p-5 sm:p-6 flex flex-col gap-4 w-full"
-        style={{
-          background: "linear-gradient(165deg, rgba(253,251,247,0.95), rgba(250,245,238,0.95))",
-          border: "1.5px solid rgba(197,155,39,0.3)",
-          boxShadow: "0 10px 30px rgba(43,33,24,0.06)",
-          boxSizing: "border-box",
-        }}
-      >
-        <div className="flex flex-col items-center gap-1 text-center">
-          <p
-            className="font-jakarta text-xs font-bold tracking-widest uppercase"
-            style={{ color: "var(--gold)", letterSpacing: "0.18em" }}
+          {/* Bank Info Container */}
+          <div
+            className="rounded-2xl p-5 sm:p-7 flex flex-col gap-4 w-full"
+            style={{
+              background: "linear-gradient(165deg, rgba(253,251,247,0.95), rgba(250,245,238,0.95))",
+              border: "1.5px solid rgba(197,155,39,0.35)",
+              boxShadow: "0 10px 30px rgba(43,33,24,0.06)",
+              boxSizing: "border-box",
+            }}
           >
-            {gift.bankName}
-          </p>
-          <p className="font-cormorant italic text-base sm:text-lg text-[var(--dark-brown-70)]">
-            Titular: <span className="font-semibold not-italic text-[var(--dark-brown)]">{gift.holderName}</span>
-          </p>
-        </div>
+            <div className="flex flex-col items-center gap-1 text-center">
+              <p
+                className="font-jakarta text-xs font-bold tracking-widest uppercase"
+                style={{ color: "var(--gold)", letterSpacing: "0.18em" }}
+              >
+                {gift.bankName}
+              </p>
+              <p className="font-cormorant italic text-base sm:text-lg text-[var(--dark-brown-70)]">
+                Titular: <span className="font-semibold not-italic text-[var(--dark-brown)]">{gift.holderName}</span>
+              </p>
+            </div>
 
-        {/* Copy fields */}
-        <div className="flex flex-col gap-3 w-full">
-          <CopyRow
-            label="Alias"
-            value={gift.alias}
-            isCopied={copied === "alias"}
-            onCopy={() => handleCopy(gift.alias, "alias")}
-          />
-          <CopyRow
-            label="CBU"
-            value={gift.cbu}
-            isCopied={copied === "cbu"}
-            onCopy={() => handleCopy(gift.cbu, "cbu")}
-          />
+            {/* Copy fields */}
+            <div className="flex flex-col gap-3.5 w-full">
+              <CopyRow
+                label="Alias"
+                value={gift.alias}
+                isCopied={copied === "alias"}
+                onCopy={() => handleCopy(gift.alias, "alias")}
+              />
+              <CopyRow
+                label="CBU"
+                value={gift.cbu}
+                isCopied={copied === "cbu"}
+                onCopy={() => handleCopy(gift.cbu, "cbu")}
+              />
+            </div>
+          </div>
+
+          {/* Reset button to show chest again */}
+          <button
+            onClick={handleReset}
+            type="button"
+            className="font-jakarta text-xs opacity-60 hover:opacity-100 font-semibold transition-opacity flex items-center gap-1.5 mt-1 cursor-pointer"
+            style={{ color: "var(--dark-brown)" }}
+          >
+            <RefreshCw size={13} aria-hidden="true" />
+            Volver a ver el cofre
+          </button>
         </div>
-      </div>
+      )}
     </div>
   );
 }
