@@ -38,30 +38,31 @@ export default function GiftCard({ gift }: GiftCardProps) {
   );
 
   return (
-    <div className="glass-card p-8 md:p-10 flex flex-col gap-6">
+    <div className="glass-card p-8 sm:p-12 md:p-14 flex flex-col gap-8">
       {/* Header */}
-      <div className="flex items-start gap-4">
+      <div className="flex items-center gap-5 sm:gap-6">
         <div
-          className="shrink-0 w-12 h-12 rounded-full flex items-center justify-center"
+          className="shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center shadow-md"
           style={{ background: "linear-gradient(135deg, #C59B27, #D4A373)" }}
           aria-hidden="true"
         >
-          <Gift size={22} color="#fff" />
+          <Gift size={26} color="#fff" />
         </div>
-        <div>
+        <div className="flex flex-col gap-1">
           <h3
             className="font-cormorant"
             style={{
-              fontSize: "clamp(1.4rem, 2.5vw, 1.75rem)",
+              fontSize: "clamp(1.75rem, 3.5vw, 2.25rem)",
               fontWeight: 600,
               color: "var(--dark-brown)",
+              lineHeight: 1.15,
             }}
           >
             Regalos
           </h3>
           <p
-            className="font-jakarta mt-1"
-            style={{ fontSize: "0.9rem", color: "var(--dark-brown-70)" }}
+            className="font-jakarta text-base"
+            style={{ color: "var(--dark-brown-70)", lineHeight: 1.5 }}
           >
             El mejor regalo es tu presencia. Pero si deseás hacernos un
             presente...
@@ -74,30 +75,32 @@ export default function GiftCard({ gift }: GiftCardProps) {
         style={{
           height: "1px",
           background:
-            "linear-gradient(to right, transparent, var(--gold-pale), transparent)",
+            "linear-gradient(to right, transparent, rgba(197,155,39,0.35), transparent)",
         }}
       />
 
-      {/* Bank name */}
-      <p
-        className="font-jakarta text-center text-sm font-semibold tracking-widest uppercase"
-        style={{ color: "var(--dark-brown-40)", letterSpacing: "0.15em" }}
-      >
-        {gift.bankName}
-      </p>
-      <p
-        className="font-cormorant text-center"
-        style={{
-          fontSize: "clamp(1rem, 2vw, 1.2rem)",
-          color: "var(--dark-brown-70)",
-          fontStyle: "italic",
-        }}
-      >
-        Titular: {gift.holderName}
-      </p>
+      {/* Bank info container */}
+      <div className="flex flex-col items-center gap-2 py-1">
+        <p
+          className="font-jakarta text-center text-xs font-bold tracking-widest uppercase"
+          style={{ color: "var(--gold)", letterSpacing: "0.2em" }}
+        >
+          {gift.bankName}
+        </p>
+        <p
+          className="font-cormorant text-center"
+          style={{
+            fontSize: "clamp(1.15rem, 2.5vw, 1.4rem)",
+            color: "var(--dark-brown-70)",
+            fontStyle: "italic",
+          }}
+        >
+          Titular: <span className="font-semibold not-italic" style={{ color: "var(--dark-brown)" }}>{gift.holderName}</span>
+        </p>
+      </div>
 
       {/* Copy fields */}
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-4">
         <CopyRow
           label="Alias"
           value={gift.alias}
@@ -125,22 +128,22 @@ interface CopyRowProps {
 function CopyRow({ label, value, isCopied, onCopy }: CopyRowProps) {
   return (
     <div
-      className="flex items-center justify-between gap-3 rounded-xl px-4 py-3"
+      className="flex items-center justify-between gap-4 rounded-2xl px-5 py-4"
       style={{
-        background: "rgba(197,155,39,0.07)",
-        border: "1px solid rgba(197,155,39,0.2)",
+        background: "rgba(197,155,39,0.08)",
+        border: "1.5px solid rgba(197,155,39,0.25)",
       }}
     >
-      <div className="flex-1 min-w-0">
+      <div className="flex-1 min-w-0 flex flex-col gap-0.5">
         <p
-          className="font-jakarta font-semibold"
-          style={{ fontSize: "0.7rem", color: "var(--gold)", letterSpacing: "0.1em", textTransform: "uppercase" }}
+          className="font-jakarta font-bold"
+          style={{ fontSize: "0.75rem", color: "var(--gold)", letterSpacing: "0.12em", textTransform: "uppercase" }}
         >
           {label}
         </p>
         <p
-          className="font-jakarta font-medium truncate"
-          style={{ fontSize: "0.95rem", color: "var(--dark-brown)" }}
+          className="font-jakarta font-semibold truncate"
+          style={{ fontSize: "1rem", color: "var(--dark-brown)" }}
         >
           {value}
         </p>
@@ -149,9 +152,9 @@ function CopyRow({ label, value, isCopied, onCopy }: CopyRowProps) {
         onClick={onCopy}
         aria-label={isCopied ? `${label} copiado` : `Copiar ${label}`}
         aria-pressed={isCopied}
-        className="shrink-0 flex items-center gap-1.5 rounded-lg px-3 py-1.5 font-jakarta font-semibold transition-all duration-200"
+        className="shrink-0 flex items-center gap-2 rounded-xl px-4 py-2.5 font-jakarta font-semibold transition-all duration-200 shadow-sm"
         style={{
-          fontSize: "0.8rem",
+          fontSize: "0.875rem",
           background: isCopied ? "#16a34a" : "linear-gradient(135deg, #C59B27, #D4A373)",
           color: "#fff",
           border: "none",
@@ -161,11 +164,11 @@ function CopyRow({ label, value, isCopied, onCopy }: CopyRowProps) {
       >
         {isCopied ? (
           <>
-            <Check size={13} aria-hidden="true" /> ¡Copiado!
+            <Check size={15} aria-hidden="true" /> ¡Copiado!
           </>
         ) : (
           <>
-            <Copy size={13} aria-hidden="true" /> Copiar
+            <Copy size={15} aria-hidden="true" /> Copiar
           </>
         )}
       </button>

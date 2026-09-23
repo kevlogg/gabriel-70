@@ -77,23 +77,24 @@ export default function RsvpForm() {
   }
 
   return (
-    <div className="glass-card p-8 md:p-10">
-      <div className="flex flex-col gap-2 mb-8">
+    <div className="glass-card p-8 sm:p-12 md:p-16">
+      <div className="flex flex-col gap-3 mb-10">
         <h3
           className="font-cormorant"
           style={{
-            fontSize: "clamp(1.6rem, 3.5vw, 2.2rem)",
+            fontSize: "clamp(1.75rem, 3.5vw, 2.25rem)",
             fontWeight: 600,
             color: "var(--dark-brown)",
+            lineHeight: 1.15,
           }}
         >
           Confirmá tu asistencia
         </h3>
         <p
-          className="font-jakarta"
-          style={{ fontSize: "0.95rem", color: "var(--dark-brown-70)" }}
+          className="font-jakarta text-base"
+          style={{ color: "var(--dark-brown-70)", lineHeight: 1.5 }}
         >
-          Por favor completá el formulario para que podamos organizarnos.
+          Por favor completá el formulario para poder reservarte un lugar especial.
         </p>
       </div>
 
@@ -101,10 +102,10 @@ export default function RsvpForm() {
         <div
           role="alert"
           aria-live="assertive"
-          className="mb-5 rounded-xl px-4 py-3 font-jakarta text-sm"
+          className="mb-8 rounded-2xl px-5 py-4 font-jakarta text-sm font-medium"
           style={{
             background: "rgba(220,38,38,0.08)",
-            border: "1px solid rgba(220,38,38,0.25)",
+            border: "1.5px solid rgba(220,38,38,0.25)",
             color: "#b91c1c",
           }}
         >
@@ -112,7 +113,7 @@ export default function RsvpForm() {
         </div>
       )}
 
-      <form ref={formRef} action={formAction} noValidate className="flex flex-col gap-5">
+      <form ref={formRef} action={formAction} noValidate className="flex flex-col gap-7 sm:gap-8">
         {/* Nombre */}
         <fieldset className="border-none p-0">
           <label htmlFor="rsvp-name" className="form-label">
@@ -138,10 +139,10 @@ export default function RsvpForm() {
 
         {/* Asistencia */}
         <fieldset className="border-none p-0">
-          <legend className="form-label mb-2">
+          <legend className="form-label mb-3">
             ¿Vas a asistir? <span aria-hidden="true" style={{ color: "#dc2626" }}>*</span>
           </legend>
-          <div className="flex gap-3">
+          <div className="flex gap-4">
             {(["yes", "no"] as const).map((value) => (
               <label
                 key={value}
@@ -157,7 +158,7 @@ export default function RsvpForm() {
                   aria-required="true"
                 />
                 <span
-                  className="flex items-center justify-center w-full rounded-xl py-3 font-jakarta font-semibold text-sm transition-all duration-200"
+                  className="flex items-center justify-center w-full rounded-2xl py-4 px-4 font-jakarta font-semibold text-base transition-all duration-200 shadow-sm"
                   style={{
                     border: "1.5px solid rgba(197,155,39,0.4)",
                     background: "var(--cream-2)",
@@ -246,7 +247,7 @@ export default function RsvpForm() {
             className={`form-input resize-none ${state.errors?.message ? "error" : ""}`}
             aria-describedby="rsvp-message-hint"
           />
-          <p id="rsvp-message-hint" className="font-jakarta text-xs opacity-50 mt-1">
+          <p id="rsvp-message-hint" className="font-jakarta text-xs opacity-50 mt-1.5 font-medium">
             Máximo 500 caracteres
           </p>
         </fieldset>
@@ -255,18 +256,18 @@ export default function RsvpForm() {
         <button
           type="submit"
           disabled={isPending}
-          className="btn-gold mt-2"
+          className="btn-gold mt-4 py-4 text-base shadow-md"
           aria-label={isPending ? "Enviando tu confirmación..." : "Enviar confirmación"}
         >
           {isPending ? (
             <>
-              <Loader2 size={16} aria-hidden="true" className="animate-spin" />
+              <Loader2 size={18} aria-hidden="true" className="animate-spin" />
               Enviando...
             </>
           ) : (
             <>
-              <Send size={16} aria-hidden="true" />
-              Confirmar asistencia
+              <Send size={18} aria-hidden="true" />
+              Confirmar mi asistencia
             </>
           )}
         </button>

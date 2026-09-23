@@ -7,33 +7,33 @@ interface VenueCardProps {
 
 export default function VenueCard({ venue }: VenueCardProps) {
   return (
-    <div className="glass-card p-8 md:p-10 flex flex-col gap-6">
+    <div className="glass-card p-8 sm:p-12 md:p-14 flex flex-col gap-8">
       {/* Header */}
-      <div className="flex items-start gap-4">
+      <div className="flex items-center gap-5 sm:gap-6">
         <div
-          className="shrink-0 w-12 h-12 rounded-full flex items-center justify-center"
+          className="shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center shadow-md"
           style={{ background: "linear-gradient(135deg, #C59B27, #D4A373)" }}
           aria-hidden="true"
         >
-          <MapPin size={22} color="#fff" />
+          <MapPin size={26} color="#fff" />
         </div>
-        <div>
+        <div className="flex flex-col gap-1">
           <h3
             className="font-cormorant"
             style={{
-              fontSize: "clamp(1.5rem, 3vw, 2rem)",
+              fontSize: "clamp(1.75rem, 3.5vw, 2.25rem)",
               fontWeight: 600,
               color: "var(--dark-brown)",
-              lineHeight: 1.2,
+              lineHeight: 1.15,
             }}
           >
             {venue.name}
           </h3>
           <p
-            className="font-jakarta mt-1"
+            className="font-jakarta text-base"
             style={{
-              fontSize: "0.95rem",
               color: "var(--dark-brown-70)",
+              lineHeight: 1.5,
             }}
           >
             {venue.address}
@@ -47,22 +47,22 @@ export default function VenueCard({ venue }: VenueCardProps) {
         style={{
           height: "1px",
           background:
-            "linear-gradient(to right, transparent, var(--gold-pale), transparent)",
+            "linear-gradient(to right, transparent, rgba(197,155,39,0.35), transparent)",
         }}
       />
 
       {/* Event datetime detail */}
       <div
-        className="font-jakarta text-center py-2"
+        className="font-jakarta text-center py-5 px-6 my-1 flex flex-col gap-2"
         style={{
-          background: "rgba(197,155,39,0.08)",
-          borderRadius: "0.75rem",
-          padding: "0.875rem 1.25rem",
+          background: "linear-gradient(135deg, rgba(197,155,39,0.08), rgba(212,163,115,0.08))",
+          border: "1px solid rgba(197,155,39,0.25)",
+          borderRadius: "1rem",
         }}
       >
         <p
           style={{
-            fontSize: "clamp(1rem, 2vw, 1.2rem)",
+            fontSize: "clamp(1.1rem, 2.2vw, 1.35rem)",
             color: "var(--dark-brown)",
             fontWeight: 600,
             letterSpacing: "0.01em",
@@ -72,10 +72,9 @@ export default function VenueCard({ venue }: VenueCardProps) {
         </p>
         <p
           style={{
-            fontSize: "clamp(0.95rem, 1.8vw, 1.1rem)",
+            fontSize: "clamp(1.05rem, 2vw, 1.25rem)",
             color: "var(--gold)",
-            fontWeight: 600,
-            marginTop: "0.25rem",
+            fontWeight: 700,
           }}
         >
           🕢 20:30 hs
@@ -83,25 +82,25 @@ export default function VenueCard({ venue }: VenueCardProps) {
       </div>
 
       {/* Actions */}
-      <div className="flex flex-col sm:flex-row gap-3">
+      <div className="flex flex-col sm:flex-row gap-4 pt-2">
         <a
           href={venue.mapsUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="btn-gold flex-1 justify-center"
+          className="btn-gold flex-1 justify-center py-4"
           aria-label={`Ver cómo llegar a ${venue.name} en Google Maps`}
         >
-          <Navigation size={16} aria-hidden="true" />
+          <Navigation size={18} aria-hidden="true" />
           Cómo llegar
         </a>
         <a
           href={venue.googleCalendarUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="btn-outline flex-1 justify-center"
+          className="btn-outline flex-1 justify-center py-4"
           aria-label="Agendar el evento en Google Calendar"
         >
-          <CalendarPlus size={16} aria-hidden="true" />
+          <CalendarPlus size={18} aria-hidden="true" />
           Agendar fecha
         </a>
       </div>
@@ -110,7 +109,7 @@ export default function VenueCard({ venue }: VenueCardProps) {
       <a
         href="/api/calendar"
         download="gabriel-70.ics"
-        className="font-jakarta text-center text-sm underline underline-offset-2 transition-opacity hover:opacity-70"
+        className="font-jakarta text-center text-sm font-medium underline underline-offset-4 transition-opacity hover:opacity-75 pt-1"
         style={{ color: "var(--dark-brown-70)" }}
         aria-label="Descargar archivo .ics para agregar a tu calendario"
       >

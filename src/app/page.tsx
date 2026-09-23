@@ -52,39 +52,39 @@ export default function InvitationPage() {
           }}
         />
 
-        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-16 flex flex-col gap-20">
+        <div className="max-w-3xl mx-auto px-5 sm:px-8 py-20 md:py-32 flex flex-col gap-24 sm:gap-32 md:gap-40">
 
           {/* ─── HERO SECTION ────────────────────────────────── */}
           <section
             aria-labelledby="hero-headline"
-            className="flex flex-col items-center gap-6 text-center"
+            className="flex flex-col items-center gap-8 sm:gap-10 md:gap-12 text-center py-6 md:py-12"
           >
             {/* Decorative ornament */}
             <div
               aria-hidden="true"
-              className="flex items-center gap-3"
-              style={{ color: "var(--gold)", opacity: 0.7 }}
+              className="flex items-center gap-4"
+              style={{ color: "var(--gold)", opacity: 0.85 }}
             >
-              <span style={{ fontSize: "1.5rem" }}>✦</span>
-              <span className="font-cormorant italic" style={{ fontSize: "1rem", letterSpacing: "0.2em" }}>
+              <span style={{ fontSize: "1.75rem" }}>✦</span>
+              <span className="font-cormorant italic font-semibold" style={{ fontSize: "1.1rem", letterSpacing: "0.25em" }}>
                 CELEBRACIÓN ESPECIAL
               </span>
-              <span style={{ fontSize: "1.5rem" }}>✦</span>
+              <span style={{ fontSize: "1.75rem" }}>✦</span>
             </div>
 
             {/* Name badge */}
             <div
-              className="inline-flex items-center gap-3 px-6 py-2 rounded-full animate-slide-down"
+              className="inline-flex items-center gap-3 px-7 py-3 rounded-full animate-slide-down shadow-sm"
               style={{
-                background: "linear-gradient(135deg, rgba(197,155,39,0.15), rgba(212,163,115,0.15))",
-                border: "1px solid rgba(197,155,39,0.4)",
+                background: "linear-gradient(135deg, rgba(197,155,39,0.18), rgba(212,163,115,0.18))",
+                border: "1.5px solid rgba(197,155,39,0.45)",
               }}
             >
               <span
                 className="font-jakarta font-semibold"
                 style={{
-                  fontSize: "0.8rem",
-                  letterSpacing: "0.2em",
+                  fontSize: "0.85rem",
+                  letterSpacing: "0.22em",
                   textTransform: "uppercase",
                   color: "var(--gold)",
                 }}
@@ -98,11 +98,11 @@ export default function InvitationPage() {
               id="hero-headline"
               className="font-cormorant animate-slide-up delay-100"
               style={{
-                fontSize: "clamp(3rem, 10vw, 5.5rem)",
+                fontSize: "clamp(3.5rem, 11vw, 6.5rem)",
                 fontWeight: 700,
                 color: "var(--dark-brown)",
-                lineHeight: 1.1,
-                letterSpacing: "-0.01em",
+                lineHeight: 1.05,
+                letterSpacing: "-0.015em",
               }}
             >
               {EVENT_DATA.headline}
@@ -111,17 +111,18 @@ export default function InvitationPage() {
             {/* Decorative "70" */}
             <div
               aria-hidden="true"
-              className="font-cormorant animate-slide-up delay-200"
+              className="font-cormorant animate-slide-up delay-200 my-2"
               style={{
-                fontSize: "clamp(5rem, 18vw, 10rem)",
+                fontSize: "clamp(6rem, 22vw, 12rem)",
                 fontWeight: 700,
-                lineHeight: 0.9,
+                lineHeight: 0.85,
                 background: "linear-gradient(135deg, #C59B27 0%, #D4A373 50%, #C59B27 100%)",
                 backgroundSize: "200% auto",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
                 animation: "shimmer 4s linear infinite, slideUp 0.7s ease forwards 0.2s",
+                filter: "drop-shadow(0 10px 30px rgba(197,155,39,0.25))",
               }}
             >
               70
@@ -130,10 +131,10 @@ export default function InvitationPage() {
             <p
               className="font-cormorant italic animate-slide-up delay-300"
               style={{
-                fontSize: "clamp(1.1rem, 2.5vw, 1.5rem)",
+                fontSize: "clamp(1.25rem, 3vw, 1.75rem)",
                 color: "var(--dark-brown-70)",
-                maxWidth: "36ch",
-                lineHeight: 1.5,
+                maxWidth: "40ch",
+                lineHeight: 1.6,
               }}
             >
               {EVENT_DATA.subheadline}
@@ -143,11 +144,11 @@ export default function InvitationPage() {
             <a
               href="#countdown"
               aria-label="Ver cuenta regresiva"
-              className="flex flex-col items-center gap-1 mt-4 opacity-50 hover:opacity-100 transition-opacity animate-slide-up delay-500"
+              className="flex flex-col items-center gap-2 mt-8 opacity-60 hover:opacity-100 transition-all duration-300 animate-slide-up delay-500"
               style={{ color: "var(--dark-brown)" }}
             >
-              <span className="font-jakarta text-xs tracking-widest uppercase">Descubrí</span>
-              <span style={{ animation: "float 2s ease-in-out infinite" }}>↓</span>
+              <span className="font-jakarta text-xs font-semibold tracking-widest uppercase">Descubrí más</span>
+              <span style={{ fontSize: "1.25rem", animation: "float 2s ease-in-out infinite" }}>↓</span>
             </a>
           </section>
 
@@ -158,9 +159,9 @@ export default function InvitationPage() {
           <section
             id="countdown"
             aria-labelledby="countdown-heading"
-            className="flex flex-col items-center gap-8 animate-slide-up delay-200"
+            className="flex flex-col items-center gap-10 animate-slide-up delay-200"
           >
-            <SectionHeading id="countdown-heading" emoji="🎊" title="La cuenta regresiva" />
+            <SectionHeading id="countdown-heading" emoji="🎊" title="La cuenta regresiva" centered />
             <Countdown targetDate={EVENT_DATA.targetDate} />
           </section>
 
@@ -170,9 +171,9 @@ export default function InvitationPage() {
           <section
             id="venue"
             aria-labelledby="venue-heading"
-            className="flex flex-col gap-6 animate-slide-up delay-200"
+            className="flex flex-col gap-8 animate-slide-up delay-200"
           >
-            <SectionHeading id="venue-heading" emoji="📍" title="¿Dónde?" centered />
+            <SectionHeading id="venue-heading" emoji="📍" title="¿Dónde se festeja?" centered />
             <VenueCard venue={EVENT_DATA.venue} />
           </section>
 
@@ -182,9 +183,9 @@ export default function InvitationPage() {
           <section
             id="regalos"
             aria-labelledby="gift-heading"
-            className="flex flex-col gap-6 animate-slide-up delay-200"
+            className="flex flex-col gap-8 animate-slide-up delay-200"
           >
-            <SectionHeading id="gift-heading" emoji="🎁" title="Regalos" centered />
+            <SectionHeading id="gift-heading" emoji="🎁" title="Mesa de Regalos" centered />
             <GiftCard gift={EVENT_DATA.gift} />
           </section>
 
@@ -194,29 +195,29 @@ export default function InvitationPage() {
           <section
             id="rsvp"
             aria-labelledby="rsvp-heading"
-            className="flex flex-col gap-6 animate-slide-up delay-200"
+            className="flex flex-col gap-8 animate-slide-up delay-200"
           >
-            <SectionHeading id="rsvp-heading" emoji="✉️" title="Confirmá tu asistencia" centered />
+            <SectionHeading id="rsvp-heading" emoji="✉️" title="Confirmación de Asistencia" centered />
             <RsvpForm />
           </section>
 
           <OrnamentDivider />
 
           {/* ─── FOOTER ──────────────────────────────────────── */}
-          <footer className="flex flex-col items-center gap-3 text-center pb-8" role="contentinfo">
+          <footer className="flex flex-col items-center gap-4 text-center py-12" role="contentinfo">
             <p
               className="font-cormorant italic"
               style={{
-                fontSize: "clamp(1.3rem, 3vw, 1.8rem)",
+                fontSize: "clamp(1.5rem, 3.5vw, 2.25rem)",
                 color: "var(--gold)",
-                fontWeight: 500,
+                fontWeight: 600,
               }}
             >
-              ¡Te esperamos con los brazos abiertos! 🥂
+              ¡Te esperamos con los brazos abiertos para brindar juntos! 🥂
             </p>
             <p
-              className="font-jakarta text-xs"
-              style={{ color: "var(--dark-brown-40)", letterSpacing: "0.05em" }}
+              className="font-jakarta text-xs uppercase tracking-widest font-medium"
+              style={{ color: "var(--dark-brown-40)", letterSpacing: "0.15em" }}
             >
               Con todo el amor · {new Date(EVENT_DATA.targetDate).getFullYear()}
             </p>
@@ -226,7 +227,7 @@ export default function InvitationPage() {
         {/* ─── Bottom flourish ──────────────────────────────── */}
         <div
           aria-hidden="true"
-          className="w-full h-2"
+          className="w-full h-2.5"
           style={{
             background:
               "linear-gradient(90deg, transparent, #C59B27 30%, #D4A373 50%, #C59B27 70%, transparent)",
@@ -243,7 +244,7 @@ function OrnamentDivider() {
       aria-hidden="true"
       className="ornament-divider"
     >
-      <span className="font-cormorant text-xl">✦</span>
+      <span className="font-cormorant text-2xl">✦</span>
     </div>
   );
 }
@@ -261,16 +262,16 @@ function SectionHeading({ id, emoji, title, centered = false }: SectionHeadingPr
       id={id}
       className={`font-cormorant ${centered ? "text-center" : ""}`}
       style={{
-        fontSize: "clamp(1.8rem, 4vw, 2.5rem)",
+        fontSize: "clamp(2rem, 5vw, 3rem)",
         fontWeight: 600,
         color: "var(--dark-brown)",
         display: "flex",
         alignItems: "center",
         justifyContent: centered ? "center" : "flex-start",
-        gap: "0.5rem",
+        gap: "0.75rem",
       }}
     >
-      <span aria-hidden="true">{emoji}</span>
+      <span aria-hidden="true" style={{ fontSize: "0.9em" }}>{emoji}</span>
       {title}
     </h2>
   );

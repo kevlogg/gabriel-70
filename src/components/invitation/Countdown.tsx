@@ -52,21 +52,21 @@ export default function Countdown({ targetDate }: CountdownProps) {
   ];
 
   return (
-    <div className="flex flex-col items-center gap-6">
+    <div className="flex flex-col items-center gap-8 py-2">
       <p
-        className="font-cormorant text-center"
+        className="font-cormorant text-center font-medium"
         style={{
-          fontSize: "clamp(1.1rem, 2.5vw, 1.4rem)",
+          fontSize: "clamp(1.2rem, 3vw, 1.6rem)",
           color: "var(--dark-brown-70)",
-          letterSpacing: "0.08em",
+          letterSpacing: "0.12em",
           textTransform: "uppercase",
         }}
       >
-        Faltan
+        — Faltan solo —
       </p>
 
       <div
-        className="flex gap-3 md:gap-5"
+        className="flex gap-4 sm:gap-6 md:gap-8"
         role="timer"
         aria-label="Cuenta regresiva para el evento"
         aria-live="off"
@@ -93,9 +93,9 @@ export default function Countdown({ targetDate }: CountdownProps) {
           <p
             className="font-cormorant text-center animate-scale-in"
             style={{
-              fontSize: "clamp(1.5rem, 4vw, 2.5rem)",
+              fontSize: "clamp(1.8rem, 4vw, 2.8rem)",
               color: "var(--gold)",
-              fontWeight: 600,
+              fontWeight: 700,
             }}
           >
             ¡Es hoy! 🎉

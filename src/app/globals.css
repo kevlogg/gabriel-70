@@ -135,10 +135,14 @@ body {
 /* ─── Glass Card ──────────────────────────────────────── */
 .glass-card {
   background: var(--white-glass);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(197,155,39,0.2);
-  border-radius: 1.25rem;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(197, 155, 39, 0.35);
+  border-radius: 1.75rem;
+  box-shadow: 
+    0 30px 70px -15px rgba(43, 33, 24, 0.1),
+    0 10px 30px -10px rgba(197, 155, 39, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
 /* ─── Gold Button ─────────────────────────────────────── */
@@ -146,30 +150,32 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.75rem;
+  gap: 0.625rem;
+  padding: 0.95rem 2.25rem;
   background: linear-gradient(135deg, #C59B27 0%, #D4A373 100%);
   color: #fff;
   font-family: var(--font-jakarta);
   font-weight: 600;
-  font-size: 0.9rem;
-  letter-spacing: 0.03em;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
   border: none;
   border-radius: 3rem;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+  box-shadow: 0 6px 20px rgba(197, 155, 39, 0.3);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, opacity 0.2s ease;
   text-decoration: none;
   white-space: nowrap;
 }
 .btn-gold:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(197,155,39,0.4);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(197, 155, 39, 0.45);
 }
-.btn-gold:active { transform: translateY(0); }
+.btn-gold:active { transform: translateY(-1px); }
 .btn-gold:disabled {
   opacity: 0.6;
   cursor: not-allowed;
   transform: none;
+  box-shadow: none;
 }
 
 /* ─── Terracotta Button ───────────────────────────────── */
@@ -177,24 +183,25 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.75rem;
+  gap: 0.625rem;
+  padding: 0.95rem 2.25rem;
   background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
   color: #fff;
   font-family: var(--font-jakarta);
   font-weight: 600;
-  font-size: 0.9rem;
-  letter-spacing: 0.03em;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
   border: none;
   border-radius: 3rem;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 6px 20px rgba(139, 69, 19, 0.3);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
   text-decoration: none;
   white-space: nowrap;
 }
 .btn-terracotta:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(139,69,19,0.4);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(139, 69, 19, 0.45);
 }
 
 /* ─── Outline Button ──────────────────────────────────── */
@@ -202,81 +209,86 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.75rem;
+  gap: 0.625rem;
+  padding: 0.95rem 2.25rem;
   background: transparent;
   color: var(--terracotta);
   font-family: var(--font-jakarta);
   font-weight: 600;
-  font-size: 0.9rem;
-  letter-spacing: 0.03em;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
   border: 1.5px solid var(--terracotta);
   border-radius: 3rem;
   cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  transition: background 0.25s ease, color 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
   text-decoration: none;
   white-space: nowrap;
 }
 .btn-outline:hover {
   background: var(--terracotta);
   color: #fff;
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(139, 69, 19, 0.25);
 }
 
 /* ─── Form Controls ───────────────────────────────────── */
 .form-input {
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: 0.9rem 1.25rem;
   background: var(--cream);
-  border: 1.5px solid rgba(197,155,39,0.35);
-  border-radius: 0.625rem;
+  border: 1.5px solid rgba(197, 155, 39, 0.35);
+  border-radius: 0.875rem;
   font-family: var(--font-jakarta);
-  font-size: 0.95rem;
+  font-size: 0.975rem;
   color: var(--dark-brown);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
   outline: none;
 }
 .form-input:focus {
   border-color: var(--gold);
-  box-shadow: 0 0 0 3px rgba(197,155,39,0.15);
+  box-shadow: 0 0 0 4px rgba(197, 155, 39, 0.18);
 }
 .form-input::placeholder {
   color: var(--dark-brown-40);
 }
 .form-input.error {
   border-color: #dc2626;
-  box-shadow: 0 0 0 3px rgba(220,38,38,0.1);
+  box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.12);
 }
 
 .form-label {
   display: block;
   font-family: var(--font-jakarta);
-  font-size: 0.875rem;
+  font-size: 0.9rem;
   font-weight: 600;
   color: var(--dark-brown);
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.01em;
 }
 
 .form-error {
-  font-size: 0.8rem;
+  font-size: 0.825rem;
   color: #dc2626;
-  margin-top: 0.25rem;
+  margin-top: 0.35rem;
+  font-weight: 500;
 }
 
 /* ─── Section Divider ─────────────────────────────────── */
 .ornament-divider {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  justify-content: center;
+  gap: 1.5rem;
   color: var(--gold);
-  opacity: 0.6;
+  opacity: 0.75;
+  margin: 1.5rem 0;
 }
 .ornament-divider::before,
 .ornament-divider::after {
   content: '';
   flex: 1;
   height: 1px;
-  background: linear-gradient(to right, transparent, var(--gold-pale), transparent);
+  background: linear-gradient(to right, transparent, rgba(197, 155, 39, 0.4), transparent);
 }
 
 /* ─── Countdown card ──────────────────────────────────── */
@@ -284,31 +296,42 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: linear-gradient(160deg, rgba(255,255,255,0.9) 0%, rgba(250,245,238,0.9) 100%);
-  border: 1px solid rgba(197,155,39,0.25);
-  border-radius: 1rem;
-  padding: 1.25rem 1rem;
-  min-width: 72px;
-  box-shadow: 0 4px 16px rgba(43,33,24,0.08);
+  justify-content: center;
+  background: linear-gradient(165deg, #FFFFFF 0%, #FAF5EE 100%);
+  border: 1px solid rgba(197, 155, 39, 0.35);
+  border-radius: 1.25rem;
+  padding: 1.5rem 1.25rem;
+  min-width: 85px;
+  box-shadow: 
+    0 10px 25px rgba(43, 33, 24, 0.07),
+    0 2px 6px rgba(197, 155, 39, 0.1),
+    inset 0 1px 0 #FFFFFF;
+}
+
+@media (min-width: 640px) {
+  .countdown-unit {
+    min-width: 115px;
+    padding: 1.75rem 1.5rem;
+  }
 }
 
 .countdown-number {
   font-family: var(--font-cormorant);
-  font-size: clamp(2.5rem, 5vw, 3.5rem);
-  font-weight: 600;
-  line-height: 1;
+  font-size: clamp(2.75rem, 6vw, 4rem);
+  font-weight: 700;
+  line-height: 0.95;
   color: var(--dark-brown);
   letter-spacing: -0.02em;
 }
 
 .countdown-label {
   font-family: var(--font-jakarta);
-  font-size: 0.65rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--dark-brown-70);
-  margin-top: 0.4rem;
+  color: var(--gold);
+  margin-top: 0.6rem;
 }
 
 /* ─── Scrollbar ───────────────────────────────────────── */

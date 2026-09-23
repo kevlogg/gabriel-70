@@ -63,15 +63,15 @@ export default function EnvelopeModal({ onOpen }: EnvelopeModalProps) {
       <button
         onClick={handleOpen}
         aria-label="Abrir invitación"
-        className="group relative flex flex-col items-center gap-6 cursor-pointer border-none bg-transparent p-0"
-        style={{ perspective: "800px" }}
+        className="group relative flex flex-col items-center gap-8 cursor-pointer border-none bg-transparent p-4"
+        style={{ perspective: "1000px" }}
       >
         {/* Envelope SVG */}
         <div
           className="relative"
           style={{
-            width: "min(320px, 80vw)",
-            filter: "drop-shadow(0 20px 40px rgba(139,69,19,0.35))",
+            width: "min(380px, 85vw)",
+            filter: "drop-shadow(0 25px 50px rgba(139,69,19,0.38))",
             animation: "float 4s ease-in-out infinite",
           }}
         >
@@ -136,29 +136,28 @@ export default function EnvelopeModal({ onOpen }: EnvelopeModalProps) {
         </div>
 
         {/* Call to action text */}
-        <div className="flex flex-col items-center gap-2 text-center">
+        <div className="flex flex-col items-center gap-3 text-center pt-2">
           <p
-            className="font-cormorant"
+            className="font-cormorant font-semibold"
             style={{
-              fontSize: "clamp(1.4rem, 4vw, 2rem)",
+              fontSize: "clamp(1.6rem, 4.5vw, 2.25rem)",
               color: "#2B2118",
-              fontWeight: 600,
               letterSpacing: "0.02em",
             }}
           >
             {EVENT_DATA.personName} te invita
           </p>
           <span
-            className="btn-terracotta animate-wax-pulse"
+            className="btn-terracotta animate-wax-pulse py-4 px-8 text-base font-semibold shadow-lg"
             style={{ pointerEvents: "none" }}
           >
             ✉ Abrir invitación
           </span>
           <p
-            className="font-jakarta text-sm opacity-60"
+            className="font-jakarta text-xs uppercase tracking-widest font-semibold opacity-60 mt-1"
             style={{ color: "#2B2118" }}
           >
-            Hacé clic para continuar
+            Hacé clic en el sobre para continuar
           </p>
         </div>
       </button>
