@@ -7,17 +7,19 @@ import type { GiftConfig } from "@/config/event";
 
 interface TreasureChestProps {
   gift: GiftConfig;
+  onChestOpen?: () => void;
 }
 
 type CopyField = "alias" | "cbu" | null;
 
-export default function TreasureChest({ gift }: TreasureChestProps) {
+export default function TreasureChest({ gift, onChestOpen }: TreasureChestProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [copied, setCopied] = useState<CopyField>(null);
 
   const handleOpen = useCallback(() => {
     setIsOpen(true);
-  }, []);
+    onChestOpen?.();
+  }, [onChestOpen]);
 
   const handleReset = useCallback(() => {
     setIsOpen(false);

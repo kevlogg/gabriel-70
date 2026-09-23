@@ -11,10 +11,15 @@ import AudioController from "@/components/invitation/AudioController";
 
 export default function InvitationPage() {
   const [isOpened, setIsOpened] = useState(false);
+  const [isChestOpened, setIsChestOpened] = useState(false);
 
   const handleEnvelopeOpen = useCallback(() => {
     setIsOpened(true);
     document.body.style.overflow = "auto";
+  }, []);
+
+  const handleChestOpen = useCallback(() => {
+    setIsChestOpened(true);
   }, []);
 
   // Lock scroll until envelope is opened
@@ -195,42 +200,52 @@ export default function InvitationPage() {
             className="flex flex-col gap-8 animate-slide-up delay-200"
           >
             <SectionHeading id="gift-heading" emoji="🎁" title="Mesa de Regalos" centered />
-            <GiftCard gift={EVENT_DATA.gift} />
+            <GiftCard gift={EVENT_DATA.gift} onChestOpen={handleChestOpen} />
           </section>
 
-          <OrnamentDivider />
+          {/* ─── RSVP SECTION (LOCKED UNTIL CHEST IS OPENED) ─── */}
+          {isChestOpened ? (
+            <>
+              <OrnamentDivider />
+              <section
+                id="rsvp"
+                aria-labelledby="rsvp-heading"
+                className="flex flex-col gap-8 animate-slide-up"
+              >
+                <SectionHeading id="rsvp-heading" emoji="✉️" title="Confirmación de Asistencia" centered />
+                <RsvpForm />
+              </section>
 
-          {/* ─── RSVP SECTION ────────────────────────────────── */}
-          <section
-            id="rsvp"
-            aria-labelledby="rsvp-heading"
-            className="flex flex-col gap-8 animate-slide-up delay-200"
-          >
-            <SectionHeading id="rsvp-heading" emoji="✉️" title="Confirmación de Asistencia" centered />
-            <RsvpForm />
-          </section>
+              <OrnamentDivider />
 
-          <OrnamentDivider />
-
-          {/* ─── FOOTER ──────────────────────────────────────── */}
-          <footer className="flex flex-col items-center gap-4 text-center py-12" role="contentinfo">
-            <p
-              className="font-cormorant italic"
-              style={{
-                fontSize: "clamp(1.5rem, 3.5vw, 2.25rem)",
-                color: "var(--gold)",
-                fontWeight: 600,
-              }}
-            >
-              ¡Te esperamos con los brazos abiertos para brindar juntos! 🥂
-            </p>
-            <p
-              className="font-jakarta text-xs uppercase tracking-widest font-medium"
-              style={{ color: "var(--dark-brown-40)", letterSpacing: "0.15em" }}
-            >
-              Con todo el amor · {new Date(EVENT_DATA.targetDate).getFullYear()}
-            </p>
-          </footer>
+              {/* ─── FOOTER ──────────────────────────────────────── */}
+              <footer className="flex flex-col items-center gap-4 text-center py-12 animate-slide-up" role="contentinfo">
+                <p
+                  className="font-cormorant italic"
+                  style={{
+                    fontSize: "clamp(1.5rem, 3.5vw, 2.25rem)",
+                    color: "var(--gold)",
+                    fontWeight: 600,
+                  }}
+                >
+                  ¡Te esperamos con los brazos abiertos para brindar juntos! 🥂
+                </p>
+                <p
+                  className="font-jakarta text-xs uppercase tracking-widest font-medium"
+                  style={{ color: "var(--dark-brown-40)", letterSpacing: "0.15em" }}
+                >
+                  Con todo el amor · {new Date(EVENT_DATA.targetDate).getFullYear()}
+                </p>
+              </footer>
+            </>
+          ) : (
+            <div className="flex flex-col items-center text-center p-6 sm:p-8 rounded-3xl border-2 border-dashed border-[rgba(197,155,39,0.35)] bg-[rgba(197,155,39,0.06)] animate-pulse gap-2 my-4">
+              <span className="text-3xl" role="img" aria-label="Candado">🔒</span>
+              <p className="font-jakarta font-semibold text-xs sm:text-sm text-[var(--dark-brown)]">
+                Tocá el cofre en la sección anterior para abrirlo y desbloquear la confirmación de asistencia
+              </p>
+            </div>
+          )}
         </div>
 
         {/* ─── Bottom flourish ──────────────────────────────── */}
