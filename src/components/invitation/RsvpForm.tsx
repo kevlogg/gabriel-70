@@ -77,8 +77,15 @@ export default function RsvpForm() {
   }
 
   return (
-    <div className="glass-card p-6 sm:p-10 md:p-12">
-      <div className="flex flex-col gap-3 mb-8">
+    <div
+      className="glass-card flex flex-col gap-6"
+      style={{
+        padding: "clamp(1.75rem, 5vw, 3rem)",
+        boxSizing: "border-box",
+        width: "100%",
+      }}
+    >
+      <div className="flex flex-col gap-3 mb-2">
         <h3
           className="font-cormorant"
           style={{
@@ -100,10 +107,13 @@ export default function RsvpForm() {
 
       {/* Adult Event Highlight Callout */}
       <div
-        className="flex items-start sm:items-center gap-3.5 p-4 sm:p-5 rounded-2xl mb-8 shadow-xs"
+        className="flex items-start sm:items-center gap-3.5 rounded-2xl mb-4 shadow-xs"
         style={{
-          background: "linear-gradient(135deg, rgba(197,155,39,0.12), rgba(212,163,115,0.12))",
-          border: "1.5px solid rgba(197,155,39,0.35)",
+          padding: "1.15rem 1.25rem",
+          background: "linear-gradient(135deg, rgba(197,155,39,0.14), rgba(212,163,115,0.14))",
+          border: "1.5px solid rgba(197,155,39,0.4)",
+          boxSizing: "border-box",
+          width: "100%",
         }}
       >
         <span className="text-2xl shrink-0 leading-none pt-0.5 sm:pt-0" role="img" aria-label="Adultos">🔞</span>
@@ -127,24 +137,26 @@ export default function RsvpForm() {
         <div
           role="alert"
           aria-live="assertive"
-          className="mb-8 rounded-2xl px-5 py-4 font-jakarta text-sm font-medium"
+          className="mb-4 rounded-2xl font-jakarta text-sm font-medium"
           style={{
+            padding: "1rem 1.25rem",
             background: "rgba(220,38,38,0.08)",
             border: "1.5px solid rgba(220,38,38,0.25)",
             color: "#b91c1c",
+            boxSizing: "border-box",
           }}
         >
           {state.message}
         </div>
       )}
 
-      <form ref={formRef} action={formAction} noValidate className="flex flex-col gap-6 sm:gap-7">
+      <form ref={formRef} action={formAction} noValidate className="flex flex-col gap-6">
         {/* Hidden field for default attending status */}
         <input type="hidden" name="attending" value="yes" />
 
         {/* Nombre y Apellido */}
-        <fieldset className="border-none p-0">
-          <label htmlFor="rsvp-name" className="form-label">
+        <fieldset className="border-none p-0 flex flex-col gap-1.5" style={{ width: "100%", boxSizing: "border-box" }}>
+          <label htmlFor="rsvp-name" className="form-label" style={{ marginBottom: "0.25rem" }}>
             Nombre y Apellido <span aria-hidden="true" style={{ color: "#dc2626" }}>*</span>
           </label>
           <input
@@ -155,6 +167,11 @@ export default function RsvpForm() {
             required
             placeholder="Ej: María García"
             className={`form-input ${state.errors?.name ? "error" : ""}`}
+            style={{
+              padding: "0.9rem 1.25rem",
+              width: "100%",
+              boxSizing: "border-box",
+            }}
             aria-invalid={!!state.errors?.name}
             aria-describedby={state.errors?.name ? "rsvp-name-error" : undefined}
           />
@@ -166,8 +183,8 @@ export default function RsvpForm() {
         </fieldset>
 
         {/* Integrantes del mismo hogar */}
-        <fieldset className="border-none p-0">
-          <label htmlFor="rsvp-companions" className="form-label">
+        <fieldset className="border-none p-0 flex flex-col gap-1.5" style={{ width: "100%", boxSizing: "border-box" }}>
+          <label htmlFor="rsvp-companions" className="form-label" style={{ marginBottom: "0.25rem" }}>
             Integrantes adicionales de tu mismo hogar
           </label>
           <input
@@ -178,10 +195,15 @@ export default function RsvpForm() {
             max="10"
             defaultValue="0"
             className={`form-input ${state.errors?.companionsCount ? "error" : ""}`}
+            style={{
+              padding: "0.9rem 1.25rem",
+              width: "100%",
+              boxSizing: "border-box",
+            }}
             aria-invalid={!!state.errors?.companionsCount}
             aria-describedby={state.errors?.companionsCount ? "rsvp-companions-error" : "rsvp-companions-hint"}
           />
-          <p id="rsvp-companions-hint" className="font-jakarta text-xs opacity-60 mt-1.5 font-medium">
+          <p id="rsvp-companions-hint" className="font-jakarta text-xs opacity-60 font-medium" style={{ marginTop: "0.2rem" }}>
             Ingresá la cantidad de integrantes que asistirán con vos (0 si venís solo/a)
           </p>
           {state.errors?.companionsCount && (
@@ -192,8 +214,8 @@ export default function RsvpForm() {
         </fieldset>
 
         {/* Restricciones alimentarias */}
-        <fieldset className="border-none p-0">
-          <label htmlFor="rsvp-dietary" className="form-label">
+        <fieldset className="border-none p-0 flex flex-col gap-1.5" style={{ width: "100%", boxSizing: "border-box" }}>
+          <label htmlFor="rsvp-dietary" className="form-label" style={{ marginBottom: "0.25rem" }}>
             Restricciones alimentarias
           </label>
           <select
@@ -201,6 +223,11 @@ export default function RsvpForm() {
             name="dietaryRestrictions"
             className="form-input cursor-pointer"
             defaultValue="ninguna"
+            style={{
+              padding: "0.9rem 1.25rem",
+              width: "100%",
+              boxSizing: "border-box",
+            }}
           >
             {Object.entries(DIETARY_LABELS).map(([value, label]) => (
               <option key={value} value={value}>
@@ -211,8 +238,8 @@ export default function RsvpForm() {
         </fieldset>
 
         {/* Mensaje / Dedicatoria */}
-        <fieldset className="border-none p-0">
-          <label htmlFor="rsvp-message" className="form-label">
+        <fieldset className="border-none p-0 flex flex-col gap-1.5" style={{ width: "100%", boxSizing: "border-box" }}>
+          <label htmlFor="rsvp-message" className="form-label" style={{ marginBottom: "0.25rem" }}>
             Dedicatoria o mensaje para Gabriel{" "}
             <span className="font-normal opacity-50">(opcional)</span>
           </label>
@@ -223,9 +250,14 @@ export default function RsvpForm() {
             maxLength={500}
             placeholder="Escribile algo especial..."
             className={`form-input resize-none ${state.errors?.message ? "error" : ""}`}
+            style={{
+              padding: "0.9rem 1.25rem",
+              width: "100%",
+              boxSizing: "border-box",
+            }}
             aria-describedby="rsvp-message-hint"
           />
-          <p id="rsvp-message-hint" className="font-jakarta text-xs opacity-50 mt-1.5 font-medium">
+          <p id="rsvp-message-hint" className="font-jakarta text-xs opacity-50 font-medium" style={{ marginTop: "0.2rem" }}>
             Máximo 500 caracteres
           </p>
         </fieldset>
@@ -234,7 +266,12 @@ export default function RsvpForm() {
         <button
           type="submit"
           disabled={isPending}
-          className="btn-gold mt-2 py-4 text-base shadow-md"
+          className="btn-gold mt-2 text-base shadow-md"
+          style={{
+            padding: "1rem 2rem",
+            width: "100%",
+            boxSizing: "border-box",
+          }}
           aria-label={isPending ? "Enviando tu confirmación..." : "Enviar confirmación"}
         >
           {isPending ? (

@@ -7,7 +7,14 @@ interface VenueCardProps {
 
 export default function VenueCard({ venue }: VenueCardProps) {
   return (
-    <div className="glass-card p-6 sm:p-10 md:p-12 flex flex-col gap-6 sm:gap-8">
+    <div
+      className="glass-card flex flex-col gap-6 sm:gap-8"
+      style={{
+        padding: "clamp(1.75rem, 5vw, 3rem)",
+        boxSizing: "border-box",
+        width: "100%",
+      }}
+    >
       {/* Header */}
       <div className="flex items-center gap-4 sm:gap-6">
         <div

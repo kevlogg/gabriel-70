@@ -136,11 +136,12 @@ body {
 .glass-card {
   width: 100%;
   max-width: 100%;
-  box-sizing: border-box;
+  box-sizing: border-box !important;
+  padding: clamp(1.25rem, 4vw, 3rem) !important;
   background: var(--white-glass);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(197, 155, 39, 0.35);
+  border: 1.5px solid rgba(197, 155, 39, 0.35);
   border-radius: 1.75rem;
   box-shadow: 
     0 30px 70px -15px rgba(43, 33, 24, 0.1),
@@ -237,7 +238,8 @@ body {
 /* ─── Form Controls ───────────────────────────────────── */
 .form-input {
   width: 100%;
-  padding: 0.9rem 1.25rem;
+  box-sizing: border-box !important;
+  padding: 0.9rem 1.25rem !important;
   background: var(--cream);
   border: 1.5px solid rgba(197, 155, 39, 0.35);
   border-radius: 0.875rem;

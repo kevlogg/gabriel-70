@@ -52,7 +52,16 @@ export default function InvitationPage() {
           }}
         />
 
-        <div className="max-w-3xl w-full mx-auto px-6 sm:px-10 md:px-12 py-16 sm:py-24 md:py-32 flex flex-col gap-20 sm:gap-28 md:gap-36">
+        <div
+          className="max-w-3xl w-full mx-auto flex flex-col gap-20 sm:gap-28 md:gap-36"
+          style={{
+            paddingLeft: "clamp(1.25rem, 5vw, 3rem)",
+            paddingRight: "clamp(1.25rem, 5vw, 3rem)",
+            paddingTop: "clamp(3rem, 6vw, 6rem)",
+            paddingBottom: "clamp(4rem, 8vw, 8rem)",
+            boxSizing: "border-box",
+          }}
+        >
 
           {/* ─── HERO SECTION ────────────────────────────────── */}
           <section

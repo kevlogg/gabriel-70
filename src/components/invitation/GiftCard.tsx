@@ -38,7 +38,14 @@ export default function GiftCard({ gift }: GiftCardProps) {
   );
 
   return (
-    <div className="glass-card p-6 sm:p-10 md:p-12 flex flex-col gap-6 sm:gap-8">
+    <div
+      className="glass-card flex flex-col gap-6 sm:gap-8"
+      style={{
+        padding: "clamp(1.75rem, 5vw, 3rem)",
+        boxSizing: "border-box",
+        width: "100%",
+      }}
+    >
       {/* Header */}
       <div className="flex items-center gap-4 sm:gap-6">
         <div
@@ -128,8 +135,9 @@ interface CopyRowProps {
 function CopyRow({ label, value, isCopied, onCopy }: CopyRowProps) {
   return (
     <div
-      className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 rounded-2xl p-5 sm:px-7 sm:py-5 w-full"
+      className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 rounded-2xl w-full"
       style={{
+        padding: "1.25rem 1.5rem",
         background: "rgba(197,155,39,0.08)",
         border: "1.5px solid rgba(197,155,39,0.28)",
         boxSizing: "border-box",
@@ -163,8 +171,9 @@ function CopyRow({ label, value, isCopied, onCopy }: CopyRowProps) {
         type="button"
         aria-label={isCopied ? `${label} copiado` : `Copiar ${label}`}
         aria-pressed={isCopied}
-        className="shrink-0 self-start sm:self-center flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 sm:px-5 sm:py-3 font-jakarta font-semibold transition-all duration-200 shadow-sm mt-1 sm:mt-0"
+        className="shrink-0 self-start sm:self-center flex items-center justify-center gap-2 rounded-xl font-jakarta font-semibold transition-all duration-200 shadow-sm mt-1 sm:mt-0"
         style={{
+          padding: "0.65rem 1.25rem",
           fontSize: "0.85rem",
           background: isCopied ? "#16a34a" : "linear-gradient(135deg, #C59B27, #D4A373)",
           color: "#fff",
