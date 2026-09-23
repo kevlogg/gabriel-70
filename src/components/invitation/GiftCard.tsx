@@ -128,22 +128,32 @@ interface CopyRowProps {
 function CopyRow({ label, value, isCopied, onCopy }: CopyRowProps) {
   return (
     <div
-      className="flex items-center justify-between gap-4 rounded-2xl px-5 py-4"
+      className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl px-6 sm:px-8 py-5 sm:py-6"
       style={{
         background: "rgba(197,155,39,0.08)",
         border: "1.5px solid rgba(197,155,39,0.25)",
       }}
     >
-      <div className="flex-1 min-w-0 flex flex-col gap-0.5">
+      <div className="flex-1 min-w-0 flex flex-col gap-1 pr-2">
         <p
           className="font-jakarta font-bold"
-          style={{ fontSize: "0.75rem", color: "var(--gold)", letterSpacing: "0.12em", textTransform: "uppercase" }}
+          style={{
+            fontSize: "0.75rem",
+            color: "var(--gold)",
+            letterSpacing: "0.14em",
+            textTransform: "uppercase",
+            marginBottom: "0.1rem",
+          }}
         >
           {label}
         </p>
         <p
-          className="font-jakarta font-semibold truncate"
-          style={{ fontSize: "1rem", color: "var(--dark-brown)" }}
+          className="font-jakarta font-semibold text-sm sm:text-base break-all"
+          style={{
+            color: "var(--dark-brown)",
+            lineHeight: 1.4,
+            letterSpacing: label === "CBU" ? "0.05em" : "normal",
+          }}
         >
           {value}
         </p>
@@ -152,23 +162,23 @@ function CopyRow({ label, value, isCopied, onCopy }: CopyRowProps) {
         onClick={onCopy}
         aria-label={isCopied ? `${label} copiado` : `Copiar ${label}`}
         aria-pressed={isCopied}
-        className="shrink-0 flex items-center gap-2 rounded-xl px-4 py-2.5 font-jakarta font-semibold transition-all duration-200 shadow-sm"
+        className="shrink-0 self-start sm:self-center flex items-center justify-center gap-2 rounded-xl px-5 py-3 font-jakarta font-semibold transition-all duration-200 shadow-sm"
         style={{
           fontSize: "0.875rem",
           background: isCopied ? "#16a34a" : "linear-gradient(135deg, #C59B27, #D4A373)",
           color: "#fff",
           border: "none",
           cursor: "pointer",
-          transform: isCopied ? "scale(1.05)" : "scale(1)",
+          transform: isCopied ? "scale(1.04)" : "scale(1)",
         }}
       >
         {isCopied ? (
           <>
-            <Check size={15} aria-hidden="true" /> ¡Copiado!
+            <Check size={16} aria-hidden="true" /> ¡Copiado!
           </>
         ) : (
           <>
-            <Copy size={15} aria-hidden="true" /> Copiar
+            <Copy size={16} aria-hidden="true" /> Copiar
           </>
         )}
       </button>

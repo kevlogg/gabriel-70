@@ -74,19 +74,19 @@ export default function InvitationPage() {
 
             {/* Name badge */}
             <div
-              className="inline-flex items-center gap-3 px-7 py-3 rounded-full animate-slide-down shadow-sm"
+              className="inline-flex items-center justify-center gap-3 px-6 sm:px-8 py-3.5 rounded-full animate-slide-down shadow-sm max-w-full text-center"
               style={{
                 background: "linear-gradient(135deg, rgba(197,155,39,0.18), rgba(212,163,115,0.18))",
                 border: "1.5px solid rgba(197,155,39,0.45)",
               }}
             >
               <span
-                className="font-jakarta font-semibold"
+                className="font-jakarta font-semibold text-xs sm:text-sm"
                 style={{
-                  fontSize: "0.85rem",
-                  letterSpacing: "0.22em",
+                  letterSpacing: "0.2em",
                   textTransform: "uppercase",
                   color: "var(--gold)",
+                  lineHeight: 1.4,
                 }}
               >
                 Sábado · 14 de Noviembre · 20:30 hs

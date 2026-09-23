@@ -53,11 +53,10 @@ export default function VenueCard({ venue }: VenueCardProps) {
 
       {/* Event datetime detail */}
       <div
-        className="font-jakarta text-center py-5 px-6 my-1 flex flex-col gap-2"
+        className="font-jakarta text-center py-6 px-6 sm:px-8 my-1 flex flex-col gap-2 rounded-2xl"
         style={{
           background: "linear-gradient(135deg, rgba(197,155,39,0.08), rgba(212,163,115,0.08))",
-          border: "1px solid rgba(197,155,39,0.25)",
-          borderRadius: "1rem",
+          border: "1.5px solid rgba(197,155,39,0.25)",
         }}
       >
         <p
