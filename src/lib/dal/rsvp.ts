@@ -1,10 +1,5 @@
-import { createClient } from "@libsql/client";
+import { getClient } from "@/lib/db";
 import type { RsvpRecord } from "@/lib/schemas/rsvp.schema";
-
-function getClient() {
-  const url = process.env.DATABASE_URL ?? "file:./gabriel70.db";
-  return createClient({ url });
-}
 
 async function initializeDb(): Promise<void> {
   const client = getClient();
@@ -82,33 +77,38 @@ export async function createRsvp(data: CreateRsvpInput): Promise<RsvpRecord> {
 }
 
 export async function getAllRsvps(): Promise<RsvpRecord[]> {
-  await initializeDb();
-  const client = getClient();
+  try {
+    await initializeDb();
+    const client = getClient();
 
-  const result = await client.execute(
-    `SELECT id, name, attending, companionsCount, companionNames, dietaryRestrictions, message, createdAt
-     FROM rsvps ORDER BY createdAt DESC`
-  );
+    const result = await client.execute(
+      `SELECT id, name, attending, companionsCount, companionNames, dietaryRestrictions, message, createdAt
+       FROM rsvps ORDER BY createdAt DESC`
+    );
 
-  return result.rows.map((row) => {
-    let companionNames: string[] | undefined = undefined;
-    if (row.companionNames && typeof row.companionNames === "string") {
-      try {
-        companionNames = JSON.parse(row.companionNames);
-      } catch {
-        companionNames = [row.companionNames];
+    return result.rows.map((row) => {
+      let companionNames: string[] | undefined = undefined;
+      if (row.companionNames && typeof row.companionNames === "string") {
+        try {
+          companionNames = JSON.parse(row.companionNames);
+        } catch {
+          companionNames = [row.companionNames];
+        }
       }
-    }
 
-    return {
-      id: String(row.id),
-      name: String(row.name),
-      attending: row.attending === 1 ? "yes" : ("no" as "yes" | "no"),
-      companionsCount: Number(row.companionsCount),
-      companionNames,
-      dietaryRestrictions: String(row.dietaryRestrictions) as RsvpRecord["dietaryRestrictions"],
-      message: row.message != null ? String(row.message) : undefined,
-      createdAt: String(row.createdAt),
-    };
-  });
+      return {
+        id: String(row.id),
+        name: String(row.name),
+        attending: row.attending === 1 ? "yes" : ("no" as "yes" | "no"),
+        companionsCount: Number(row.companionsCount),
+        companionNames,
+        dietaryRestrictions: String(row.dietaryRestrictions) as RsvpRecord["dietaryRestrictions"],
+        message: row.message != null ? String(row.message) : undefined,
+        createdAt: String(row.createdAt),
+      };
+    });
+  } catch (err) {
+    console.error("Error fetching RSVPs:", err);
+    return [];
+  }
 }

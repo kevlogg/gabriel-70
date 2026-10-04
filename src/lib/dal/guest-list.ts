@@ -1,9 +1,4 @@
-import { createClient } from "@libsql/client";
-
-function getClient() {
-  const url = process.env.DATABASE_URL ?? "file:./gabriel70.db";
-  return createClient({ url });
-}
+import { getClient } from "@/lib/db";
 
 export interface MasterGuest {
   id: string;
@@ -29,14 +24,19 @@ function generateId(): string {
 }
 
 export async function getMasterGuests(): Promise<MasterGuest[]> {
-  await initializeMasterGuestsDb();
-  const client = getClient();
-  const result = await client.execute(`SELECT id, name, createdAt FROM master_guests ORDER BY name ASC`);
-  return result.rows.map((r) => ({
-    id: String(r.id),
-    name: String(r.name),
-    createdAt: String(r.createdAt),
-  }));
+  try {
+    await initializeMasterGuestsDb();
+    const client = getClient();
+    const result = await client.execute(`SELECT id, name, createdAt FROM master_guests ORDER BY name ASC`);
+    return result.rows.map((r) => ({
+      id: String(r.id),
+      name: String(r.name),
+      createdAt: String(r.createdAt),
+    }));
+  } catch (err) {
+    console.error("Error fetching master guests:", err);
+    return [];
+  }
 }
 
 export async function addMasterGuest(name: string): Promise<MasterGuest> {
