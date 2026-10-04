@@ -80,12 +80,12 @@ export default function RsvpTable({ rsvps }: RsvpTableProps) {
   return (
     <div className="flex flex-col gap-4">
       {/* Controls */}
-      <div className="flex flex-col sm:flex-row gap-3 justify-between items-stretch sm:items-center">
-        <div className="relative flex-1 max-w-sm">
+      <div className="flex flex-col sm:flex-row gap-3 justify-between items-stretch sm:items-center w-full">
+        <div className="relative flex-1 w-full sm:max-w-sm">
           <Search
             size={16}
             aria-hidden="true"
-            className="absolute left-3 top-1/2 -translate-y-1/2"
+            className="absolute left-3.5 top-1/2 -translate-y-1/2"
             style={{ color: "var(--dark-brown-40)" }}
           />
           <input
@@ -94,14 +94,13 @@ export default function RsvpTable({ rsvps }: RsvpTableProps) {
             placeholder="Buscar por nombre..."
             value={filterText}
             onChange={(e) => setFilterText(e.target.value)}
-            className="form-input pl-9"
+            className="form-input pl-10 py-2.5 text-sm w-full"
             aria-label="Buscar confirmaciones por nombre"
-            aria-controls="rsvp-table-body"
           />
         </div>
         <button
           onClick={handleExportCsv}
-          className="btn-outline flex items-center gap-2"
+          className="btn-outline flex items-center justify-center gap-2 text-xs sm:text-sm py-2.5 px-4 w-full sm:w-auto"
           aria-label={`Exportar ${filteredRsvps.length} registros a CSV`}
           id="export-csv-btn"
         >
@@ -110,9 +109,58 @@ export default function RsvpTable({ rsvps }: RsvpTableProps) {
         </button>
       </div>
 
-      {/* Table */}
+      {/* ─── MOBILE VIEW: CARDS (DISPLAYED ONLY ON MOBILE < 640px) ─── */}
+      <div className="flex flex-col gap-3 sm:hidden w-full">
+        {filteredRsvps.length === 0 ? (
+          <div className="text-center py-8 px-4 rounded-2xl bg-[var(--cream-2)] border border-[rgba(197,155,39,0.2)] font-jakarta text-xs text-[var(--dark-brown-40)]">
+            {filterText
+              ? "No se encontraron coincidencias."
+              : "Aún no hay confirmaciones."}
+          </div>
+        ) : (
+          filteredRsvps.map((rsvp) => (
+            <div
+              key={rsvp.id}
+              className="p-4 rounded-2xl border border-[rgba(197,155,39,0.25)] bg-[var(--cream-2)] flex flex-col gap-2.5 shadow-xs"
+            >
+              <div className="flex items-start justify-between gap-2">
+                <div className="flex flex-col">
+                  <span className="font-jakarta font-bold text-sm text-[var(--dark-brown)]">
+                    {rsvp.name}
+                  </span>
+                  {rsvp.companionNames && rsvp.companionNames.length > 0 && (
+                    <span className="font-jakarta text-xs text-[var(--gold)] font-semibold mt-0.5">
+                      + {rsvp.companionNames.join(", ")}
+                    </span>
+                  )}
+                </div>
+                <AttendanceBadge attending={rsvp.attending} />
+              </div>
+
+              <div className="flex items-center justify-between text-xs text-[var(--dark-brown-70)] pt-1 border-t border-[rgba(197,155,39,0.15)]">
+                <span>Total personas: <strong>{1 + rsvp.companionsCount}</strong></span>
+                <span>{formatDate(rsvp.createdAt)}</span>
+              </div>
+
+              {rsvp.dietaryRestrictions !== "ninguna" && (
+                <div className="text-xs bg-amber-50 text-amber-900 border border-amber-200 rounded-lg p-2 font-medium">
+                  🥗 Restricción: {DIETARY_LABELS[rsvp.dietaryRestrictions as keyof typeof DIETARY_LABELS] ?? rsvp.dietaryRestrictions}
+                </div>
+              )}
+
+              {rsvp.message && (
+                <div className="text-xs bg-[rgba(197,155,39,0.08)] text-[var(--dark-brown)] italic rounded-lg p-2 border border-[rgba(197,155,39,0.2)]">
+                  “{rsvp.message}”
+                </div>
+              )}
+            </div>
+          ))
+        )}
+      </div>
+
+      {/* ─── DESKTOP VIEW: TABLE (DISPLAYED ONLY ON SCREENS >= 640px) ─── */}
       <div
-        className="rounded-2xl overflow-hidden"
+        className="hidden sm:block rounded-2xl overflow-hidden w-full"
         style={{ border: "1px solid rgba(197,155,39,0.2)" }}
       >
         <div className="overflow-x-auto">

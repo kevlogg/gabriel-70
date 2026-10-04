@@ -59,41 +59,41 @@ export default function MetricsCards({ rsvps }: MetricsCardsProps) {
   return (
     <div className="flex flex-col gap-6">
       {/* KPI grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 w-full">
         {metrics.map(({ id, icon: Icon, label, value, sublabel, color, bg }) => (
           <div
             key={id}
             id={id}
-            className="rounded-2xl p-6 flex flex-col gap-3"
+            className="rounded-2xl p-4 sm:p-6 flex flex-col gap-2.5 shadow-xs"
             style={{
               background: bg,
               border: `1px solid ${color}30`,
             }}
           >
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2.5">
               <div
-                className="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center shrink-0"
                 style={{ background: color }}
                 aria-hidden="true"
               >
-                <Icon size={18} color="#fff" />
+                <Icon size={17} color="#fff" />
               </div>
               <p
-                className="font-jakarta font-semibold text-sm"
+                className="font-jakarta font-semibold text-xs sm:text-sm"
                 style={{ color: "var(--dark-brown-70)" }}
               >
                 {label}
               </p>
             </div>
             <p
-              className="font-cormorant font-bold"
-              style={{ fontSize: "3rem", lineHeight: 1, color: "var(--dark-brown)" }}
+              className="font-cormorant font-bold text-3xl sm:text-5xl"
+              style={{ lineHeight: 1, color: "var(--dark-brown)" }}
               aria-label={`${value} ${label}`}
             >
               {value}
             </p>
             <p
-              className="font-jakarta text-xs"
+              className="font-jakarta text-[11px] sm:text-xs"
               style={{ color: "var(--dark-brown-40)" }}
             >
               {sublabel}

@@ -114,65 +114,65 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
   };
 
   return (
-    <div className="flex flex-col gap-8">
-      {/* KPI Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+    <div className="flex flex-col gap-6 sm:gap-8 w-full">
+      {/* KPI Stats Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4">
         <div
-          className="rounded-2xl p-5 flex flex-col gap-1"
+          className="rounded-2xl p-3.5 sm:p-5 flex flex-col gap-1"
           style={{ background: "rgba(197,155,39,0.1)", border: "1px solid rgba(197,155,39,0.3)" }}
         >
-          <div className="flex items-center justify-between text-xs font-bold uppercase tracking-wider text-[var(--gold)]">
-            <span>Total en Lista</span>
-            <Users size={16} />
+          <div className="flex items-center justify-between text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[var(--gold)]">
+            <span>En Lista</span>
+            <Users size={15} />
           </div>
-          <span className="font-cormorant font-bold text-4xl text-[var(--dark-brown)]">{masterGuests.length}</span>
-          <span className="text-xs text-[var(--dark-brown-40)]">invitados cargados</span>
+          <span className="font-cormorant font-bold text-3xl sm:text-4xl text-[var(--dark-brown)]">{masterGuests.length}</span>
+          <span className="text-[11px] text-[var(--dark-brown-40)]">invitados</span>
         </div>
 
         <div
-          className="rounded-2xl p-5 flex flex-col gap-1"
+          className="rounded-2xl p-3.5 sm:p-5 flex flex-col gap-1"
           style={{ background: "rgba(22,163,74,0.1)", border: "1px solid rgba(22,163,74,0.3)" }}
         >
-          <div className="flex items-center justify-between text-xs font-bold uppercase tracking-wider text-[#16a34a]">
+          <div className="flex items-center justify-between text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#16a34a]">
             <span>Confirmados</span>
-            <CheckCircle size={16} />
+            <CheckCircle size={15} />
           </div>
-          <span className="font-cormorant font-bold text-4xl text-[var(--dark-brown)]">{confirmedCount}</span>
-          <span className="text-xs text-[var(--dark-brown-40)]">ya respondieron Sí</span>
+          <span className="font-cormorant font-bold text-3xl sm:text-4xl text-[var(--dark-brown)]">{confirmedCount}</span>
+          <span className="text-[11px] text-[var(--dark-brown-40)]">dijeron Sí</span>
         </div>
 
         <div
-          className="rounded-2xl p-5 flex flex-col gap-1"
+          className="rounded-2xl p-3.5 sm:p-5 flex flex-col gap-1"
           style={{ background: "rgba(234,179,8,0.12)", border: "1px solid rgba(234,179,8,0.35)" }}
         >
-          <div className="flex items-center justify-between text-xs font-bold uppercase tracking-wider text-[#ca8a04]">
-            <span>Faltan Confirmar</span>
-            <Clock size={16} />
+          <div className="flex items-center justify-between text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#ca8a04]">
+            <span>Faltan</span>
+            <Clock size={15} />
           </div>
-          <span className="font-cormorant font-bold text-4xl text-[var(--dark-brown)]">{pendingCount}</span>
-          <span className="text-xs text-[var(--dark-brown-40)]">sin respuesta aún</span>
+          <span className="font-cormorant font-bold text-3xl sm:text-4xl text-[var(--dark-brown)]">{pendingCount}</span>
+          <span className="text-[11px] text-[var(--dark-brown-40)]">sin responder</span>
         </div>
 
         <div
-          className="rounded-2xl p-5 flex flex-col gap-1"
+          className="rounded-2xl p-3.5 sm:p-5 flex flex-col gap-1"
           style={{ background: "rgba(220,38,38,0.1)", border: "1px solid rgba(220,38,38,0.3)" }}
         >
-          <div className="flex items-center justify-between text-xs font-bold uppercase tracking-wider text-[#dc2626]">
+          <div className="flex items-center justify-between text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#dc2626]">
             <span>No Asisten</span>
-            <XCircle size={16} />
+            <XCircle size={15} />
           </div>
-          <span className="font-cormorant font-bold text-4xl text-[var(--dark-brown)]">{declinedCount}</span>
-          <span className="text-xs text-[var(--dark-brown-40)]">ausencia confirmada</span>
+          <span className="font-cormorant font-bold text-3xl sm:text-4xl text-[var(--dark-brown)]">{declinedCount}</span>
+          <span className="text-[11px] text-[var(--dark-brown-40)]">ausentes</span>
         </div>
       </div>
 
       {/* Action Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-4 p-5 rounded-2xl bg-[rgba(197,155,39,0.06)] border border-[rgba(197,155,39,0.25)]">
-        <div className="flex flex-wrap items-center gap-2">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-4 sm:p-5 rounded-2xl bg-[rgba(197,155,39,0.06)] border border-[rgba(197,155,39,0.25)]">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full sm:w-auto">
           <button
             type="button"
             onClick={() => setShowBulkModal(true)}
-            className="btn-gold text-xs sm:text-sm py-2.5 px-4 flex items-center gap-2"
+            className="btn-gold text-xs sm:text-sm py-3 sm:py-2.5 px-4 flex items-center justify-center gap-2 w-full sm:w-auto"
           >
             <ClipboardList size={16} />
             Cargar lista masiva
@@ -180,7 +180,7 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
           <button
             type="button"
             onClick={() => setShowSingleInput(!showSingleInput)}
-            className="btn-outline text-xs sm:text-sm py-2.5 px-4 flex items-center gap-2"
+            className="btn-outline text-xs sm:text-sm py-3 sm:py-2.5 px-4 flex items-center justify-center gap-2 w-full sm:w-auto"
           >
             <UserPlus size={16} />
             + Agregar individual
@@ -191,7 +191,7 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
           <button
             type="button"
             onClick={handleCopyPending}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl font-jakarta font-semibold text-xs sm:text-sm bg-[rgba(234,179,8,0.15)] text-[#854d0e] border border-[rgba(234,179,8,0.4)] hover:bg-[rgba(234,179,8,0.25)] transition-colors cursor-pointer"
+            className="flex items-center justify-center gap-2 px-4 py-3 sm:py-2.5 rounded-xl font-jakarta font-semibold text-xs sm:text-sm bg-[rgba(234,179,8,0.15)] text-[#854d0e] border border-[rgba(234,179,8,0.4)] hover:bg-[rgba(234,179,8,0.25)] transition-colors cursor-pointer w-full sm:w-auto"
           >
             {copiedPending ? (
               <>
@@ -208,15 +208,15 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
 
       {/* Single Guest Add Form */}
       {showSingleInput && (
-        <form action={addGuestAction} className="flex gap-2 animate-scale-in p-4 rounded-2xl bg-[var(--cream-2)] border border-[rgba(197,155,39,0.3)]">
+        <form action={addGuestAction} className="flex flex-col sm:flex-row gap-2 animate-scale-in p-4 rounded-2xl bg-[var(--cream-2)] border border-[rgba(197,155,39,0.3)]">
           <input
             name="name"
             type="text"
             required
             placeholder="Nombre y Apellido del invitado"
-            className="form-input flex-1"
+            className="form-input flex-1 text-sm py-2.5"
           />
-          <button type="submit" className="btn-gold px-5 py-2.5 text-xs sm:text-sm shrink-0">
+          <button type="submit" className="btn-gold px-5 py-2.5 text-xs sm:text-sm shrink-0 justify-center">
             Guardar
           </button>
         </form>
@@ -224,9 +224,9 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
 
       {/* Bulk Add Modal */}
       {showBulkModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs animate-fade-in">
-          <div className="glass-card max-w-lg w-full p-6 sm:p-8 flex flex-col gap-5 animate-scale-in">
-            <h3 className="font-cormorant font-bold text-2xl text-[var(--dark-brown)]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
+          <div className="glass-card max-w-lg w-full p-5 sm:p-8 flex flex-col gap-4 sm:gap-5 animate-scale-in max-h-[90vh] overflow-y-auto">
+            <h3 className="font-cormorant font-bold text-xl sm:text-2xl text-[var(--dark-brown)]">
               Cargar lista masiva de invitados
             </h3>
             <p className="font-jakarta text-xs sm:text-sm text-[var(--dark-brown-70)]">
@@ -235,23 +235,23 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
             <form action={bulkAddGuestsAction} className="flex flex-col gap-4">
               <textarea
                 name="rawList"
-                rows={8}
+                rows={7}
                 required
                 placeholder="Juan Pérez&#10;María González&#10;Carlos Rodríguez..."
                 className="form-input text-sm p-3.5 resize-none"
               />
-              <div className="flex justify-end gap-3 pt-2">
+              <div className="flex justify-end gap-2.5 pt-2">
                 <button
                   type="button"
                   onClick={() => setShowBulkModal(false)}
-                  className="btn-outline px-4 py-2 text-sm"
+                  className="btn-outline px-4 py-2 text-xs sm:text-sm"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
                   onClick={() => setShowBulkModal(false)}
-                  className="btn-gold px-5 py-2 text-sm"
+                  className="btn-gold px-5 py-2 text-xs sm:text-sm"
                 >
                   Cargar lista
                 </button>
@@ -262,21 +262,21 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
       )}
 
       {/* Search & Filter Controls */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+      <div className="flex flex-col gap-3">
         {/* Search */}
-        <div className="relative flex-1 max-w-sm">
+        <div className="relative w-full">
           <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--dark-brown-40)]" />
           <input
             type="search"
-            placeholder="Buscar en lista..."
+            placeholder="Buscar en lista por nombre..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="form-input pl-10 py-2.5 text-sm"
+            className="form-input pl-10 py-2.5 text-sm w-full"
           />
         </div>
 
         {/* Filter Pills */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1.5 w-full no-scrollbar">
           {(["all", "pending", "confirmed", "declined"] as const).map((f) => {
             const labels = {
               all: `Todos (${matchedList.length})`,
@@ -290,7 +290,7 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
                 key={f}
                 type="button"
                 onClick={() => setFilter(f)}
-                className={`px-3 py-1.5 rounded-full font-jakarta text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
+                className={`px-3 py-1.5 rounded-full font-jakarta text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer shrink-0 ${
                   isActive
                     ? "bg-[var(--gold)] text-white shadow-xs"
                     : "bg-[rgba(197,155,39,0.08)] text-[var(--dark-brown-70)] hover:bg-[rgba(197,155,39,0.18)]"
@@ -303,8 +303,69 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
         </div>
       </div>
 
-      {/* Table */}
-      <div className="rounded-2xl overflow-hidden border border-[rgba(197,155,39,0.2)]">
+      {/* ─── MOBILE VIEW: CARDS (DISPLAYED ONLY ON MOBILE < 640px) ─── */}
+      <div className="flex flex-col gap-2.5 sm:hidden w-full">
+        {filteredList.length === 0 ? (
+          <div className="text-center py-8 px-4 rounded-2xl bg-[var(--cream-2)] border border-[rgba(197,155,39,0.2)] font-jakarta text-xs text-[var(--dark-brown-40)]">
+            {masterGuests.length === 0
+              ? "Aún no cargaste ninguna lista de invitados. Tocá 'Cargar lista masiva' para empezar."
+              : "No se encontraron invitados con los filtros seleccionados."}
+          </div>
+        ) : (
+          filteredList.map(({ guest, status, matchedRsvp }) => (
+            <div
+              key={guest.id}
+              className="p-3.5 rounded-2xl border border-[rgba(197,155,39,0.25)] bg-[var(--cream-2)] flex flex-col gap-2 shadow-xs"
+            >
+              <div className="flex items-start justify-between gap-2">
+                <span className="font-jakarta font-bold text-sm text-[var(--dark-brown)] break-words leading-snug">
+                  {guest.name}
+                </span>
+                <form action={deleteGuestAction} className="shrink-0 pt-0.5">
+                  <input type="hidden" name="id" value={guest.id} />
+                  <button
+                    type="submit"
+                    className="p-1 text-[var(--dark-brown-40)] hover:text-red-600 transition-colors cursor-pointer"
+                    title="Eliminar de la lista"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </form>
+              </div>
+
+              <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-[rgba(197,155,39,0.15)] text-xs">
+                <div>
+                  {status === "confirmed" && (
+                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700 border border-emerald-300">
+                      <CheckCircle size={12} /> Confirmado
+                    </span>
+                  )}
+                  {status === "declined" && (
+                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-red-700 border border-red-300">
+                      <XCircle size={12} /> No asiste
+                    </span>
+                  )}
+                  {status === "pending" && (
+                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-700 border border-amber-300">
+                      <Clock size={12} /> Pendiente
+                    </span>
+                  )}
+                </div>
+
+                {matchedRsvp && (
+                  <span className="font-jakarta text-[11px] text-[var(--dark-brown-70)] font-medium">
+                    RSVP: <strong>{matchedRsvp.name}</strong>
+                    {matchedRsvp.companionsCount > 0 ? ` (+${matchedRsvp.companionsCount})` : ""}
+                  </span>
+                )}
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+
+      {/* ─── DESKTOP VIEW: TABLE (DISPLAYED ONLY ON SCREENS >= 640px) ─── */}
+      <div className="hidden sm:block rounded-2xl overflow-hidden border border-[rgba(197,155,39,0.2)] w-full">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
@@ -400,7 +461,7 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
       </div>
 
       {masterGuests.length > 0 && (
-        <div className="flex justify-end">
+        <div className="flex justify-end pt-1">
           <form action={clearAllGuestsAction} onSubmit={(e) => {
             if (!confirm("¿Seguro que querés vaciar toda la lista de invitados?")) {
               e.preventDefault();

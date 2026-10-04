@@ -113,44 +113,37 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
       />
 
       <main
-        className="max-w-6xl mx-auto px-4 sm:px-6 py-10 flex flex-col gap-10"
+        className="max-w-6xl mx-auto px-3.5 sm:px-6 py-6 sm:py-10 flex flex-col gap-8 sm:gap-10 w-full box-border overflow-hidden"
         aria-label="Panel de administración de confirmaciones"
       >
         {/* Header */}
-        <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div>
+        <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3.5 w-full">
+          <div className="flex flex-col gap-0.5 max-w-full">
             <p
-              className="font-jakarta font-semibold text-xs tracking-widest uppercase mb-1"
+              className="font-jakarta font-semibold text-[11px] sm:text-xs tracking-widest uppercase"
               style={{ color: "var(--gold)" }}
             >
-              Panel de Administración
+              PANEL DE ADMINISTRACIÓN
             </p>
             <h1
-              className="font-cormorant"
-              style={{
-                fontSize: "clamp(1.8rem, 4vw, 2.5rem)",
-                fontWeight: 700,
-                color: "var(--dark-brown)",
-                lineHeight: 1.1,
-              }}
+              className="font-cormorant font-bold text-3xl sm:text-4xl leading-tight text-[var(--dark-brown)] break-words"
             >
               {EVENT_DATA.headline}
             </h1>
             <p
-              className="font-jakarta text-sm mt-1"
-              style={{ color: "var(--dark-brown-70)" }}
+              className="font-jakarta text-xs sm:text-sm text-[var(--dark-brown-70)]"
             >
               Gestión de lista de invitados y confirmaciones
             </p>
           </div>
           <a
             href={`/admin?key=${adminKey}`}
-            className="btn-outline flex items-center gap-2 shrink-0"
+            className="btn-outline text-xs py-2 px-3.5 sm:py-2.5 sm:px-5 flex items-center gap-2 self-start sm:self-center shrink-0"
             aria-label="Recargar datos"
             id="admin-refresh-btn"
           >
             <RefreshCw size={14} aria-hidden="true" />
-            Actualizar
+            Actualizar datos
           </a>
         </header>
 
@@ -164,11 +157,11 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
         />
 
         {/* SECTION 1: MASTER GUEST LIST & RSVP MATCHING */}
-        <section aria-labelledby="guest-list-heading" className="flex flex-col gap-4">
+        <section aria-labelledby="guest-list-heading" className="flex flex-col gap-3.5">
           <div className="flex flex-col gap-1">
             <h2
               id="guest-list-heading"
-              className="font-cormorant text-2xl font-bold text-[var(--dark-brown)]"
+              className="font-cormorant text-xl sm:text-2xl font-bold text-[var(--dark-brown)] leading-snug"
             >
               📋 Control de Invitados (Lista General vs Confirmaciones)
             </h2>
@@ -189,10 +182,10 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
         />
 
         {/* SECTION 2: RSVP RESPONSES & METRICS */}
-        <section aria-labelledby="metrics-heading" className="flex flex-col gap-6">
+        <section aria-labelledby="metrics-heading" className="flex flex-col gap-4 sm:gap-6">
           <h2
             id="metrics-heading"
-            className="font-cormorant text-2xl font-bold text-[var(--dark-brown)]"
+            className="font-cormorant text-xl sm:text-2xl font-bold text-[var(--dark-brown)] leading-snug"
           >
             📊 Resumen de Respuestas y Menús Especiales
           </h2>
@@ -200,10 +193,10 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
         </section>
 
         {/* Table */}
-        <section aria-labelledby="table-heading" className="flex flex-col gap-4">
+        <section aria-labelledby="table-heading" className="flex flex-col gap-3.5">
           <h2
             id="table-heading"
-            className="font-cormorant text-2xl font-bold text-[var(--dark-brown)]"
+            className="font-cormorant text-xl sm:text-2xl font-bold text-[var(--dark-brown)] leading-snug"
           >
             ✉️ Todas las confirmaciones recibidas (RSVPs)
           </h2>
