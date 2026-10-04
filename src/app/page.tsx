@@ -103,7 +103,7 @@ export default function InvitationPage() {
                   lineHeight: 1.4,
                 }}
               >
-                Sábado · 14 de Noviembre · 20:30 hs
+                Sábado · 7 de Noviembre · 20:30 hs
               </span>
             </div>
 

@@ -109,12 +109,18 @@ export default function TreasureChest({ gift, onChestOpen }: TreasureChestProps)
       {isOpen && (
         <div className="flex flex-col items-center gap-6 w-full animate-scale-in">
           {/* Main Phrase / Message */}
-          <div className="flex flex-col items-center text-center gap-3 max-w-lg px-2">
+          <div className="flex flex-col items-center text-center gap-2.5 max-w-lg px-2">
             <p
-              className="font-cormorant italic font-semibold text-xl sm:text-2xl"
-              style={{ color: "var(--dark-brown)", lineHeight: 1.4 }}
+              className="font-cormorant italic font-bold text-2xl sm:text-3xl"
+              style={{ color: "var(--gold)", lineHeight: 1.3 }}
             >
-              “El mejor regalo es tu presencia y celebrar juntos este día tan especial.”
+              “Menos chiches, más chanchito.”
+            </p>
+            <p
+              className="font-cormorant italic font-semibold text-lg sm:text-xl"
+              style={{ color: "var(--dark-brown)", lineHeight: 1.45 }}
+            >
+              Tu presencia es mi mejor regalo, tu transferencia, el combustible para seguir festejando.
             </p>
           </div>
 

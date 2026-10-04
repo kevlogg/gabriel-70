@@ -74,7 +74,7 @@ export default function VenueCard({ venue }: VenueCardProps) {
             letterSpacing: "0.01em",
           }}
         >
-          🗓 Sábado 14 de Noviembre de 2026
+          🗓 Sábado 7 de Noviembre de 2026
         </p>
         <p
           style={{
