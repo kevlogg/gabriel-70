@@ -1,8 +1,10 @@
 import { redirect } from "next/navigation";
 import { getAllRsvps } from "@/lib/dal/rsvp";
+import { getMasterGuests } from "@/lib/dal/guest-list";
 import { EVENT_DATA } from "@/config/event";
 import MetricsCards from "@/components/admin/MetricsCards";
 import RsvpTable from "@/components/admin/RsvpTable";
+import GuestListManager from "@/components/admin/GuestListManager";
 import { ShieldCheck, RefreshCw } from "lucide-react";
 
 interface AdminPageProps {
@@ -94,6 +96,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
   }
 
   const rsvps = await getAllRsvps();
+  const masterGuests = await getMasterGuests();
 
   return (
     <div
@@ -120,7 +123,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
               className="font-jakarta font-semibold text-xs tracking-widest uppercase mb-1"
               style={{ color: "var(--gold)" }}
             >
-              Panel de Admin
+              Panel de Administración
             </p>
             <h1
               className="font-cormorant"
@@ -137,12 +140,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
               className="font-jakarta text-sm mt-1"
               style={{ color: "var(--dark-brown-70)" }}
             >
-              Confirmaciones recibidas · {new Date().toLocaleDateString("es-AR", {
-                weekday: "long",
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
+              Gestión de lista de invitados y confirmaciones
             </p>
           </div>
           <a
@@ -165,26 +163,49 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
           }}
         />
 
-        {/* Metrics */}
-        <section aria-labelledby="metrics-heading">
+        {/* SECTION 1: MASTER GUEST LIST & RSVP MATCHING */}
+        <section aria-labelledby="guest-list-heading" className="flex flex-col gap-4">
+          <div className="flex flex-col gap-1">
+            <h2
+              id="guest-list-heading"
+              className="font-cormorant text-2xl font-bold text-[var(--dark-brown)]"
+            >
+              📋 Control de Invitados (Lista General vs Confirmaciones)
+            </h2>
+            <p className="font-jakarta text-xs sm:text-sm text-[var(--dark-brown-70)]">
+              Cargá la lista completa de invitados esperados para comparar en tiempo real quiénes ya confirmaron y quiénes faltan.
+            </p>
+          </div>
+          <GuestListManager masterGuests={masterGuests} rsvps={rsvps} />
+        </section>
+
+        {/* Divider */}
+        <div
+          aria-hidden="true"
+          style={{
+            height: "1px",
+            background: "linear-gradient(to right, transparent, rgba(197,155,39,0.25), transparent)",
+          }}
+        />
+
+        {/* SECTION 2: RSVP RESPONSES & METRICS */}
+        <section aria-labelledby="metrics-heading" className="flex flex-col gap-6">
           <h2
             id="metrics-heading"
-            className="font-cormorant mb-5"
-            style={{ fontSize: "1.5rem", fontWeight: 600, color: "var(--dark-brown)" }}
+            className="font-cormorant text-2xl font-bold text-[var(--dark-brown)]"
           >
-            Resumen
+            📊 Resumen de Respuestas y Menús Especiales
           </h2>
           <MetricsCards rsvps={rsvps} />
         </section>
 
         {/* Table */}
-        <section aria-labelledby="table-heading">
+        <section aria-labelledby="table-heading" className="flex flex-col gap-4">
           <h2
             id="table-heading"
-            className="font-cormorant mb-5"
-            style={{ fontSize: "1.5rem", fontWeight: 600, color: "var(--dark-brown)" }}
+            className="font-cormorant text-2xl font-bold text-[var(--dark-brown)]"
           >
-            Todas las confirmaciones
+            ✉️ Todas las confirmaciones recibidas (RSVPs)
           </h2>
           <RsvpTable rsvps={rsvps} />
         </section>
