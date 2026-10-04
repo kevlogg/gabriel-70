@@ -31,6 +31,7 @@ export const RsvpFormSchema = z.object({
     .int("Debe ser un número entero")
     .min(0, "No puede ser negativo")
     .max(10, "Máximo 10 integrantes"),
+  companionNames: z.array(z.string()).optional(),
   dietaryRestrictions: DietaryRestriction,
   message: z.string().max(500, "El mensaje no puede superar los 500 caracteres").optional(),
 });

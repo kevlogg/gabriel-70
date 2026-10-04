@@ -37,10 +37,18 @@ function buildCsv(rows: RsvpRecord[]): string {
 
   const dataRows = rows.map((r) => [
     escapeCell(formatDate(r.createdAt)),
-    escapeCell(r.name),
+    escapeCell(
+      r.name +
+        (r.companionNames && r.companionNames.length > 0
+          ? ` (+ ${r.companionNames.join(", ")})`
+          : "")
+    ),
     escapeCell(r.attending === "yes" ? "Sí" : "No"),
     escapeCell(String(1 + r.companionsCount)),
-    escapeCell(DIETARY_LABELS[r.dietaryRestrictions as keyof typeof DIETARY_LABELS] ?? r.dietaryRestrictions),
+    escapeCell(
+      DIETARY_LABELS[r.dietaryRestrictions as keyof typeof DIETARY_LABELS] ??
+        r.dietaryRestrictions
+    ),
     escapeCell(r.message ?? ""),
   ]);
 
@@ -169,10 +177,20 @@ export default function RsvpTable({ rsvps }: RsvpTableProps) {
                       {formatDate(rsvp.createdAt)}
                     </td>
                     <td
-                      className="px-4 py-3 font-jakarta font-semibold text-sm"
+                      className="px-4 py-3 font-jakarta text-sm"
                       style={{ color: "var(--dark-brown)", whiteSpace: "nowrap" }}
                     >
-                      {rsvp.name}
+                      <div className="flex flex-col gap-0.5">
+                        <span className="font-semibold">{rsvp.name}</span>
+                        {rsvp.companionNames && rsvp.companionNames.length > 0 && (
+                          <span
+                            className="text-xs font-medium"
+                            style={{ color: "var(--dark-brown-70)" }}
+                          >
+                            + {rsvp.companionNames.join(", ")}
+                          </span>
+                        )}
+                      </div>
                     </td>
                     <td className="px-4 py-3">
                       <AttendanceBadge attending={rsvp.attending} />

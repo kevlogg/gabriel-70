@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS rsvps (
   name                TEXT NOT NULL,
   attending           INTEGER NOT NULL CHECK (attending IN (0, 1)),
   companionsCount     INTEGER NOT NULL DEFAULT 0 CHECK (companionsCount >= 0),
+  companionNames      TEXT,
   dietaryRestrictions TEXT NOT NULL DEFAULT 'ninguna',
   message             TEXT,
   createdAt           TEXT NOT NULL

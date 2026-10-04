@@ -13,10 +13,16 @@ export async function submitRsvp(
   _prevState: RsvpActionState,
   formData: FormData
 ): Promise<RsvpActionState> {
+  const companionNamesRaw = formData.getAll("companionNames");
+  const companionNames = companionNamesRaw
+    .map((v) => (typeof v === "string" ? v.trim() : ""))
+    .filter((v) => v.length > 0);
+
   const raw = {
     name: formData.get("name"),
     attending: formData.get("attending") ?? "yes",
     companionsCount: formData.get("companionsCount") ?? 0,
+    companionNames: companionNames.length > 0 ? companionNames : undefined,
     dietaryRestrictions: formData.get("dietaryRestrictions"),
     message: formData.get("message"),
   };
