@@ -115,6 +115,22 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
 
   return (
     <div className="flex flex-col gap-6 sm:gap-8 w-full">
+      {masterGuests.length === 0 && (
+        <div className="p-4 rounded-2xl bg-[rgba(197,155,39,0.08)] border border-[rgba(197,155,39,0.3)] flex items-start gap-3 text-xs sm:text-sm text-[var(--dark-brown-70)]">
+          <span className="text-xl shrink-0" role="img" aria-label="Info">💡</span>
+          <div className="flex flex-col gap-1">
+            <strong className="text-[var(--gold)] font-bold">¿Cómo funciona el Control de Invitados?</strong>
+            <p>
+              Podés cargar la lista completa de personas invitadas tocando <strong>"Cargar lista masiva"</strong>.
+              El sistema comparará en tiempo real tu lista con quienes confirmen asistencia.
+            </p>
+            <p className="text-xs opacity-80 font-medium mt-0.5">
+              👇 Todas las respuestas recibidas en el formulario se muestran más abajo en la sección <strong>"Todas las confirmaciones recibidas (RSVPs)"</strong>.
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* KPI Stats Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4">
         <div
