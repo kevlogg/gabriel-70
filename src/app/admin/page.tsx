@@ -2,7 +2,6 @@ import { redirect } from "next/navigation";
 import { getAllRsvps } from "@/lib/dal/rsvp";
 import { getMasterGuests } from "@/lib/dal/guest-list";
 import { EVENT_DATA } from "@/config/event";
-import RsvpTable from "@/components/admin/RsvpTable";
 import GuestListManager from "@/components/admin/GuestListManager";
 import { ShieldCheck, RefreshCw } from "lucide-react";
 
@@ -158,26 +157,6 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
         {/* MASTER GUEST LIST & 3 KPI CARDS */}
         <section aria-labelledby="guest-list-heading" className="flex flex-col gap-3.5">
           <GuestListManager masterGuests={masterGuests} rsvps={rsvps} />
-        </section>
-
-        {/* Divider */}
-        <div
-          aria-hidden="true"
-          style={{
-            height: "1px",
-            background: "linear-gradient(to right, transparent, rgba(197,155,39,0.25), transparent)",
-          }}
-        />
-
-        {/* RSVP Table */}
-        <section aria-labelledby="table-heading" className="flex flex-col gap-3.5">
-          <h2
-            id="table-heading"
-            className="font-cormorant text-xl sm:text-2xl font-bold text-[var(--dark-brown)] leading-snug"
-          >
-            ✉️ Todas las confirmaciones recibidas (RSVPs)
-          </h2>
-          <RsvpTable rsvps={rsvps} />
         </section>
       </main>
 
