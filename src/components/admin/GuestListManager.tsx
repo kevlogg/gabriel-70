@@ -78,9 +78,16 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
   }, [masterGuests, rsvps]);
 
   // Statistics
+  const pendingCount = matchedList.filter((m) => m.status === "pending").length;
   const confirmedCount = matchedList.filter((m) => m.status === "confirmed").length;
   const declinedCount = matchedList.filter((m) => m.status === "declined").length;
-  const pendingCount = matchedList.filter((m) => m.status === "pending").length;
+  
+  // Real confirmed attendees count (titulares + acompañantes)
+  const realConfirmedAttendees = useMemo(() => {
+    return rsvps
+      .filter((r) => r.attending === "yes")
+      .reduce((sum, r) => sum + 1 + r.companionsCount, 0);
+  }, [rsvps]);
 
   // Filtered display list
   const filteredList = useMemo(() => {
@@ -115,70 +122,51 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
 
   return (
     <div className="flex flex-col gap-6 sm:gap-8 w-full">
-      {masterGuests.length === 0 && (
-        <div className="p-4 rounded-2xl bg-[rgba(197,155,39,0.08)] border border-[rgba(197,155,39,0.3)] flex items-start gap-3 text-xs sm:text-sm text-[var(--dark-brown-70)]">
-          <span className="text-xl shrink-0" role="img" aria-label="Info">💡</span>
-          <div className="flex flex-col gap-1">
-            <strong className="text-[var(--gold)] font-bold">¿Cómo funciona el Control de Invitados?</strong>
-            <p>
-              Podés cargar la lista completa de personas invitadas tocando <strong>"Cargar lista masiva"</strong>.
-              El sistema comparará en tiempo real tu lista con quienes confirmen asistencia.
-            </p>
-            <p className="text-xs opacity-80 font-medium mt-0.5">
-              👇 Todas las respuestas recibidas en el formulario se muestran más abajo en la sección <strong>"Todas las confirmaciones recibidas (RSVPs)"</strong>.
-            </p>
-          </div>
-        </div>
-      )}
-
-      {/* KPI Stats Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4">
+      {/* 3 Main KPI Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+        {/* CARD 1: EN LISTA */}
         <div
-          className="rounded-2xl p-3.5 sm:p-5 flex flex-col gap-1"
-          style={{ background: "rgba(197,155,39,0.1)", border: "1px solid rgba(197,155,39,0.3)" }}
+          className="rounded-2xl p-4 sm:p-5 flex flex-col gap-1.5 shadow-xs"
+          style={{ background: "rgba(197,155,39,0.1)", border: "1.5px solid rgba(197,155,39,0.35)" }}
         >
-          <div className="flex items-center justify-between text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[var(--gold)]">
+          <div className="flex items-center justify-between text-xs font-bold uppercase tracking-wider text-[var(--gold)]">
             <span>En Lista</span>
-            <Users size={15} />
+            <Users size={16} />
           </div>
-          <span className="font-cormorant font-bold text-3xl sm:text-4xl text-[var(--dark-brown)]">{masterGuests.length}</span>
-          <span className="text-[11px] text-[var(--dark-brown-40)]">invitados</span>
+          <span className="font-cormorant font-bold text-3xl sm:text-5xl text-[var(--dark-brown)] leading-none my-1">
+            {masterGuests.length}
+          </span>
+          <span className="text-xs text-[var(--dark-brown-40)] font-medium">invitados cargados en lista</span>
         </div>
 
+        {/* CARD 2: CONFIRMADOS REALES */}
         <div
-          className="rounded-2xl p-3.5 sm:p-5 flex flex-col gap-1"
-          style={{ background: "rgba(22,163,74,0.1)", border: "1px solid rgba(22,163,74,0.3)" }}
+          className="rounded-2xl p-4 sm:p-5 flex flex-col gap-1.5 shadow-xs"
+          style={{ background: "rgba(22,163,74,0.12)", border: "1.5px solid rgba(22,163,74,0.35)" }}
         >
-          <div className="flex items-center justify-between text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#16a34a]">
-            <span>Confirmados</span>
-            <CheckCircle size={15} />
+          <div className="flex items-center justify-between text-xs font-bold uppercase tracking-wider text-[#16a34a]">
+            <span>Confirmados Reales</span>
+            <CheckCircle size={16} />
           </div>
-          <span className="font-cormorant font-bold text-3xl sm:text-4xl text-[var(--dark-brown)]">{confirmedCount}</span>
-          <span className="text-[11px] text-[var(--dark-brown-40)]">dijeron Sí</span>
+          <span className="font-cormorant font-bold text-3xl sm:text-5xl text-[#16a34a] leading-none my-1">
+            {realConfirmedAttendees}
+          </span>
+          <span className="text-xs text-[var(--dark-brown-40)] font-medium">personas que van (titulares + acompañantes)</span>
         </div>
 
+        {/* CARD 3: FALTAN CONFIRMAR */}
         <div
-          className="rounded-2xl p-3.5 sm:p-5 flex flex-col gap-1"
-          style={{ background: "rgba(234,179,8,0.12)", border: "1px solid rgba(234,179,8,0.35)" }}
+          className="rounded-2xl p-4 sm:p-5 flex flex-col gap-1.5 shadow-xs"
+          style={{ background: "rgba(234,179,8,0.12)", border: "1.5px solid rgba(234,179,8,0.4)" }}
         >
-          <div className="flex items-center justify-between text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#ca8a04]">
-            <span>Faltan</span>
-            <Clock size={15} />
+          <div className="flex items-center justify-between text-xs font-bold uppercase tracking-wider text-[#ca8a04]">
+            <span>Faltan Confirmar</span>
+            <Clock size={16} />
           </div>
-          <span className="font-cormorant font-bold text-3xl sm:text-4xl text-[var(--dark-brown)]">{pendingCount}</span>
-          <span className="text-[11px] text-[var(--dark-brown-40)]">sin responder</span>
-        </div>
-
-        <div
-          className="rounded-2xl p-3.5 sm:p-5 flex flex-col gap-1"
-          style={{ background: "rgba(220,38,38,0.1)", border: "1px solid rgba(220,38,38,0.3)" }}
-        >
-          <div className="flex items-center justify-between text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#dc2626]">
-            <span>No Asisten</span>
-            <XCircle size={15} />
-          </div>
-          <span className="font-cormorant font-bold text-3xl sm:text-4xl text-[var(--dark-brown)]">{declinedCount}</span>
-          <span className="text-[11px] text-[var(--dark-brown-40)]">ausentes</span>
+          <span className="font-cormorant font-bold text-3xl sm:text-5xl text-[var(--dark-brown)] leading-none my-1">
+            {pendingCount}
+          </span>
+          <span className="text-xs text-[var(--dark-brown-40)] font-medium">invitados sin responder aún</span>
         </div>
       </div>
 

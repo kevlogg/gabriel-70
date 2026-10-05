@@ -2,7 +2,6 @@ import { redirect } from "next/navigation";
 import { getAllRsvps } from "@/lib/dal/rsvp";
 import { getMasterGuests } from "@/lib/dal/guest-list";
 import { EVENT_DATA } from "@/config/event";
-import MetricsCards from "@/components/admin/MetricsCards";
 import RsvpTable from "@/components/admin/RsvpTable";
 import GuestListManager from "@/components/admin/GuestListManager";
 import { ShieldCheck, RefreshCw } from "lucide-react";
@@ -156,19 +155,8 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
           }}
         />
 
-        {/* SECTION 1: MASTER GUEST LIST & RSVP MATCHING */}
+        {/* MASTER GUEST LIST & 3 KPI CARDS */}
         <section aria-labelledby="guest-list-heading" className="flex flex-col gap-3.5">
-          <div className="flex flex-col gap-1">
-            <h2
-              id="guest-list-heading"
-              className="font-cormorant text-xl sm:text-2xl font-bold text-[var(--dark-brown)] leading-snug"
-            >
-              📋 Control de Invitados (Lista General vs Confirmaciones)
-            </h2>
-            <p className="font-jakarta text-xs sm:text-sm text-[var(--dark-brown-70)]">
-              Cargá la lista completa de invitados esperados para comparar en tiempo real quiénes ya confirmaron y quiénes faltan.
-            </p>
-          </div>
           <GuestListManager masterGuests={masterGuests} rsvps={rsvps} />
         </section>
 
@@ -181,18 +169,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
           }}
         />
 
-        {/* SECTION 2: RSVP RESPONSES & METRICS */}
-        <section aria-labelledby="metrics-heading" className="flex flex-col gap-4 sm:gap-6">
-          <h2
-            id="metrics-heading"
-            className="font-cormorant text-xl sm:text-2xl font-bold text-[var(--dark-brown)] leading-snug"
-          >
-            📊 Resumen de Respuestas y Menús Especiales
-          </h2>
-          <MetricsCards rsvps={rsvps} />
-        </section>
-
-        {/* Table */}
+        {/* RSVP Table */}
         <section aria-labelledby="table-heading" className="flex flex-col gap-3.5">
           <h2
             id="table-heading"
