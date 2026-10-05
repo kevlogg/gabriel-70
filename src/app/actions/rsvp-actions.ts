@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { RsvpFormSchema } from "@/lib/schemas/rsvp.schema";
 import { createRsvp } from "@/lib/dal/rsvp";
 
@@ -45,11 +46,14 @@ export async function submitRsvp(
 
   try {
     await createRsvp(parsed.data);
+    revalidatePath("/admin");
+    revalidatePath("/");
     return {
       status: "success",
       message: "¡Gracias! Tu confirmación fue recibida. ¡Nos vemos en la fiesta! 🎉",
     };
-  } catch {
+  } catch (err) {
+    console.error("Error creating RSVP:", err);
     return {
       status: "error",
       message: "Ocurrió un error al guardar tu confirmación. Por favor intentá de nuevo.",

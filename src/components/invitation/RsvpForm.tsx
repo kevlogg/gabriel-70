@@ -103,7 +103,7 @@ export default function RsvpForm() {
           className="font-jakarta font-bold text-sm sm:text-base"
           style={{ color: "#dc2626", letterSpacing: "0.01em" }}
         >
-          Por favor confirmar antes del 20/10
+          Por favor confirmar antes del 17/10
         </p>
         <p
           className="font-jakarta text-sm sm:text-base"

@@ -22,14 +22,40 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Los 70 de Gabriel — Invitación Digital",
+  metadataBase: new URL("https://invitacion70gabriel.vercel.app"),
+  title: "Gabriel | Los 70 de Gabriel",
   description:
-    "Acompañanos a celebrar los 70 años de Gabriel en Finca El Reencuentro, Mar del Plata. Sábado 7 de Noviembre, 20:30 hs.",
+    "¡Acompañanos a celebrar los 70 años de Gabriel! Sábado 7 de Noviembre, 20:30 hs.",
+  icons: {
+    icon: [
+      { url: "/seal-70.png", type: "image/png" },
+    ],
+    shortcut: "/seal-70.png",
+    apple: "/seal-70.png",
+  },
   openGraph: {
-    title: "Los 70 de Gabriel",
+    title: "Gabriel | Los 70 de Gabriel",
     description:
-      "¡Acompañanos a celebrar una vida llena de momentos inolvidables! Sábado 7 de Noviembre, 20:30 hs en Finca El Reencuentro, Mar del Plata.",
+      "¡Acompañanos a celebrar una vida llena de momentos inolvidables! 🥂 Sábado 7 de Noviembre, 20:30 hs",
+    url: "https://invitacion70gabriel.vercel.app",
+    siteName: "Los 70 de Gabriel",
+    images: [
+      {
+        url: "https://invitacion70gabriel.vercel.app/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Los 70 de Gabriel - Invitación Especial",
+      },
+    ],
+    locale: "es_AR",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Gabriel | Los 70 de Gabriel",
+    description:
+      "¡Acompañanos a celebrar una vida llena de momentos inolvidables! 🥂",
+    images: ["https://invitacion70gabriel.vercel.app/og-image.png"],
   },
 };
 

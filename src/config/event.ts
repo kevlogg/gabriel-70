@@ -41,5 +41,5 @@ export const EVENT_DATA: EventConfig = {
     cbu: "0000003100010000000000",
     holderName: "Gabriel",
   },
-  audioTrackPath: "/audio/celebration.mp3",
+  audioTrackPath: "/audio/LosAngelesAzules-LaCumbiadelInfinito.mp3",
 };

@@ -135,7 +135,7 @@ export default function TreasureChest({ gift, onChestOpen }: TreasureChestProps)
 
           {/* Bank Info Container */}
           <div
-            className="rounded-2xl p-5 sm:p-7 flex flex-col gap-4 w-full"
+            className="rounded-2xl px-4 py-5 sm:px-8 sm:py-7 flex flex-col gap-4 w-full"
             style={{
               background: "linear-gradient(165deg, rgba(253,251,247,0.95), rgba(250,245,238,0.95))",
               border: "1.5px solid rgba(197,155,39,0.35)",
@@ -156,7 +156,7 @@ export default function TreasureChest({ gift, onChestOpen }: TreasureChestProps)
             </div>
 
             {/* Copy fields */}
-            <div className="flex flex-col gap-3.5 w-full">
+            <div className="flex flex-col gap-3.5 w-full px-1 sm:px-2">
               <CopyRow
                 label="Alias"
                 value={gift.alias}
@@ -182,6 +182,33 @@ export default function TreasureChest({ gift, onChestOpen }: TreasureChestProps)
             <RefreshCw size={13} aria-hidden="true" />
             Volver a ver el cofre
           </button>
+
+          {/* Mensaje destacado con flecha parpadeando para seguir bajando al RSVP */}
+          <a
+            href="#rsvp"
+            className="flex flex-col items-center gap-2 mt-4 text-center group cursor-pointer"
+            aria-label="Bajá para confirmar tu asistencia"
+          >
+            <div
+              className="flex items-center gap-2.5 px-6 py-3 rounded-full shadow-md transition-all duration-300 group-hover:scale-105"
+              style={{
+                background: "linear-gradient(135deg, rgba(197,155,39,0.18), rgba(212,163,115,0.18))",
+                border: "1.5px solid rgba(197,155,39,0.5)",
+              }}
+            >
+              <span className="text-lg animate-bounce" role="img" aria-label="Flecha abajo">👇</span>
+              <span className="font-jakarta font-bold text-xs sm:text-sm text-[var(--dark-brown)] uppercase tracking-wider">
+                Bajá para confirmar tu asistencia
+              </span>
+              <span className="text-lg animate-bounce" role="img" aria-label="Flecha abajo">👇</span>
+            </div>
+            <span
+              className="font-jakarta font-bold text-2xl text-[var(--gold)] animate-bounce mt-1"
+              aria-hidden="true"
+            >
+              ↓
+            </span>
+          </a>
         </div>
       )}
     </div>
