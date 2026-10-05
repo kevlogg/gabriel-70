@@ -88,17 +88,15 @@ export default function InvitationPage() {
 
             {/* Name badge */}
             <div
-              className="inline-flex items-center justify-center gap-3 px-6 sm:px-8 py-3.5 rounded-full animate-slide-down shadow-sm max-w-full text-center"
+              className="inline-flex items-center justify-center gap-2.5 px-5 py-2.5 sm:px-8 sm:py-3.5 rounded-2xl sm:rounded-full animate-slide-down shadow-sm max-w-full text-center box-border"
               style={{
                 background: "linear-gradient(135deg, rgba(197,155,39,0.18), rgba(212,163,115,0.18))",
                 border: "1.5px solid rgba(197,155,39,0.45)",
               }}
             >
               <span
-                className="font-jakarta font-semibold text-xs sm:text-sm"
+                className="font-jakarta font-bold text-[11px] sm:text-xs md:text-sm tracking-wider uppercase"
                 style={{
-                  letterSpacing: "0.2em",
-                  textTransform: "uppercase",
                   color: "var(--gold)",
                   lineHeight: 1.4,
                 }}
