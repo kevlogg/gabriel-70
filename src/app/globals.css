@@ -305,8 +305,9 @@ body {
   background: linear-gradient(165deg, #FFFFFF 0%, #FAF5EE 100%);
   border: 1px solid rgba(197, 155, 39, 0.35);
   border-radius: 1.25rem;
-  padding: 1.5rem 1.25rem;
-  min-width: 85px;
+  padding: 1.1rem 0.4rem;
+  min-width: 0;
+  width: 100%;
   box-shadow: 
     0 10px 25px rgba(43, 33, 24, 0.07),
     0 2px 6px rgba(197, 155, 39, 0.1),
@@ -315,8 +316,7 @@ body {
 
 @media (min-width: 640px) {
   .countdown-unit {
-    min-width: 115px;
-    padding: 1.75rem 1.5rem;
+    padding: 1.75rem 1.25rem;
   }
 }
 

@@ -87,18 +87,7 @@ export default function RsvpForm() {
         width: "100%",
       }}
     >
-      <div className="flex flex-col gap-2 mb-1">
-        <h3
-          className="font-cormorant"
-          style={{
-            fontSize: "clamp(1.75rem, 3.5vw, 2.25rem)",
-            fontWeight: 600,
-            color: "var(--dark-brown)",
-            lineHeight: 1.15,
-          }}
-        >
-          Confirmá tu asistencia
-        </h3>
+      <div className="flex flex-col gap-1.5 mb-1">
         <p
           className="font-jakarta font-bold text-sm sm:text-base"
           style={{ color: "#dc2626", letterSpacing: "0.01em" }}

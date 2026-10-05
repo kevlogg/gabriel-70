@@ -66,13 +66,13 @@ export default function Countdown({ targetDate }: CountdownProps) {
       </p>
 
       <div
-        className="flex gap-4 sm:gap-6 md:gap-8"
+        className="flex gap-2 sm:gap-4 md:gap-6 w-full max-w-2xl justify-center px-2 sm:px-4 box-border"
         role="timer"
         aria-label="Cuenta regresiva para el evento"
         aria-live="off"
       >
         {units.map(({ label, key }) => (
-          <div key={key} className="countdown-unit">
+          <div key={key} className="countdown-unit flex-1 min-w-0">
             <span
               className="countdown-number"
               aria-label={`${timeLeft ? timeLeft[key] : 0} ${label}`}

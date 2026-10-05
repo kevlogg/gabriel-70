@@ -135,7 +135,7 @@ export default function TreasureChest({ gift, onChestOpen }: TreasureChestProps)
 
           {/* Bank Info Container */}
           <div
-            className="rounded-2xl px-4 py-5 sm:px-8 sm:py-7 flex flex-col gap-4 w-full"
+            className="rounded-2xl p-5 sm:p-8 flex flex-col gap-5 w-full"
             style={{
               background: "linear-gradient(165deg, rgba(253,251,247,0.95), rgba(250,245,238,0.95))",
               border: "1.5px solid rgba(197,155,39,0.35)",
@@ -143,7 +143,7 @@ export default function TreasureChest({ gift, onChestOpen }: TreasureChestProps)
               boxSizing: "border-box",
             }}
           >
-            <div className="flex flex-col items-center gap-1 text-center">
+            <div className="flex flex-col items-center gap-1 text-center pb-1">
               <p
                 className="font-jakarta text-xs font-bold tracking-widest uppercase"
                 style={{ color: "var(--gold)", letterSpacing: "0.18em" }}
@@ -155,8 +155,8 @@ export default function TreasureChest({ gift, onChestOpen }: TreasureChestProps)
               </p>
             </div>
 
-            {/* Copy fields */}
-            <div className="flex flex-col gap-3.5 w-full px-1 sm:px-2">
+            {/* Copy fields - Generous side margins inside outer box */}
+            <div className="flex flex-col gap-4 w-full px-2 sm:px-4 box-border">
               <CopyRow
                 label="Alias"
                 value={gift.alias}

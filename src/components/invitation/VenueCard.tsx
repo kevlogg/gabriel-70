@@ -1,4 +1,4 @@
-import { MapPin, CalendarPlus, Navigation } from "lucide-react";
+import { MapPin, CalendarPlus, Navigation, Calendar, Clock } from "lucide-react";
 import type { VenueConfig } from "@/config/event";
 
 interface VenueCardProps {
@@ -58,33 +58,40 @@ export default function VenueCard({ venue }: VenueCardProps) {
         }}
       />
 
-      {/* Event datetime detail */}
-      <div
-        className="font-jakarta text-center py-6 px-6 sm:px-8 my-1 flex flex-col gap-2 rounded-2xl"
-        style={{
-          background: "linear-gradient(135deg, rgba(197,155,39,0.08), rgba(212,163,115,0.08))",
-          border: "1.5px solid rgba(197,155,39,0.25)",
-        }}
-      >
-        <p
-          style={{
-            fontSize: "clamp(1.1rem, 2.2vw, 1.35rem)",
-            color: "var(--dark-brown)",
-            fontWeight: 600,
-            letterSpacing: "0.01em",
-          }}
-        >
-          🗓 Sábado 7 de Noviembre de 2026
-        </p>
-        <p
-          style={{
-            fontSize: "clamp(1.05rem, 2vw, 1.25rem)",
-            color: "var(--gold)",
-            fontWeight: 700,
-          }}
-        >
-          🕢 20:30 hs
-        </p>
+      {/* Event datetime detail - High visibility for time */}
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 p-5 sm:p-6 rounded-2xl bg-[rgba(197,155,39,0.08)] border-1.5 border-[rgba(197,155,39,0.3)] shadow-xs">
+        {/* FECHA */}
+        <div className="flex items-center gap-3.5 text-left flex-1">
+          <div className="w-12 h-12 rounded-xl bg-[rgba(197,155,39,0.18)] flex items-center justify-center shrink-0">
+            <Calendar size={22} className="text-[var(--gold)]" aria-hidden="true" />
+          </div>
+          <div className="flex flex-col gap-0.5">
+            <span className="font-jakarta font-bold text-xs uppercase tracking-widest text-[var(--gold)]">
+              Fecha del evento
+            </span>
+            <span className="font-jakarta font-bold text-base sm:text-lg text-[var(--dark-brown)]">
+              Sábado 7 de Noviembre
+            </span>
+          </div>
+        </div>
+
+        {/* Divider desktop */}
+        <div className="hidden sm:block w-px h-12 bg-[rgba(197,155,39,0.3)]" />
+
+        {/* HORARIO (DESTACADO Y VISIBLE) */}
+        <div className="flex items-center gap-3.5 text-left flex-1 p-3.5 sm:p-0 rounded-xl bg-[rgba(197,155,39,0.12)] sm:bg-transparent border sm:border-none border-[rgba(197,155,39,0.3)]">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#C59B27] to-[#D4A373] flex items-center justify-center shrink-0 shadow-sm animate-pulse">
+            <Clock size={22} color="#fff" aria-hidden="true" />
+          </div>
+          <div className="flex flex-col gap-0.5">
+            <span className="font-jakarta font-bold text-xs uppercase tracking-widest text-[#dc2626] flex items-center gap-1">
+              <span>⏰ Horario importante</span>
+            </span>
+            <span className="font-jakarta font-black text-xl sm:text-2xl text-[var(--dark-brown)] tracking-tight flex items-center gap-2">
+              20:30 hs <span className="font-semibold text-xs text-[var(--gold)] uppercase tracking-wider">(Puntual)</span>
+            </span>
+          </div>
+        </div>
       </div>
 
       {/* Actions */}
