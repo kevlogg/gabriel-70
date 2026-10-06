@@ -226,7 +226,7 @@ export default function InvitationPage() {
                     fontWeight: 600,
                   }}
                 >
-                  ¡Te esperamos con los brazos abiertos para brindar juntos! 🥂
+                  70 vueltas al sol merecen una fiesta a la altura. Vení listo para disfrutar sin mirar el reloj. 🥂
                 </p>
                 <p
                   className="font-jakarta text-xs uppercase tracking-widest font-medium"
