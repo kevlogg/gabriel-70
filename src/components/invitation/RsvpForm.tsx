@@ -102,33 +102,7 @@ export default function RsvpForm() {
         </p>
       </div>
 
-      {/* Adult Event Highlight Callout */}
-      <div
-        className="flex items-start sm:items-center gap-3.5 rounded-2xl mb-2 shadow-xs"
-        style={{
-          padding: "1.15rem 1.25rem",
-          background: "linear-gradient(135deg, rgba(197,155,39,0.14), rgba(212,163,115,0.14))",
-          border: "1.5px solid rgba(197,155,39,0.4)",
-          boxSizing: "border-box",
-          width: "100%",
-        }}
-      >
-        <span className="text-2xl shrink-0 leading-none pt-0.5 sm:pt-0" role="img" aria-label="Adultos">🔞</span>
-        <div className="flex flex-col gap-0.5">
-          <p
-            className="font-jakarta font-bold text-xs sm:text-sm uppercase tracking-wider"
-            style={{ color: "var(--gold)" }}
-          >
-            Evento exclusivo para adultos
-          </p>
-          <p
-            className="font-jakarta text-xs sm:text-sm font-medium"
-            style={{ color: "var(--dark-brown-70)", lineHeight: 1.4 }}
-          >
-            Para que todos podamos celebrar libremente, este evento está destinado únicamente a adultos.
-          </p>
-        </div>
-      </div>
+
 
       {state.status === "error" && state.message && !state.errors && (
         <div
