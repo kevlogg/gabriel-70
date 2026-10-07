@@ -27,7 +27,7 @@ export async function getMasterGuests(): Promise<MasterGuest[]> {
   try {
     await initializeMasterGuestsDb();
     const client = getClient();
-    const result = await client.execute(`SELECT id, name, createdAt FROM master_guests ORDER BY name ASC`);
+    const result = await client.execute(`SELECT id, name, createdAt FROM master_guests ORDER BY rowid ASC`);
     return result.rows.map((r) => ({
       id: String(r.id),
       name: String(r.name),
@@ -77,12 +77,12 @@ export async function addMasterGuestsBulk(rawNamesText: string): Promise<number>
 
   if (names.length === 0) return 0;
 
-  const createdAt = new Date().toISOString();
+  const baseTime = Date.now();
 
   try {
-    const statements = names.map((name) => ({
+    const statements = names.map((name, index) => ({
       sql: `INSERT INTO master_guests (id, name, createdAt) VALUES (?, ?, ?)`,
-      args: [generateId(), name, createdAt],
+      args: [generateId(), name, new Date(baseTime + index).toISOString()],
     }));
 
     await client.batch(statements, "write");
@@ -90,11 +90,12 @@ export async function addMasterGuestsBulk(rawNamesText: string): Promise<number>
   } catch (err) {
     console.error("Error in batch insert of master guests, falling back to sequential:", err);
     let count = 0;
-    for (const name of names) {
+    for (let i = 0; i < names.length; i++) {
+      const name = names[i];
       try {
         await client.execute({
           sql: `INSERT INTO master_guests (id, name, createdAt) VALUES (?, ?, ?)`,
-          args: [generateId(), name, createdAt],
+          args: [generateId(), name, new Date(baseTime + i).toISOString()],
         });
         count++;
       } catch (innerErr) {
