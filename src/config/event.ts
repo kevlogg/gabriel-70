@@ -38,7 +38,7 @@ export const EVENT_DATA: EventConfig = {
   gift: {
     bankName: "Banco / Billetera Virtual",
     alias: "GABRIEL.70.CUMPLE",
-    cbu: "0000003100010000000000",
+    cbu: "0000003100062663052871",
     holderName: "Gabriel",
   },
   audioTrackPath: "/audio/LosAngelesAzules-LaCumbiadelInfinito.mp3",
