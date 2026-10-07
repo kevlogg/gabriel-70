@@ -50,9 +50,37 @@ function normalizeName(str: string): string {
 export default function GuestListManager({ masterGuests, rsvps }: GuestListManagerProps) {
   const [showBulkModal, setShowBulkModal] = useState(false);
   const [showSingleInput, setShowSingleInput] = useState(false);
+  const [isSubmittingBulk, setIsSubmittingBulk] = useState(false);
+  const [isSubmittingSingle, setIsSubmittingSingle] = useState(false);
   const [filter, setFilter] = useState<"all" | "pending" | "confirmed" | "declined">("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [copiedPending, setCopiedPending] = useState(false);
+
+  const handleBulkSubmit = async (formData: FormData) => {
+    setIsSubmittingBulk(true);
+    try {
+      await bulkAddGuestsAction(formData);
+      setShowBulkModal(false);
+    } catch (err) {
+      console.error("Error al cargar lista masiva:", err);
+      alert("Ocurrió un error al guardar la lista. Intentá de nuevo.");
+    } finally {
+      setIsSubmittingBulk(false);
+    }
+  };
+
+  const handleSingleSubmit = async (formData: FormData) => {
+    setIsSubmittingSingle(true);
+    try {
+      await addGuestAction(formData);
+      setShowSingleInput(false);
+    } catch (err) {
+      console.error("Error al agregar invitado:", err);
+    } finally {
+      setIsSubmittingSingle(false);
+    }
+  };
+
 
   // Match master guests with RSVPs AND include unmatched RSVPs
   const matchedList = useMemo<MatchedGuestItem[]>(() => {
@@ -265,16 +293,17 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
 
       {/* Single Guest Add Form */}
       {showSingleInput && (
-        <form action={addGuestAction} className="flex flex-col sm:flex-row gap-2.5 animate-scale-in p-4 rounded-2xl bg-[var(--cream-2)] border-2 border-[rgba(197,155,39,0.35)] shadow-xs">
+        <form action={handleSingleSubmit} className="flex flex-col sm:flex-row gap-2.5 animate-scale-in p-4 rounded-2xl bg-[var(--cream-2)] border-2 border-[rgba(197,155,39,0.35)] shadow-xs">
           <input
             name="name"
             type="text"
             required
+            disabled={isSubmittingSingle}
             placeholder="Nombre y Apellido del invitado"
             className="form-input flex-1 text-sm py-2.5"
           />
-          <button type="submit" className="btn-gold px-5 py-2.5 text-xs sm:text-sm shrink-0 justify-center">
-            Guardar
+          <button type="submit" disabled={isSubmittingSingle} className="btn-gold px-5 py-2.5 text-xs sm:text-sm shrink-0 justify-center">
+            {isSubmittingSingle ? "Guardando..." : "Guardar"}
           </button>
         </form>
       )}
@@ -287,19 +316,21 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
               Cargar lista masiva de invitados
             </h3>
             <p className="font-jakarta text-xs sm:text-sm text-[var(--dark-brown-70)]">
-              Pegá o escribí los nombres de tus invitados, <strong>un nombre por línea</strong>:
+              Pegá o escribí los nombres de tus invitados, <strong>un nombre por línea</strong> (o separados por coma):
             </p>
-            <form action={bulkAddGuestsAction} className="flex flex-col gap-4">
+            <form action={handleBulkSubmit} className="flex flex-col gap-4">
               <textarea
                 name="rawList"
                 rows={7}
                 required
+                disabled={isSubmittingBulk}
                 placeholder="Juan Pérez&#10;María González&#10;Carlos Rodríguez..."
                 className="form-input text-sm p-3.5 resize-none"
               />
               <div className="flex justify-end gap-2.5 pt-2">
                 <button
                   type="button"
+                  disabled={isSubmittingBulk}
                   onClick={() => setShowBulkModal(false)}
                   className="btn-outline px-4 py-2 text-xs sm:text-sm"
                 >
@@ -307,10 +338,10 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
                 </button>
                 <button
                   type="submit"
-                  onClick={() => setShowBulkModal(false)}
+                  disabled={isSubmittingBulk}
                   className="btn-gold px-5 py-2 text-xs sm:text-sm"
                 >
-                  Cargar lista
+                  {isSubmittingBulk ? "Cargando lista..." : "Cargar lista"}
                 </button>
               </div>
             </form>

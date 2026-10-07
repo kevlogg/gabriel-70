@@ -59,27 +59,52 @@ export async function addMasterGuest(name: string): Promise<MasterGuest> {
 export async function addMasterGuestsBulk(rawNamesText: string): Promise<number> {
   await initializeMasterGuestsDb();
   const client = getClient();
-  const names = rawNamesText
-    .split(/\r?\n/)
-    .map((n) => n.trim())
+
+  // Split by newlines, or by commas/semicolons if user pasted a single line with commas
+  let rawLines = rawNamesText.split(/\r?\n/);
+  if (rawLines.length === 1 && (rawNamesText.includes(",") || rawNamesText.includes(";"))) {
+    rawLines = rawNamesText.split(/[,;]/);
+  }
+
+  const names = rawLines
+    .map((line) => {
+      return line
+        // Remove leading numbers, dots, parentheses, bullets ("1.", "1)", "•", "-", "*", etc.)
+        .replace(/^[\s\d.\-)•*+]+/, "")
+        .trim();
+    })
     .filter((n) => n.length > 0);
 
   if (names.length === 0) return 0;
 
   const createdAt = new Date().toISOString();
-  let addedCount = 0;
 
-  for (const name of names) {
-    const id = generateId();
-    await client.execute({
+  try {
+    const statements = names.map((name) => ({
       sql: `INSERT INTO master_guests (id, name, createdAt) VALUES (?, ?, ?)`,
-      args: [id, name, createdAt],
-    });
-    addedCount++;
-  }
+      args: [generateId(), name, createdAt],
+    }));
 
-  return addedCount;
+    await client.batch(statements, "write");
+    return names.length;
+  } catch (err) {
+    console.error("Error in batch insert of master guests, falling back to sequential:", err);
+    let count = 0;
+    for (const name of names) {
+      try {
+        await client.execute({
+          sql: `INSERT INTO master_guests (id, name, createdAt) VALUES (?, ?, ?)`,
+          args: [generateId(), name, createdAt],
+        });
+        count++;
+      } catch (innerErr) {
+        console.error(`Failed to insert guest "${name}":`, innerErr);
+      }
+    }
+    return count;
+  }
 }
+
 
 export async function deleteMasterGuest(id: string): Promise<void> {
   await initializeMasterGuestsDb();
