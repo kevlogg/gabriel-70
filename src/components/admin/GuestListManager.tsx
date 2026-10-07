@@ -153,28 +153,28 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
   };
 
   return (
-    <div className="flex flex-col gap-5 sm:gap-6 w-full">
-      {/* 3 Main KPI Cards - Side-by-side horizontally on ALL screen sizes */}
-      <div className="grid grid-cols-3 gap-2 sm:gap-4 w-full">
+    <div className="flex flex-col gap-6 sm:gap-8 w-full">
+      {/* 3 Main KPI Cards - Centered info, enhanced borders & margins */}
+      <div className="grid grid-cols-3 gap-2.5 sm:gap-5 w-full">
         {/* CARD 1: EN LISTA */}
         <button
           type="button"
           onClick={() => setFilter("all")}
-          className={`rounded-xl sm:rounded-2xl p-2.5 sm:p-5 flex flex-col justify-between text-left transition-all cursor-pointer ${
+          className={`rounded-2xl p-3 sm:p-6 flex flex-col items-center justify-center text-center transition-all cursor-pointer border-2 ${
             filter === "all"
-              ? "ring-2 ring-[var(--gold)] bg-[rgba(197,155,39,0.18)] shadow-sm scale-[1.01]"
-              : "bg-[rgba(197,155,39,0.08)] hover:bg-[rgba(197,155,39,0.14)] border border-[rgba(197,155,39,0.25)]"
+              ? "border-[var(--gold)] bg-[rgba(197,155,39,0.18)] shadow-md scale-[1.02] ring-2 ring-[var(--gold)]/40"
+              : "border-[rgba(197,155,39,0.35)] bg-[rgba(197,155,39,0.06)] hover:bg-[rgba(197,155,39,0.14)] hover:border-[var(--gold)]"
           }`}
         >
-          <div className="flex items-center justify-between text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[var(--gold)]">
-            <span className="truncate">EN LISTA</span>
-            <Users size={14} className="hidden sm:block shrink-0" />
+          <div className="flex items-center justify-center gap-1.5 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[var(--gold)] mb-1">
+            <Users size={15} className="shrink-0" />
+            <span>EN LISTA</span>
           </div>
-          <span className="font-cormorant font-bold text-2xl sm:text-4xl text-[var(--dark-brown)] leading-none my-1">
+          <span className="font-cormorant font-bold text-3xl sm:text-5xl text-[var(--dark-brown)] leading-none my-1">
             {masterGuests.length}
           </span>
-          <span className="text-[10px] sm:text-xs text-[var(--dark-brown-70)] font-medium truncate">
-            {masterGuests.length === 1 ? "invitado" : "invitados"}
+          <span className="text-[10px] sm:text-xs text-[var(--dark-brown-70)] font-medium leading-tight text-center">
+            {masterGuests.length === 1 ? "invitado" : "invitados en total"}
           </span>
         </button>
 
@@ -182,21 +182,21 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
         <button
           type="button"
           onClick={() => setFilter("confirmed")}
-          className={`rounded-xl sm:rounded-2xl p-2.5 sm:p-5 flex flex-col justify-between text-left transition-all cursor-pointer ${
+          className={`rounded-2xl p-3 sm:p-6 flex flex-col items-center justify-center text-center transition-all cursor-pointer border-2 ${
             filter === "confirmed"
-              ? "ring-2 ring-emerald-600 bg-emerald-100 shadow-sm scale-[1.01]"
-              : "bg-emerald-50/70 hover:bg-emerald-100/60 border border-emerald-200"
+              ? "border-emerald-500 bg-emerald-100 shadow-md scale-[1.02] ring-2 ring-emerald-500/40"
+              : "border-emerald-300 bg-emerald-50/80 hover:bg-emerald-100/70 hover:border-emerald-400"
           }`}
         >
-          <div className="flex items-center justify-between text-[10px] sm:text-xs font-bold uppercase tracking-wider text-emerald-700">
-            <span className="truncate">CONFIRMADOS</span>
-            <CheckCircle size={14} className="hidden sm:block shrink-0" />
+          <div className="flex items-center justify-center gap-1.5 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-emerald-700 mb-1">
+            <CheckCircle size={15} className="shrink-0" />
+            <span>CONFIRMADOS</span>
           </div>
-          <span className="font-cormorant font-bold text-2xl sm:text-4xl text-emerald-700 leading-none my-1">
+          <span className="font-cormorant font-bold text-3xl sm:text-5xl text-emerald-700 leading-none my-1">
             {realConfirmedAttendees}
           </span>
-          <span className="text-[10px] sm:text-xs text-emerald-800/80 font-medium truncate">
-            reales (tit. + acomp.)
+          <span className="text-[10px] sm:text-xs text-emerald-800/90 font-medium leading-tight text-center">
+            asistentes (tit. + acomp.)
           </span>
         </button>
 
@@ -204,42 +204,42 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
         <button
           type="button"
           onClick={() => setFilter("pending")}
-          className={`rounded-xl sm:rounded-2xl p-2.5 sm:p-5 flex flex-col justify-between text-left transition-all cursor-pointer ${
+          className={`rounded-2xl p-3 sm:p-6 flex flex-col items-center justify-center text-center transition-all cursor-pointer border-2 ${
             filter === "pending"
-              ? "ring-2 ring-amber-600 bg-amber-100 shadow-sm scale-[1.01]"
-              : "bg-amber-50/70 hover:bg-amber-100/60 border border-amber-200"
+              ? "border-amber-500 bg-amber-100 shadow-md scale-[1.02] ring-2 ring-amber-500/40"
+              : "border-amber-300 bg-amber-50/80 hover:bg-amber-100/70 hover:border-amber-400"
           }`}
         >
-          <div className="flex items-center justify-between text-[10px] sm:text-xs font-bold uppercase tracking-wider text-amber-700">
-            <span className="truncate">FALTAN</span>
-            <Clock size={14} className="hidden sm:block shrink-0" />
+          <div className="flex items-center justify-center gap-1.5 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-amber-700 mb-1">
+            <Clock size={15} className="shrink-0" />
+            <span>FALTAN</span>
           </div>
-          <span className="font-cormorant font-bold text-2xl sm:text-4xl text-amber-800 leading-none my-1">
+          <span className="font-cormorant font-bold text-3xl sm:text-5xl text-amber-800 leading-none my-1">
             {pendingCount}
           </span>
-          <span className="text-[10px] sm:text-xs text-amber-800/80 font-medium truncate">
+          <span className="text-[10px] sm:text-xs text-amber-800/90 font-medium leading-tight text-center">
             sin responder
           </span>
         </button>
       </div>
 
       {/* Action Bar */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 p-3.5 sm:p-4 rounded-2xl bg-[rgba(197,155,39,0.06)] border border-[rgba(197,155,39,0.25)]">
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-4 rounded-2xl bg-[rgba(197,155,39,0.06)] border-2 border-[rgba(197,155,39,0.3)] shadow-xs">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full sm:w-auto">
           <button
             type="button"
             onClick={() => setShowBulkModal(true)}
-            className="btn-gold text-xs sm:text-sm py-2.5 px-3.5 flex items-center justify-center gap-2 w-full sm:w-auto"
+            className="btn-gold text-xs sm:text-sm py-2.5 px-4 flex items-center justify-center gap-2 w-full sm:w-auto"
           >
-            <ClipboardList size={15} />
+            <ClipboardList size={16} />
             Cargar lista masiva
           </button>
           <button
             type="button"
             onClick={() => setShowSingleInput(!showSingleInput)}
-            className="btn-outline text-xs sm:text-sm py-2.5 px-3.5 flex items-center justify-center gap-2 w-full sm:w-auto"
+            className="btn-outline text-xs sm:text-sm py-2.5 px-4 flex items-center justify-center gap-2 w-full sm:w-auto"
           >
-            <UserPlus size={15} />
+            <UserPlus size={16} />
             + Agregar individual
           </button>
         </div>
@@ -248,15 +248,15 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
           <button
             type="button"
             onClick={handleCopyPending}
-            className="flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl font-jakarta font-semibold text-xs bg-[rgba(234,179,8,0.15)] text-[#854d0e] border border-[rgba(234,179,8,0.4)] hover:bg-[rgba(234,179,8,0.25)] transition-colors cursor-pointer w-full sm:w-auto"
+            className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-full font-jakarta font-semibold text-xs bg-amber-100 text-amber-900 border-2 border-amber-300 hover:bg-amber-200 transition-colors cursor-pointer w-full sm:w-auto shadow-xs"
           >
             {copiedPending ? (
               <>
-                <Check size={14} color="#16a34a" /> ¡Nombres copiados!
+                <Check size={15} color="#16a34a" /> ¡Nombres copiados!
               </>
             ) : (
               <>
-                <Copy size={14} /> Copiar faltantes ({pendingCount})
+                <Copy size={15} /> Copiar faltantes ({pendingCount})
               </>
             )}
           </button>
@@ -265,7 +265,7 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
 
       {/* Single Guest Add Form */}
       {showSingleInput && (
-        <form action={addGuestAction} className="flex flex-col sm:flex-row gap-2 animate-scale-in p-3.5 rounded-2xl bg-[var(--cream-2)] border border-[rgba(197,155,39,0.3)]">
+        <form action={addGuestAction} className="flex flex-col sm:flex-row gap-2.5 animate-scale-in p-4 rounded-2xl bg-[var(--cream-2)] border-2 border-[rgba(197,155,39,0.35)] shadow-xs">
           <input
             name="name"
             type="text"
@@ -320,13 +320,13 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
 
       {/* Search Bar */}
       <div className="relative w-full">
-        <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--dark-brown-40)]" />
+        <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--dark-brown-40)]" />
         <input
           type="search"
           placeholder="Buscar invitado por nombre..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="form-input pl-10 py-2.5 text-sm w-full"
+          className="form-input pl-11 pr-4 py-3 text-sm w-full border-2 border-[rgba(197,155,39,0.35)] rounded-2xl shadow-xs"
         />
       </div>
 
@@ -358,9 +358,9 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
       </div>
 
       {/* ─── MOBILE VIEW: CARDS (DISPLAYED ONLY ON MOBILE < 640px) ─── */}
-      <div className="flex flex-col gap-2.5 sm:hidden w-full">
+      <div className="flex flex-col gap-4 sm:hidden w-full">
         {filteredList.length === 0 ? (
-          <div className="text-center py-8 px-4 rounded-2xl bg-[var(--cream-2)] border border-[rgba(197,155,39,0.2)] font-jakarta text-xs text-[var(--dark-brown-40)]">
+          <div className="text-center py-10 px-4 rounded-2xl bg-[var(--cream-2)] border-2 border-dashed border-[rgba(197,155,39,0.3)] font-jakarta text-xs text-[var(--dark-brown-40)]">
             {masterGuests.length === 0 && rsvps.length === 0
               ? "Aún no cargaste ninguna lista de invitados ni hay respuestas. Tocá 'Cargar lista masiva' para empezar."
               : "No se encontraron invitados con el filtro seleccionado."}
@@ -369,89 +369,122 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
           filteredList.map(({ id, guestName, guestId, status, matchedRsvp, isMasterGuest }) => (
             <div
               key={id}
-              className="p-3.5 rounded-2xl border border-[rgba(197,155,39,0.25)] bg-[var(--cream-2)] flex flex-col gap-2 shadow-xs"
+              className={`rounded-2xl p-4 sm:p-5 flex flex-col gap-3.5 shadow-xs border-2 transition-all ${
+                status === "confirmed"
+                  ? "bg-emerald-50/40 border-emerald-300 hover:border-emerald-500"
+                  : status === "declined"
+                  ? "bg-red-50/40 border-red-300 hover:border-red-500"
+                  : "bg-[var(--cream-2)] border-[rgba(197,155,39,0.35)] hover:border-[var(--gold)]"
+              }`}
             >
-              <div className="flex items-start justify-between gap-2">
-                <span className="font-jakarta font-bold text-sm text-[var(--dark-brown)] break-words leading-snug">
-                  {guestName}
-                </span>
+              {/* Header: Badge & Delete Button */}
+              <div className="flex items-center justify-between gap-2 border-b border-dashed border-[rgba(197,155,39,0.2)] pb-2.5">
+                <div className="flex items-center gap-2">
+                  {status === "confirmed" && (
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
+                      <CheckCircle size={13} /> Confirmado {matchedRsvp && matchedRsvp.companionsCount > 0 ? `(${1 + matchedRsvp.companionsCount} pers.)` : "(1 pers.)"}
+                    </span>
+                  )}
+                  {status === "declined" && (
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-800 border border-red-300">
+                      <XCircle size={13} /> No asiste
+                    </span>
+                  )}
+                  {status === "pending" && (
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-300">
+                      <Clock size={13} /> Pendiente
+                    </span>
+                  )}
+                </div>
 
                 {isMasterGuest && guestId && (
-                  <form action={deleteGuestAction} className="shrink-0 pt-0.5">
+                  <form action={deleteGuestAction} className="shrink-0">
                     <input type="hidden" name="id" value={guestId} />
                     <button
                       type="submit"
-                      className="p-1 text-[var(--dark-brown-40)] hover:text-red-600 transition-colors cursor-pointer"
+                      className="p-1.5 rounded-lg text-[var(--dark-brown-40)] hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
                       title="Eliminar de la lista"
                     >
-                      <Trash2 size={15} />
+                      <Trash2 size={16} />
                     </button>
                   </form>
                 )}
               </div>
 
-              {/* Badges & RSVP info */}
-              <div className="flex flex-col gap-1.5 pt-2 border-t border-[rgba(197,155,39,0.15)] text-xs">
-                <div className="flex items-center justify-between">
-                  {status === "confirmed" && (
-                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700 border border-emerald-300">
-                      <CheckCircle size={12} /> Confirmado
-                    </span>
-                  )}
-                  {status === "declined" && (
-                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-red-700 border border-red-300">
-                      <XCircle size={12} /> No asiste
-                    </span>
-                  )}
-                  {status === "pending" && (
-                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-700 border border-amber-300">
-                      <Clock size={12} /> Pendiente
-                    </span>
-                  )}
+              {/* NAMES BLOCK - ALL NAMES RENDERED WITH EQUAL FONT SIZE (text-base sm:text-lg font-bold) */}
+              <div className="flex flex-col gap-2">
+                {/* Principal Guest Name */}
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="font-jakarta font-bold text-base sm:text-lg text-[var(--dark-brown)] break-words leading-snug">
+                    {guestName}
+                  </span>
+                  <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-md bg-[rgba(197,155,39,0.12)] text-[var(--gold)] border border-[rgba(197,155,39,0.25)]">
+                    Titular
+                  </span>
                 </div>
 
-                {matchedRsvp && (
-                  <div className="flex flex-col gap-1 pt-1 text-[11px] text-[var(--dark-brown-70)]">
-                    {matchedRsvp.companionsCount > 0 && (
-                      <div className="font-medium text-[var(--dark-brown)]">
-                        👥 Acompañantes ({matchedRsvp.companionsCount}):{" "}
-                        <span className="font-normal">{matchedRsvp.companionNames?.join(", ") || "No especificado"}</span>
-                      </div>
-                    )}
-                    {matchedRsvp.dietaryRestrictions && matchedRsvp.dietaryRestrictions !== "ninguna" && (
-                      <div className="flex items-center gap-1 text-amber-800 font-medium">
-                        <Utensils size={12} /> Dieta: {DIETARY_LABELS[matchedRsvp.dietaryRestrictions]}
-                      </div>
-                    )}
-                    {matchedRsvp.message && (
-                      <div className="flex items-start gap-1 italic text-[var(--dark-brown-70)]">
-                        <MessageSquare size={12} className="shrink-0 mt-0.5" /> "{matchedRsvp.message}"
-                      </div>
-                    )}
+                {/* Companion Names (SAME FONT SIZE AND WEIGHT) */}
+                {matchedRsvp?.companionNames && matchedRsvp.companionNames.length > 0 ? (
+                  matchedRsvp.companionNames.map((companionName, idx) => (
+                    <div key={idx} className="flex items-center gap-2 flex-wrap pt-1.5 border-t border-dashed border-[rgba(197,155,39,0.15)]">
+                      <span className="font-jakarta font-bold text-base sm:text-lg text-[var(--dark-brown)] break-words leading-snug">
+                        {companionName}
+                      </span>
+                      <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-md bg-amber-100 text-amber-900 border border-amber-300">
+                        Acompañante
+                      </span>
+                    </div>
+                  ))
+                ) : matchedRsvp && matchedRsvp.companionsCount > 0 ? (
+                  <div className="flex items-center gap-2 flex-wrap pt-1.5 border-t border-dashed border-[rgba(197,155,39,0.15)]">
+                    <span className="font-jakarta font-bold text-base sm:text-lg text-[var(--dark-brown)] break-words leading-snug">
+                      + {matchedRsvp.companionsCount} Acompañante{matchedRsvp.companionsCount > 1 ? "s" : ""}
+                    </span>
+                    <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-md bg-amber-100 text-amber-900 border border-amber-300">
+                      Acompañante
+                    </span>
                   </div>
-                )}
+                ) : null}
               </div>
+
+              {/* RSVP Details (Dietary restrictions & Messages) */}
+              {matchedRsvp && (
+                <div className="flex flex-col gap-2 pt-2 border-t border-[rgba(197,155,39,0.15)] text-xs">
+                  {matchedRsvp.dietaryRestrictions && matchedRsvp.dietaryRestrictions !== "ninguna" && (
+                    <div className="flex items-center gap-2 text-amber-900 bg-amber-50 px-3 py-1.5 rounded-xl border border-amber-200/80 font-medium">
+                      <Utensils size={14} className="shrink-0 text-amber-700" />
+                      <span>Menú especial: <strong>{DIETARY_LABELS[matchedRsvp.dietaryRestrictions]}</strong></span>
+                    </div>
+                  )}
+                  {matchedRsvp.message && (
+                    <div className="flex items-start gap-2 italic text-[var(--dark-brown-70)] bg-[rgba(197,155,39,0.06)] p-2.5 rounded-xl border border-[rgba(197,155,39,0.18)]">
+                      <MessageSquare size={14} className="shrink-0 mt-0.5 text-[var(--gold)]" />
+                      <span>"{matchedRsvp.message}"</span>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           ))
         )}
       </div>
 
       {/* ─── DESKTOP VIEW: TABLE (DISPLAYED ONLY ON SCREENS >= 640px) ─── */}
-      <div className="hidden sm:block rounded-2xl overflow-hidden border border-[rgba(197,155,39,0.2)] w-full">
+      <div className="hidden sm:block rounded-2xl overflow-hidden border-2 border-[rgba(197,155,39,0.3)] w-full shadow-xs bg-white">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-[linear-gradient(135deg,rgba(197,155,39,0.12),rgba(212,163,115,0.12))] border-b border-[rgba(197,155,39,0.2)]">
-                <th className="px-4 py-3.5 font-jakarta font-semibold text-xs uppercase tracking-wider text-[var(--dark-brown-70)]">
-                  Invitado
+              <tr className="bg-[linear-gradient(135deg,rgba(197,155,39,0.15),rgba(212,163,115,0.15))] border-b-2 border-[rgba(197,155,39,0.25)]">
+                <th className="px-5 py-4 font-jakarta font-bold text-xs uppercase tracking-wider text-[var(--dark-brown)]">
+                  Invitados (Titular / Acompañante)
                 </th>
-                <th className="px-4 py-3.5 font-jakarta font-semibold text-xs uppercase tracking-wider text-[var(--dark-brown-70)]">
+                <th className="px-5 py-4 font-jakarta font-bold text-xs uppercase tracking-wider text-[var(--dark-brown)]">
                   Estado
                 </th>
-                <th className="px-4 py-3.5 font-jakarta font-semibold text-xs uppercase tracking-wider text-[var(--dark-brown-70)]">
-                  Detalle RSVP (Acompañantes / Menú Especial)
+                <th className="px-5 py-4 font-jakarta font-bold text-xs uppercase tracking-wider text-[var(--dark-brown)]">
+                  Detalles RSVP (Menú / Mensaje)
                 </th>
-                <th className="px-4 py-3.5 font-jakarta font-semibold text-xs uppercase tracking-wider text-[var(--dark-brown-70)] text-right">
+                <th className="px-5 py-4 font-jakarta font-bold text-xs uppercase tracking-wider text-[var(--dark-brown)] text-right">
                   Acción
                 </th>
               </tr>
@@ -469,62 +502,82 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
                 filteredList.map(({ id, guestName, guestId, status, matchedRsvp, isMasterGuest }, idx) => (
                   <tr
                     key={id}
-                    className={`border-b border-[rgba(197,155,39,0.1)] ${
+                    className={`border-b border-[rgba(197,155,39,0.15)] transition-colors hover:bg-[rgba(197,155,39,0.04)] ${
                       idx % 2 === 0 ? "bg-[var(--cream)]" : "bg-[var(--cream-2)]"
                     }`}
                   >
-                    <td className="px-4 py-3 font-jakarta font-semibold text-sm text-[var(--dark-brown)]">
-                      {guestName}
+                    {/* Names column with EQUAL FONT SIZES for principal and companion */}
+                    <td className="px-5 py-4 font-jakarta">
+                      <div className="flex flex-col gap-1.5">
+                        <div className="flex items-center gap-2">
+                          <span className="font-bold text-base text-[var(--dark-brown)]">
+                            {guestName}
+                          </span>
+                          <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-md bg-[rgba(197,155,39,0.12)] text-[var(--gold)] border border-[rgba(197,155,39,0.25)]">
+                            Titular
+                          </span>
+                        </div>
+
+                        {matchedRsvp?.companionNames && matchedRsvp.companionNames.length > 0 ? (
+                          matchedRsvp.companionNames.map((companionName, i) => (
+                            <div key={i} className="flex items-center gap-2 pt-0.5">
+                              <span className="font-bold text-base text-[var(--dark-brown)]">
+                                {companionName}
+                              </span>
+                              <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-md bg-amber-100 text-amber-900 border border-amber-300">
+                                Acompañante
+                              </span>
+                            </div>
+                          ))
+                        ) : matchedRsvp && matchedRsvp.companionsCount > 0 ? (
+                          <div className="flex items-center gap-2 pt-0.5">
+                            <span className="font-bold text-base text-[var(--dark-brown)]">
+                              + {matchedRsvp.companionsCount} Acompañante{matchedRsvp.companionsCount > 1 ? "s" : ""}
+                            </span>
+                            <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-md bg-amber-100 text-amber-900 border border-amber-300">
+                              Acompañante
+                            </span>
+                          </div>
+                        ) : null}
+                      </div>
                     </td>
 
-                    <td className="px-4 py-3">
+                    {/* Status column */}
+                    <td className="px-5 py-4">
                       {status === "confirmed" && (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700 border border-emerald-300">
-                          <CheckCircle size={12} /> Confirmado
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
+                          <CheckCircle size={13} /> Confirmado
                         </span>
                       )}
                       {status === "declined" && (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-700 border border-red-300">
-                          <XCircle size={12} /> No asiste
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-800 border border-red-300">
+                          <XCircle size={13} /> No asiste
                         </span>
                       )}
                       {status === "pending" && (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-700 border border-amber-300">
-                          <Clock size={12} /> Pendiente
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-300">
+                          <Clock size={13} /> Pendiente
                         </span>
                       )}
                     </td>
 
-                    <td className="px-4 py-3 font-jakarta text-xs text-[var(--dark-brown-70)]">
+                    {/* RSVP Details column */}
+                    <td className="px-5 py-4 font-jakarta text-xs text-[var(--dark-brown-70)]">
                       {matchedRsvp ? (
-                        <div className="flex flex-col gap-1">
-                          <div className="flex items-center gap-2">
-                            <span>
-                              RSVP por: <strong>{matchedRsvp.name}</strong>
-                            </span>
-                            {matchedRsvp.companionsCount > 0 && (
-                              <span className="px-2 py-0.5 rounded-md bg-[rgba(197,155,39,0.12)] text-[var(--dark-brown)] text-[11px] font-semibold">
-                                +{matchedRsvp.companionsCount} acompañante{matchedRsvp.companionsCount > 1 ? "s" : ""}
-                              </span>
-                            )}
-                          </div>
-
-                          {matchedRsvp.companionNames && matchedRsvp.companionNames.length > 0 && (
-                            <span className="text-[11px] text-[var(--dark-brown-70)]">
-                              Nombres: {matchedRsvp.companionNames.join(", ")}
-                            </span>
-                          )}
-
+                        <div className="flex flex-col gap-1.5">
                           {matchedRsvp.dietaryRestrictions && matchedRsvp.dietaryRestrictions !== "ninguna" && (
-                            <span className="text-[11px] text-amber-800 font-semibold flex items-center gap-1">
-                              <Utensils size={11} /> Dieta: {DIETARY_LABELS[matchedRsvp.dietaryRestrictions]}
+                            <span className="text-xs text-amber-900 font-semibold flex items-center gap-1.5 bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-200/80 w-fit">
+                              <Utensils size={13} className="text-amber-700" /> Dieta: {DIETARY_LABELS[matchedRsvp.dietaryRestrictions]}
                             </span>
                           )}
 
-                          {matchedRsvp.message && (
-                            <span className="text-[11px] italic text-[var(--dark-brown-70)]">
+                          {matchedRsvp.message ? (
+                            <span className="text-xs italic text-[var(--dark-brown-70)] flex items-start gap-1">
+                              <MessageSquare size={13} className="shrink-0 mt-0.5 text-[var(--gold)]" />
                               "{matchedRsvp.message}"
                             </span>
+                          ) : (
+                            <span className="opacity-40">— Sin mensaje —</span>
                           )}
                         </div>
                       ) : (
@@ -532,20 +585,21 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
                       )}
                     </td>
 
-                    <td className="px-4 py-3 text-right">
+                    {/* Action column */}
+                    <td className="px-5 py-4 text-right">
                       {isMasterGuest && guestId ? (
                         <form action={deleteGuestAction} className="inline">
                           <input type="hidden" name="id" value={guestId} />
                           <button
                             type="submit"
-                            className="p-1.5 text-[var(--dark-brown-40)] hover:text-red-600 transition-colors cursor-pointer"
+                            className="p-1.5 rounded-lg text-[var(--dark-brown-40)] hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
                             title="Eliminar de la lista"
                           >
-                            <Trash2 size={15} />
+                            <Trash2 size={16} />
                           </button>
                         </form>
                       ) : (
-                        <span className="text-[11px] text-[var(--dark-brown-40)]">Directo</span>
+                        <span className="text-[11px] font-medium text-[var(--dark-brown-40)]">Directo</span>
                       )}
                     </td>
                   </tr>
