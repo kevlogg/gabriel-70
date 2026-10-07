@@ -154,26 +154,26 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
 
   return (
     <div className="flex flex-col gap-6 sm:gap-8 w-full">
-      {/* 3 Main KPI Cards - Centered info, enhanced borders & margins */}
+      {/* 3 Main KPI Cards - Centered info & numbers, enhanced borders & margins */}
       <div className="grid grid-cols-3 gap-2.5 sm:gap-5 w-full">
         {/* CARD 1: EN LISTA */}
         <button
           type="button"
           onClick={() => setFilter("all")}
-          className={`rounded-2xl p-3 sm:p-6 flex flex-col items-center justify-center text-center transition-all cursor-pointer border-2 ${
+          className={`rounded-2xl p-3.5 sm:p-6 flex flex-col items-center justify-center text-center transition-all cursor-pointer border-2 w-full min-w-0 ${
             filter === "all"
               ? "border-[var(--gold)] bg-[rgba(197,155,39,0.18)] shadow-md scale-[1.02] ring-2 ring-[var(--gold)]/40"
               : "border-[rgba(197,155,39,0.35)] bg-[rgba(197,155,39,0.06)] hover:bg-[rgba(197,155,39,0.14)] hover:border-[var(--gold)]"
           }`}
         >
-          <div className="flex items-center justify-center gap-1.5 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[var(--gold)] mb-1">
+          <div className="flex items-center justify-center text-center gap-1.5 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[var(--gold)] mb-1.5 w-full">
             <Users size={15} className="shrink-0" />
             <span>EN LISTA</span>
           </div>
-          <span className="font-cormorant font-bold text-3xl sm:text-5xl text-[var(--dark-brown)] leading-none my-1">
+          <span className="font-cormorant font-bold text-3xl sm:text-5xl text-[var(--dark-brown)] leading-none my-1.5 text-center w-full block">
             {masterGuests.length}
           </span>
-          <span className="text-[10px] sm:text-xs text-[var(--dark-brown-70)] font-medium leading-tight text-center">
+          <span className="text-[10px] sm:text-xs text-[var(--dark-brown-70)] font-medium leading-tight text-center w-full block">
             {masterGuests.length === 1 ? "invitado" : "invitados en total"}
           </span>
         </button>
@@ -182,20 +182,20 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
         <button
           type="button"
           onClick={() => setFilter("confirmed")}
-          className={`rounded-2xl p-3 sm:p-6 flex flex-col items-center justify-center text-center transition-all cursor-pointer border-2 ${
+          className={`rounded-2xl p-3.5 sm:p-6 flex flex-col items-center justify-center text-center transition-all cursor-pointer border-2 w-full min-w-0 ${
             filter === "confirmed"
               ? "border-emerald-500 bg-emerald-100 shadow-md scale-[1.02] ring-2 ring-emerald-500/40"
               : "border-emerald-300 bg-emerald-50/80 hover:bg-emerald-100/70 hover:border-emerald-400"
           }`}
         >
-          <div className="flex items-center justify-center gap-1.5 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-emerald-700 mb-1">
+          <div className="flex items-center justify-center text-center gap-1.5 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-emerald-700 mb-1.5 w-full">
             <CheckCircle size={15} className="shrink-0" />
             <span>CONFIRMADOS</span>
           </div>
-          <span className="font-cormorant font-bold text-3xl sm:text-5xl text-emerald-700 leading-none my-1">
+          <span className="font-cormorant font-bold text-3xl sm:text-5xl text-emerald-700 leading-none my-1.5 text-center w-full block">
             {realConfirmedAttendees}
           </span>
-          <span className="text-[10px] sm:text-xs text-emerald-800/90 font-medium leading-tight text-center">
+          <span className="text-[10px] sm:text-xs text-emerald-800/90 font-medium leading-tight text-center w-full block">
             asistentes (tit. + acomp.)
           </span>
         </button>
@@ -204,20 +204,20 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
         <button
           type="button"
           onClick={() => setFilter("pending")}
-          className={`rounded-2xl p-3 sm:p-6 flex flex-col items-center justify-center text-center transition-all cursor-pointer border-2 ${
+          className={`rounded-2xl p-3.5 sm:p-6 flex flex-col items-center justify-center text-center transition-all cursor-pointer border-2 w-full min-w-0 ${
             filter === "pending"
               ? "border-amber-500 bg-amber-100 shadow-md scale-[1.02] ring-2 ring-amber-500/40"
               : "border-amber-300 bg-amber-50/80 hover:bg-amber-100/70 hover:border-amber-400"
           }`}
         >
-          <div className="flex items-center justify-center gap-1.5 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-amber-700 mb-1">
+          <div className="flex items-center justify-center text-center gap-1.5 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-amber-700 mb-1.5 w-full">
             <Clock size={15} className="shrink-0" />
             <span>FALTAN</span>
           </div>
-          <span className="font-cormorant font-bold text-3xl sm:text-5xl text-amber-800 leading-none my-1">
+          <span className="font-cormorant font-bold text-3xl sm:text-5xl text-amber-800 leading-none my-1.5 text-center w-full block">
             {pendingCount}
           </span>
-          <span className="text-[10px] sm:text-xs text-amber-800/90 font-medium leading-tight text-center">
+          <span className="text-[10px] sm:text-xs text-amber-800/90 font-medium leading-tight text-center w-full block">
             sin responder
           </span>
         </button>
@@ -366,7 +366,7 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
               : "No se encontraron invitados con el filtro seleccionado."}
           </div>
         ) : (
-          filteredList.map(({ id, guestName, guestId, status, matchedRsvp, isMasterGuest }) => (
+          filteredList.map(({ id, guestName, guestId, status, matchedRsvp }) => (
             <div
               key={id}
               className={`rounded-2xl p-4 sm:p-5 flex flex-col gap-3.5 shadow-xs border-2 transition-all ${
@@ -397,18 +397,26 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
                   )}
                 </div>
 
-                {isMasterGuest && guestId && (
-                  <form action={deleteGuestAction} className="shrink-0">
-                    <input type="hidden" name="id" value={guestId} />
-                    <button
-                      type="submit"
-                      className="p-1.5 rounded-lg text-[var(--dark-brown-40)] hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
-                      title="Eliminar de la lista"
-                    >
-                      <Trash2 size={16} />
-                    </button>
-                  </form>
-                )}
+                {/* Delete form for ANY guest or RSVP entry */}
+                <form
+                  action={deleteGuestAction}
+                  onSubmit={(e) => {
+                    if (!confirm(`¿Seguro que querés eliminar a ${guestName}?`)) {
+                      e.preventDefault();
+                    }
+                  }}
+                  className="shrink-0"
+                >
+                  {guestId && <input type="hidden" name="id" value={guestId} />}
+                  {matchedRsvp?.id && <input type="hidden" name="rsvpId" value={matchedRsvp.id} />}
+                  <button
+                    type="submit"
+                    className="p-1.5 rounded-lg text-[var(--dark-brown-40)] hover:text-red-600 hover:bg-red-100 transition-colors cursor-pointer"
+                    title="Eliminar registro"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </form>
               </div>
 
               {/* NAMES BLOCK - ALL NAMES RENDERED WITH EQUAL FONT SIZE (text-base sm:text-lg font-bold) */}
@@ -499,7 +507,7 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
                   </td>
                 </tr>
               ) : (
-                filteredList.map(({ id, guestName, guestId, status, matchedRsvp, isMasterGuest }, idx) => (
+                filteredList.map(({ id, guestName, guestId, status, matchedRsvp }, idx) => (
                   <tr
                     key={id}
                     className={`border-b border-[rgba(197,155,39,0.15)] transition-colors hover:bg-[rgba(197,155,39,0.04)] ${
@@ -587,20 +595,25 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
 
                     {/* Action column */}
                     <td className="px-5 py-4 text-right">
-                      {isMasterGuest && guestId ? (
-                        <form action={deleteGuestAction} className="inline">
-                          <input type="hidden" name="id" value={guestId} />
-                          <button
-                            type="submit"
-                            className="p-1.5 rounded-lg text-[var(--dark-brown-40)] hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
-                            title="Eliminar de la lista"
-                          >
-                            <Trash2 size={16} />
-                          </button>
-                        </form>
-                      ) : (
-                        <span className="text-[11px] font-medium text-[var(--dark-brown-40)]">Directo</span>
-                      )}
+                      <form
+                        action={deleteGuestAction}
+                        onSubmit={(e) => {
+                          if (!confirm(`¿Seguro que querés eliminar a ${guestName}?`)) {
+                            e.preventDefault();
+                          }
+                        }}
+                        className="inline"
+                      >
+                        {guestId && <input type="hidden" name="id" value={guestId} />}
+                        {matchedRsvp?.id && <input type="hidden" name="rsvpId" value={matchedRsvp.id} />}
+                        <button
+                          type="submit"
+                          className="p-1.5 rounded-lg text-[var(--dark-brown-40)] hover:text-red-600 hover:bg-red-100 transition-colors cursor-pointer"
+                          title="Eliminar registro"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </form>
                     </td>
                   </tr>
                 ))

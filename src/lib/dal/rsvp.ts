@@ -112,3 +112,17 @@ export async function getAllRsvps(): Promise<RsvpRecord[]> {
     return [];
   }
 }
+
+export async function deleteRsvp(id: string): Promise<void> {
+  try {
+    await initializeDb();
+    const client = getClient();
+    await client.execute({
+      sql: `DELETE FROM rsvps WHERE id = ?`,
+      args: [id],
+    });
+  } catch (err) {
+    console.error("Error deleting RSVP:", err);
+  }
+}
+

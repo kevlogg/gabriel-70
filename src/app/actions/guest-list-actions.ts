@@ -7,6 +7,7 @@ import {
   deleteMasterGuest,
   clearAllMasterGuests,
 } from "@/lib/dal/guest-list";
+import { deleteRsvp } from "@/lib/dal/rsvp";
 
 export async function addGuestAction(formData: FormData) {
   const name = formData.get("name")?.toString() ?? "";
@@ -26,13 +27,20 @@ export async function bulkAddGuestsAction(formData: FormData) {
 
 export async function deleteGuestAction(formData: FormData) {
   const id = formData.get("id")?.toString() ?? "";
+  const rsvpId = formData.get("rsvpId")?.toString() ?? "";
+
   if (id) {
     await deleteMasterGuest(id);
-    revalidatePath("/admin");
   }
+  if (rsvpId) {
+    await deleteRsvp(rsvpId);
+  }
+
+  revalidatePath("/admin");
 }
 
 export async function clearAllGuestsAction() {
   await clearAllMasterGuests();
   revalidatePath("/admin");
 }
+
