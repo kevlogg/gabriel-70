@@ -47,6 +47,28 @@ function normalizeName(str: string): string {
     .trim();
 }
 
+function isNameMatch(a: string, b: string): boolean {
+  const normA = normalizeName(a);
+  const normB = normalizeName(b);
+  if (!normA || !normB) return false;
+
+  if (normA === normB) return true;
+
+  const tokensA = normA.split(/\s+/).filter(Boolean);
+  const tokensB = normB.split(/\s+/).filter(Boolean);
+
+  if (tokensA.length === 0 || tokensB.length === 0) return false;
+
+  if (tokensA.length === tokensB.length) {
+    return tokensA.every((t) => tokensB.includes(t));
+  }
+
+  const shorter = tokensA.length < tokensB.length ? tokensA : tokensB;
+  const longer = tokensA.length < tokensB.length ? tokensB : tokensA;
+
+  return shorter.every((st) => st.length >= 3 && longer.some((lt) => lt === st));
+}
+
 export default function GuestListManager({ masterGuests, rsvps }: GuestListManagerProps) {
   const [showBulkModal, setShowBulkModal] = useState(false);
   const [showSingleInput, setShowSingleInput] = useState(false);
@@ -88,19 +110,13 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
 
     // 1. Map master guests
     const list: MatchedGuestItem[] = masterGuests.map((guest) => {
-      const guestNorm = normalizeName(guest.name);
-
       const matchedRsvp = rsvps.find((r) => {
-        const mainNorm = normalizeName(r.name);
-        if (mainNorm === guestNorm || mainNorm.includes(guestNorm) || guestNorm.includes(mainNorm)) {
+        if (isNameMatch(r.name, guest.name)) {
           return true;
         }
 
         if (r.companionNames && r.companionNames.length > 0) {
-          return r.companionNames.some((c) => {
-            const compNorm = normalizeName(c);
-            return compNorm === guestNorm || compNorm.includes(guestNorm) || guestNorm.includes(compNorm);
-          });
+          return r.companionNames.some((c) => isNameMatch(c, guest.name));
         }
 
         return false;
@@ -452,38 +468,45 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
 
               {/* NAMES BLOCK - ALL NAMES RENDERED WITH EQUAL FONT SIZE (text-base sm:text-lg font-bold) */}
               <div className="flex flex-col gap-2">
-                {/* Principal Guest Name */}
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="font-jakarta font-bold text-base sm:text-lg text-[var(--dark-brown)] break-words leading-snug">
-                    {guestName}
-                  </span>
-                  <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-md bg-[rgba(197,155,39,0.12)] text-[var(--gold)] border border-[rgba(197,155,39,0.25)]">
-                    Titular
-                  </span>
-                </div>
+                {/* Main Guest Name */}
+                {(() => {
+                  const isPrimary = matchedRsvp ? isNameMatch(matchedRsvp.name, guestName) : true;
+                  return (
+                    <>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="font-jakarta font-bold text-base sm:text-lg text-[var(--dark-brown)] break-words leading-snug">
+                          {guestName}
+                        </span>
+                        <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-md bg-[rgba(197,155,39,0.12)] text-[var(--gold)] border border-[rgba(197,155,39,0.25)]">
+                          {isPrimary ? "Titular" : `Acompañante (${matchedRsvp?.name})`}
+                        </span>
+                      </div>
 
-                {/* Companion Names (SAME FONT SIZE AND WEIGHT) */}
-                {matchedRsvp?.companionNames && matchedRsvp.companionNames.length > 0 ? (
-                  matchedRsvp.companionNames.map((companionName, idx) => (
-                    <div key={idx} className="flex items-center gap-2 flex-wrap pt-1.5 border-t border-dashed border-[rgba(197,155,39,0.15)]">
-                      <span className="font-jakarta font-bold text-base sm:text-lg text-[var(--dark-brown)] break-words leading-snug">
-                        {companionName}
-                      </span>
-                      <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-md bg-amber-100 text-amber-900 border border-amber-300">
-                        Acompañante
-                      </span>
-                    </div>
-                  ))
-                ) : matchedRsvp && matchedRsvp.companionsCount > 0 ? (
-                  <div className="flex items-center gap-2 flex-wrap pt-1.5 border-t border-dashed border-[rgba(197,155,39,0.15)]">
-                    <span className="font-jakarta font-bold text-base sm:text-lg text-[var(--dark-brown)] break-words leading-snug">
-                      + {matchedRsvp.companionsCount} Acompañante{matchedRsvp.companionsCount > 1 ? "s" : ""}
-                    </span>
-                    <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-md bg-amber-100 text-amber-900 border border-amber-300">
-                      Acompañante
-                    </span>
-                  </div>
-                ) : null}
+                      {/* Companion Names (rendered ONLY under primary registrant) */}
+                      {isPrimary && matchedRsvp?.companionNames && matchedRsvp.companionNames.length > 0 ? (
+                        matchedRsvp.companionNames.map((companionName, idx) => (
+                          <div key={idx} className="flex items-center gap-2 flex-wrap pt-1.5 border-t border-dashed border-[rgba(197,155,39,0.15)]">
+                            <span className="font-jakarta font-bold text-base sm:text-lg text-[var(--dark-brown)] break-words leading-snug">
+                              {companionName}
+                            </span>
+                            <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-md bg-amber-100 text-amber-900 border border-amber-300">
+                              Acompañante
+                            </span>
+                          </div>
+                        ))
+                      ) : isPrimary && matchedRsvp && matchedRsvp.companionsCount > 0 ? (
+                        <div className="flex items-center gap-2 flex-wrap pt-1.5 border-t border-dashed border-[rgba(197,155,39,0.15)]">
+                          <span className="font-jakarta font-bold text-base sm:text-lg text-[var(--dark-brown)] break-words leading-snug">
+                            + {matchedRsvp.companionsCount} Acompañante{matchedRsvp.companionsCount > 1 ? "s" : ""}
+                          </span>
+                          <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-md bg-amber-100 text-amber-900 border border-amber-300">
+                            Acompañante
+                          </span>
+                        </div>
+                      ) : null}
+                    </>
+                  );
+                })()}
               </div>
 
               {/* RSVP Details (Dietary restrictions & Messages) */}
@@ -548,36 +571,43 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
                     {/* Names column with EQUAL FONT SIZES for principal and companion */}
                     <td className="px-5 py-4 font-jakarta">
                       <div className="flex flex-col gap-1.5">
-                        <div className="flex items-center gap-2">
-                          <span className="font-bold text-base text-[var(--dark-brown)]">
-                            {guestName}
-                          </span>
-                          <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-md bg-[rgba(197,155,39,0.12)] text-[var(--gold)] border border-[rgba(197,155,39,0.25)]">
-                            Titular
-                          </span>
-                        </div>
+                        {(() => {
+                          const isPrimary = matchedRsvp ? isNameMatch(matchedRsvp.name, guestName) : true;
+                          return (
+                            <>
+                              <div className="flex items-center gap-2">
+                                <span className="font-bold text-base text-[var(--dark-brown)]">
+                                  {guestName}
+                                </span>
+                                <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-md bg-[rgba(197,155,39,0.12)] text-[var(--gold)] border border-[rgba(197,155,39,0.25)]">
+                                  {isPrimary ? "Titular" : `Acompañante (${matchedRsvp?.name})`}
+                                </span>
+                              </div>
 
-                        {matchedRsvp?.companionNames && matchedRsvp.companionNames.length > 0 ? (
-                          matchedRsvp.companionNames.map((companionName, i) => (
-                            <div key={i} className="flex items-center gap-2 pt-0.5">
-                              <span className="font-bold text-base text-[var(--dark-brown)]">
-                                {companionName}
-                              </span>
-                              <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-md bg-amber-100 text-amber-900 border border-amber-300">
-                                Acompañante
-                              </span>
-                            </div>
-                          ))
-                        ) : matchedRsvp && matchedRsvp.companionsCount > 0 ? (
-                          <div className="flex items-center gap-2 pt-0.5">
-                            <span className="font-bold text-base text-[var(--dark-brown)]">
-                              + {matchedRsvp.companionsCount} Acompañante{matchedRsvp.companionsCount > 1 ? "s" : ""}
-                            </span>
-                            <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-md bg-amber-100 text-amber-900 border border-amber-300">
-                              Acompañante
-                            </span>
-                          </div>
-                        ) : null}
+                              {isPrimary && matchedRsvp?.companionNames && matchedRsvp.companionNames.length > 0 ? (
+                                matchedRsvp.companionNames.map((companionName, i) => (
+                                  <div key={i} className="flex items-center gap-2 pt-0.5">
+                                    <span className="font-bold text-base text-[var(--dark-brown)]">
+                                      {companionName}
+                                    </span>
+                                    <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-md bg-amber-100 text-amber-900 border border-amber-300">
+                                      Acompañante
+                                    </span>
+                                  </div>
+                                ))
+                              ) : isPrimary && matchedRsvp && matchedRsvp.companionsCount > 0 ? (
+                                <div className="flex items-center gap-2 pt-0.5">
+                                  <span className="font-bold text-base text-[var(--dark-brown)]">
+                                    + {matchedRsvp.companionsCount} Acompañante{matchedRsvp.companionsCount > 1 ? "s" : ""}
+                                  </span>
+                                  <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-md bg-amber-100 text-amber-900 border border-amber-300">
+                                    Acompañante
+                                  </span>
+                                </div>
+                              ) : null}
+                            </>
+                          );
+                        })()}
                       </div>
                     </td>
 
