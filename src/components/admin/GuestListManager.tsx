@@ -30,13 +30,17 @@ interface GuestListManagerProps {
   rsvps: RsvpRecord[];
 }
 
-interface MatchedGuestItem {
+interface DisplayItem {
   id: string;
+  type: "rsvp" | "master";
   guestName: string;
-  guestId: string | null;
+  masterGuestId: string | null;
+  rsvpId: string | null;
   status: "confirmed" | "declined" | "pending";
-  matchedRsvp?: RsvpRecord;
-  isMasterGuest: boolean;
+  companionNames: string[];
+  companionsCount: number;
+  dietaryRestrictions?: string;
+  message?: string;
 }
 
 function normalizeName(str: string): string {
@@ -103,87 +107,93 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
     }
   };
 
+  // Build clean display list: RSVPs directly + unmatched master guests as pending
+  const displayItems = useMemo<DisplayItem[]>(() => {
+    const items: DisplayItem[] = [];
+    const respondedMasterGuestIds = new Set<string>();
 
-  // Match master guests with RSVPs AND include unmatched RSVPs
-  const matchedList = useMemo<MatchedGuestItem[]>(() => {
-    const matchedRsvpIds = new Set<string>();
-
-    // 1. Map master guests
-    const list: MatchedGuestItem[] = masterGuests.map((guest) => {
-      const matchedRsvp = rsvps.find((r) => {
-        if (isNameMatch(r.name, guest.name)) {
-          return true;
-        }
-
-        if (r.companionNames && r.companionNames.length > 0) {
-          return r.companionNames.some((c) => isNameMatch(c, guest.name));
-        }
-
-        return false;
-      });
-
-      let status: "confirmed" | "declined" | "pending" = "pending";
-      if (matchedRsvp) {
-        status = matchedRsvp.attending === "yes" ? "confirmed" : "declined";
-        matchedRsvpIds.add(matchedRsvp.id);
+    // 1. Map all RSVPs directly
+    rsvps.forEach((rsvp) => {
+      // Check if primary registrant matches any master guest
+      const matchedPrimaryMaster = masterGuests.find((g) => isNameMatch(g.name, rsvp.name));
+      if (matchedPrimaryMaster) {
+        respondedMasterGuestIds.add(matchedPrimaryMaster.id);
       }
 
-      return {
-        id: `master-${guest.id}`,
-        guestName: guest.name,
-        guestId: guest.id,
-        status,
-        matchedRsvp,
-        isMasterGuest: true,
-      };
+      // Check if companion names match any master guest
+      if (rsvp.companionNames && rsvp.companionNames.length > 0) {
+        rsvp.companionNames.forEach((cName) => {
+          const matchedCompanionMaster = masterGuests.find((g) => isNameMatch(g.name, cName));
+          if (matchedCompanionMaster) {
+            respondedMasterGuestIds.add(matchedCompanionMaster.id);
+          }
+        });
+      }
+
+      items.push({
+        id: `rsvp-${rsvp.id}`,
+        type: "rsvp",
+        guestName: rsvp.name,
+        masterGuestId: matchedPrimaryMaster ? matchedPrimaryMaster.id : null,
+        rsvpId: rsvp.id,
+        status: rsvp.attending === "yes" ? "confirmed" : "declined",
+        companionNames: rsvp.companionNames || [],
+        companionsCount: rsvp.companionsCount || 0,
+        dietaryRestrictions: rsvp.dietaryRestrictions,
+        message: rsvp.message,
+      });
     });
 
-    // 2. Add unmatched RSVPs (so direct RSVPs always show up even if master list is empty)
-    rsvps.forEach((rsvp) => {
-      if (!matchedRsvpIds.has(rsvp.id)) {
-        list.push({
-          id: `rsvp-${rsvp.id}`,
-          guestName: rsvp.name,
-          guestId: null,
-          status: rsvp.attending === "yes" ? "confirmed" : "declined",
-          matchedRsvp: rsvp,
-          isMasterGuest: false,
+    // 2. Map un-responded master guests as pending
+    masterGuests.forEach((guest) => {
+      if (!respondedMasterGuestIds.has(guest.id)) {
+        items.push({
+          id: `master-${guest.id}`,
+          type: "master",
+          guestName: guest.name,
+          masterGuestId: guest.id,
+          rsvpId: null,
+          status: "pending",
+          companionNames: [],
+          companionsCount: 0,
         });
       }
     });
 
-    return list;
+    return items;
   }, [masterGuests, rsvps]);
 
   // Statistics
-  const pendingCount = matchedList.filter((m) => m.status === "pending").length;
+  const pendingCount = displayItems.filter((m) => m.status === "pending").length;
 
   // Real confirmed attendees count (titulares + acompañantes)
   const realConfirmedAttendees = useMemo(() => {
     return rsvps
       .filter((r) => r.attending === "yes")
-      .reduce((sum, r) => sum + 1 + r.companionsCount, 0);
+      .reduce((sum, r) => sum + 1 + (r.companionsCount || 0), 0);
   }, [rsvps]);
 
   // Filtered display list
   const filteredList = useMemo(() => {
-    return matchedList.filter(({ guestName, status }) => {
-      if (filter !== "all" && status !== filter) return false;
+    return displayItems.filter((item) => {
+      if (filter !== "all" && item.status !== filter) return false;
       if (searchQuery.trim()) {
         const q = normalizeName(searchQuery);
-        return normalizeName(guestName).includes(q);
+        const mainMatch = normalizeName(item.guestName).includes(q);
+        const companionMatch = item.companionNames.some((c) => normalizeName(c).includes(q));
+        return mainMatch || companionMatch;
       }
       return true;
     });
-  }, [matchedList, filter, searchQuery]);
+  }, [displayItems, filter, searchQuery]);
 
   // Pending guests names text for copying
   const pendingNames = useMemo(() => {
-    return matchedList
+    return displayItems
       .filter((m) => m.status === "pending")
       .map((m) => m.guestName)
       .join("\n");
-  }, [matchedList]);
+  }, [displayItems]);
 
   const handleCopyPending = async () => {
     if (!pendingNames) return;
@@ -198,7 +208,7 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
 
   return (
     <div className="flex flex-col gap-6 sm:gap-8 w-full">
-      {/* 3 Main KPI Cards - Centered info & numbers, enhanced borders & margins */}
+      {/* 3 Main KPI Cards - Centered info & numbers */}
       <div className="grid grid-cols-3 gap-2.5 sm:gap-5 w-full">
         {/* CARD 1: EN LISTA */}
         <button
@@ -399,7 +409,7 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
             onClick={() => setFilter("all")}
             className="text-[var(--gold)] underline text-xs font-semibold cursor-pointer hover:opacity-80"
           >
-            Ver todos ({matchedList.length})
+            Ver todos ({displayItems.length})
           </button>
         )}
       </div>
@@ -413,13 +423,13 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
               : "No se encontraron invitados con el filtro seleccionado."}
           </div>
         ) : (
-          filteredList.map(({ id, guestName, guestId, status, matchedRsvp }) => (
+          filteredList.map((item) => (
             <div
-              key={id}
+              key={item.id}
               className={`rounded-2xl p-4 sm:p-5 flex flex-col gap-3.5 shadow-xs border-2 transition-all ${
-                status === "confirmed"
+                item.status === "confirmed"
                   ? "bg-emerald-50/40 border-emerald-300 hover:border-emerald-500"
-                  : status === "declined"
+                  : item.status === "declined"
                   ? "bg-red-50/40 border-red-300 hover:border-red-500"
                   : "bg-[var(--cream-2)] border-[rgba(197,155,39,0.35)] hover:border-[var(--gold)]"
               }`}
@@ -427,35 +437,35 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
               {/* Header: Badge & Delete Button */}
               <div className="flex items-center justify-between gap-2 border-b border-dashed border-[rgba(197,155,39,0.2)] pb-2.5">
                 <div className="flex items-center gap-2">
-                  {status === "confirmed" && (
+                  {item.status === "confirmed" && (
                     <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
-                      <CheckCircle size={13} /> Confirmado {matchedRsvp && matchedRsvp.companionsCount > 0 ? `(${1 + matchedRsvp.companionsCount} pers.)` : "(1 pers.)"}
+                      <CheckCircle size={13} /> Confirmado {item.companionsCount > 0 ? `(${1 + item.companionsCount} pers.)` : "(1 pers.)"}
                     </span>
                   )}
-                  {status === "declined" && (
+                  {item.status === "declined" && (
                     <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-800 border border-red-300">
                       <XCircle size={13} /> No asiste
                     </span>
                   )}
-                  {status === "pending" && (
+                  {item.status === "pending" && (
                     <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-300">
                       <Clock size={13} /> Pendiente
                     </span>
                   )}
                 </div>
 
-                {/* Delete form for ANY guest or RSVP entry */}
+                {/* Delete form */}
                 <form
                   action={deleteGuestAction}
                   onSubmit={(e) => {
-                    if (!confirm(`¿Seguro que querés eliminar a ${guestName}?`)) {
+                    if (!confirm(`¿Seguro que querés eliminar a ${item.guestName}?`)) {
                       e.preventDefault();
                     }
                   }}
                   className="shrink-0"
                 >
-                  {guestId && <input type="hidden" name="id" value={guestId} />}
-                  {matchedRsvp?.id && <input type="hidden" name="rsvpId" value={matchedRsvp.id} />}
+                  {item.masterGuestId && <input type="hidden" name="id" value={item.masterGuestId} />}
+                  {item.rsvpId && <input type="hidden" name="rsvpId" value={item.rsvpId} />}
                   <button
                     type="submit"
                     className="p-1.5 rounded-lg text-[var(--dark-brown-40)] hover:text-red-600 hover:bg-red-100 transition-colors cursor-pointer"
@@ -466,62 +476,56 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
                 </form>
               </div>
 
-              {/* NAMES BLOCK - ALL NAMES RENDERED WITH EQUAL FONT SIZE (text-base sm:text-lg font-bold) */}
+              {/* NAMES BLOCK - EQUAL FONT SIZE FOR ALL NAMES (text-base sm:text-lg font-bold) */}
               <div className="flex flex-col gap-2">
-                {/* Main Guest Name */}
-                {(() => {
-                  const isPrimary = matchedRsvp ? isNameMatch(matchedRsvp.name, guestName) : true;
-                  return (
-                    <>
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className="font-jakarta font-bold text-base sm:text-lg text-[var(--dark-brown)] break-words leading-snug">
-                          {guestName}
-                        </span>
-                        <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-md bg-[rgba(197,155,39,0.12)] text-[var(--gold)] border border-[rgba(197,155,39,0.25)]">
-                          {isPrimary ? "Titular" : `Acompañante (${matchedRsvp?.name})`}
-                        </span>
-                      </div>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="font-jakarta font-bold text-base sm:text-lg text-[var(--dark-brown)] break-words leading-snug">
+                    {item.guestName}
+                  </span>
+                  {item.type === "rsvp" && (
+                    <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-md bg-[rgba(197,155,39,0.12)] text-[var(--gold)] border border-[rgba(197,155,39,0.25)]">
+                      Titular
+                    </span>
+                  )}
+                </div>
 
-                      {/* Companion Names (rendered ONLY under primary registrant) */}
-                      {isPrimary && matchedRsvp?.companionNames && matchedRsvp.companionNames.length > 0 ? (
-                        matchedRsvp.companionNames.map((companionName, idx) => (
-                          <div key={idx} className="flex items-center gap-2 flex-wrap pt-1.5 border-t border-dashed border-[rgba(197,155,39,0.15)]">
-                            <span className="font-jakarta font-bold text-base sm:text-lg text-[var(--dark-brown)] break-words leading-snug">
-                              {companionName}
-                            </span>
-                            <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-md bg-amber-100 text-amber-900 border border-amber-300">
-                              Acompañante
-                            </span>
-                          </div>
-                        ))
-                      ) : isPrimary && matchedRsvp && matchedRsvp.companionsCount > 0 ? (
-                        <div className="flex items-center gap-2 flex-wrap pt-1.5 border-t border-dashed border-[rgba(197,155,39,0.15)]">
-                          <span className="font-jakarta font-bold text-base sm:text-lg text-[var(--dark-brown)] break-words leading-snug">
-                            + {matchedRsvp.companionsCount} Acompañante{matchedRsvp.companionsCount > 1 ? "s" : ""}
-                          </span>
-                          <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-md bg-amber-100 text-amber-900 border border-amber-300">
-                            Acompañante
-                          </span>
-                        </div>
-                      ) : null}
-                    </>
-                  );
-                })()}
+                {/* Companions */}
+                {item.companionNames.length > 0 ? (
+                  item.companionNames.map((companionName, idx) => (
+                    <div key={idx} className="flex items-center gap-2 flex-wrap pt-1.5 border-t border-dashed border-[rgba(197,155,39,0.15)]">
+                      <span className="font-jakarta font-bold text-base sm:text-lg text-[var(--dark-brown)] break-words leading-snug">
+                        {companionName}
+                      </span>
+                      <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-md bg-amber-100 text-amber-900 border border-amber-300">
+                        Acompañante
+                      </span>
+                    </div>
+                  ))
+                ) : item.companionsCount > 0 ? (
+                  <div className="flex items-center gap-2 flex-wrap pt-1.5 border-t border-dashed border-[rgba(197,155,39,0.15)]">
+                    <span className="font-jakarta font-bold text-base sm:text-lg text-[var(--dark-brown)] break-words leading-snug">
+                      + {item.companionsCount} Acompañante{item.companionsCount > 1 ? "s" : ""}
+                    </span>
+                    <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-md bg-amber-100 text-amber-900 border border-amber-300">
+                      Acompañante
+                    </span>
+                  </div>
+                ) : null}
               </div>
 
-              {/* RSVP Details (Dietary restrictions & Messages) */}
-              {matchedRsvp && (
+              {/* RSVP Details */}
+              {item.type === "rsvp" && (
                 <div className="flex flex-col gap-2 pt-2 border-t border-[rgba(197,155,39,0.15)] text-xs">
-                  {matchedRsvp.dietaryRestrictions && matchedRsvp.dietaryRestrictions !== "ninguna" && (
+                  {item.dietaryRestrictions && item.dietaryRestrictions !== "ninguna" && (
                     <div className="flex items-center gap-2 text-amber-900 bg-amber-50 px-3 py-1.5 rounded-xl border border-amber-200/80 font-medium">
                       <Utensils size={14} className="shrink-0 text-amber-700" />
-                      <span>Menú especial: <strong>{DIETARY_LABELS[matchedRsvp.dietaryRestrictions]}</strong></span>
+                      <span>Menú especial: <strong>{DIETARY_LABELS[item.dietaryRestrictions as keyof typeof DIETARY_LABELS] || item.dietaryRestrictions}</strong></span>
                     </div>
                   )}
-                  {matchedRsvp.message && (
+                  {item.message && (
                     <div className="flex items-start gap-2 italic text-[var(--dark-brown-70)] bg-[rgba(197,155,39,0.06)] p-2.5 rounded-xl border border-[rgba(197,155,39,0.18)]">
                       <MessageSquare size={14} className="shrink-0 mt-0.5 text-[var(--gold)]" />
-                      <span>"{matchedRsvp.message}"</span>
+                      <span>"{item.message}"</span>
                     </div>
                   )}
                 </div>
@@ -561,69 +565,64 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
                   </td>
                 </tr>
               ) : (
-                filteredList.map(({ id, guestName, guestId, status, matchedRsvp }, idx) => (
+                filteredList.map((item, idx) => (
                   <tr
-                    key={id}
+                    key={item.id}
                     className={`border-b border-[rgba(197,155,39,0.15)] transition-colors hover:bg-[rgba(197,155,39,0.04)] ${
                       idx % 2 === 0 ? "bg-[var(--cream)]" : "bg-[var(--cream-2)]"
                     }`}
                   >
-                    {/* Names column with EQUAL FONT SIZES for principal and companion */}
+                    {/* Names column */}
                     <td className="px-5 py-4 font-jakarta">
                       <div className="flex flex-col gap-1.5">
-                        {(() => {
-                          const isPrimary = matchedRsvp ? isNameMatch(matchedRsvp.name, guestName) : true;
-                          return (
-                            <>
-                              <div className="flex items-center gap-2">
-                                <span className="font-bold text-base text-[var(--dark-brown)]">
-                                  {guestName}
-                                </span>
-                                <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-md bg-[rgba(197,155,39,0.12)] text-[var(--gold)] border border-[rgba(197,155,39,0.25)]">
-                                  {isPrimary ? "Titular" : `Acompañante (${matchedRsvp?.name})`}
-                                </span>
-                              </div>
+                        <div className="flex items-center gap-2">
+                          <span className="font-bold text-base text-[var(--dark-brown)]">
+                            {item.guestName}
+                          </span>
+                          {item.type === "rsvp" && (
+                            <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-md bg-[rgba(197,155,39,0.12)] text-[var(--gold)] border border-[rgba(197,155,39,0.25)]">
+                              Titular
+                            </span>
+                          )}
+                        </div>
 
-                              {isPrimary && matchedRsvp?.companionNames && matchedRsvp.companionNames.length > 0 ? (
-                                matchedRsvp.companionNames.map((companionName, i) => (
-                                  <div key={i} className="flex items-center gap-2 pt-0.5">
-                                    <span className="font-bold text-base text-[var(--dark-brown)]">
-                                      {companionName}
-                                    </span>
-                                    <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-md bg-amber-100 text-amber-900 border border-amber-300">
-                                      Acompañante
-                                    </span>
-                                  </div>
-                                ))
-                              ) : isPrimary && matchedRsvp && matchedRsvp.companionsCount > 0 ? (
-                                <div className="flex items-center gap-2 pt-0.5">
-                                  <span className="font-bold text-base text-[var(--dark-brown)]">
-                                    + {matchedRsvp.companionsCount} Acompañante{matchedRsvp.companionsCount > 1 ? "s" : ""}
-                                  </span>
-                                  <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-md bg-amber-100 text-amber-900 border border-amber-300">
-                                    Acompañante
-                                  </span>
-                                </div>
-                              ) : null}
-                            </>
-                          );
-                        })()}
+                        {item.companionNames.length > 0 ? (
+                          item.companionNames.map((companionName, i) => (
+                            <div key={i} className="flex items-center gap-2 pt-0.5">
+                              <span className="font-bold text-base text-[var(--dark-brown)]">
+                                {companionName}
+                              </span>
+                              <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-md bg-amber-100 text-amber-900 border border-amber-300">
+                                Acompañante
+                              </span>
+                            </div>
+                          ))
+                        ) : item.companionsCount > 0 ? (
+                          <div className="flex items-center gap-2 pt-0.5">
+                            <span className="font-bold text-base text-[var(--dark-brown)]">
+                              + {item.companionsCount} Acompañante{item.companionsCount > 1 ? "s" : ""}
+                            </span>
+                            <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-md bg-amber-100 text-amber-900 border border-amber-300">
+                              Acompañante
+                            </span>
+                          </div>
+                        ) : null}
                       </div>
                     </td>
 
                     {/* Status column */}
                     <td className="px-5 py-4">
-                      {status === "confirmed" && (
+                      {item.status === "confirmed" && (
                         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
                           <CheckCircle size={13} /> Confirmado
                         </span>
                       )}
-                      {status === "declined" && (
+                      {item.status === "declined" && (
                         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-800 border border-red-300">
                           <XCircle size={13} /> No asiste
                         </span>
                       )}
-                      {status === "pending" && (
+                      {item.status === "pending" && (
                         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-300">
                           <Clock size={13} /> Pendiente
                         </span>
@@ -632,18 +631,18 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
 
                     {/* RSVP Details column */}
                     <td className="px-5 py-4 font-jakarta text-xs text-[var(--dark-brown-70)]">
-                      {matchedRsvp ? (
+                      {item.type === "rsvp" ? (
                         <div className="flex flex-col gap-1.5">
-                          {matchedRsvp.dietaryRestrictions && matchedRsvp.dietaryRestrictions !== "ninguna" && (
+                          {item.dietaryRestrictions && item.dietaryRestrictions !== "ninguna" && (
                             <span className="text-xs text-amber-900 font-semibold flex items-center gap-1.5 bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-200/80 w-fit">
-                              <Utensils size={13} className="text-amber-700" /> Dieta: {DIETARY_LABELS[matchedRsvp.dietaryRestrictions]}
+                              <Utensils size={13} className="text-amber-700" /> Dieta: {DIETARY_LABELS[item.dietaryRestrictions as keyof typeof DIETARY_LABELS] || item.dietaryRestrictions}
                             </span>
                           )}
 
-                          {matchedRsvp.message ? (
+                          {item.message ? (
                             <span className="text-xs italic text-[var(--dark-brown-70)] flex items-start gap-1">
                               <MessageSquare size={13} className="shrink-0 mt-0.5 text-[var(--gold)]" />
-                              "{matchedRsvp.message}"
+                              "{item.message}"
                             </span>
                           ) : (
                             <span className="opacity-40">— Sin mensaje —</span>
@@ -659,14 +658,14 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
                       <form
                         action={deleteGuestAction}
                         onSubmit={(e) => {
-                          if (!confirm(`¿Seguro que querés eliminar a ${guestName}?`)) {
+                          if (!confirm(`¿Seguro que querés eliminar a ${item.guestName}?`)) {
                             e.preventDefault();
                           }
                         }}
                         className="inline"
                       >
-                        {guestId && <input type="hidden" name="id" value={guestId} />}
-                        {matchedRsvp?.id && <input type="hidden" name="rsvpId" value={matchedRsvp.id} />}
+                        {item.masterGuestId && <input type="hidden" name="id" value={item.masterGuestId} />}
+                        {item.rsvpId && <input type="hidden" name="rsvpId" value={item.rsvpId} />}
                         <button
                           type="submit"
                           className="p-1.5 rounded-lg text-[var(--dark-brown-40)] hover:text-red-600 hover:bg-red-100 transition-colors cursor-pointer"
@@ -704,3 +703,4 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
     </div>
   );
 }
+
