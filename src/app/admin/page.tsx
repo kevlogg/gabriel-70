@@ -1,4 +1,3 @@
-import { redirect } from "next/navigation";
 import { getAllRsvps } from "@/lib/dal/rsvp";
 import { getMasterGuests } from "@/lib/dal/guest-list";
 import { EVENT_DATA } from "@/config/event";
