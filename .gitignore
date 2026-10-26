@@ -43,3 +43,6 @@ next-env.d.ts
 *-wal
 auth*
 db*
+
+# local media captures
+capturas-mensajes-1080p/
