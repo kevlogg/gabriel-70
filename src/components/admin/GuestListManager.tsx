@@ -8,7 +8,6 @@ import {
   addGuestAction,
   bulkAddGuestsAction,
   deleteGuestAction,
-  clearAllGuestsAction,
 } from "@/app/actions/guest-list-actions";
 import {
   UserPlus,
@@ -1267,27 +1266,6 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
               </tbody>
             </table>
           </div>
-        </div>
-      )}
-
-      {masterGuests.length > 0 && (
-        <div className="flex justify-end pt-2">
-          <form
-            action={clearAllGuestsAction}
-            onSubmit={(e) => {
-              if (!confirm("¿Seguro que querés vaciar toda la lista de invitados?")) {
-                e.preventDefault();
-              }
-            }}
-          >
-            <button
-              type="submit"
-              className="text-xs font-semibold text-red-600 opacity-60 hover:opacity-100 flex items-center gap-1 cursor-pointer transition-opacity"
-            >
-              <Trash2 size={13} />
-              Vaciar lista completa de invitados
-            </button>
-          </form>
         </div>
       )}
     </div>
