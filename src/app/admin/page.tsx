@@ -97,7 +97,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
 
   return (
     <div
-      className="min-h-screen"
+      className="min-h-screen w-full"
       style={{ background: "var(--cream)" }}
     >
       {/* Top bar */}
@@ -110,7 +110,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
       />
 
       <main
-        className="max-w-6xl mx-auto px-5 sm:px-8 md:px-10 py-6 sm:py-10 flex flex-col gap-8 sm:gap-10 w-full box-border"
+        className="max-w-6xl mx-auto px-4 sm:px-8 md:px-10 py-6 sm:py-10 flex flex-col gap-6 sm:gap-8 w-full box-border"
         aria-label="Panel de administración de confirmaciones"
       >
         {/* Header */}

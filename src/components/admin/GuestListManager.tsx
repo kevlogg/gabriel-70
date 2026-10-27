@@ -592,9 +592,9 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
       </div>
 
       {/* Switcher de Vista (Tarjetas vs Tabla) - Muy Visible y con Márgenes */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-3.5 p-4 sm:p-5 rounded-3xl bg-white border-2 border-[rgba(197,155,39,0.35)] shadow-xs">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-5 sm:p-6 rounded-3xl bg-[var(--cream-2)] border-2 border-[rgba(197,155,39,0.35)] shadow-xs my-1 sm:my-2">
         <div className="flex items-center gap-2.5">
-          <span className="w-2.5 h-2.5 rounded-full bg-[var(--gold)] shrink-0" />
+          <span className="w-3 h-3 rounded-full bg-[var(--gold)] shrink-0 ring-4 ring-[var(--gold)]/20" />
           <span className="font-jakarta font-bold text-xs sm:text-sm uppercase tracking-wider text-[var(--dark-brown)]">
             Modo de vista de invitados:
           </span>
@@ -604,28 +604,28 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
           <button
             type="button"
             onClick={() => setViewMode("cards")}
-            className={`flex-1 sm:flex-initial flex items-center justify-center gap-2.5 px-6 py-2.5 sm:py-3 rounded-2xl font-jakarta text-xs sm:text-sm font-bold transition-all cursor-pointer border-2 shadow-xs ${
+            className={`flex-1 sm:flex-initial flex items-center justify-center gap-2.5 px-6 py-3 rounded-2xl font-jakarta text-xs sm:text-sm font-bold transition-all cursor-pointer border-2 shadow-sm ${
               viewMode === "cards"
-                ? "bg-[linear-gradient(135deg,#C59B27,#A67C1E)] text-white border-[var(--gold)] shadow-md scale-[1.02] ring-2 ring-[var(--gold)]/30"
-                : "bg-[var(--cream)] text-[var(--dark-brown-70)] border-[rgba(197,155,39,0.3)] hover:bg-[rgba(197,155,39,0.12)] hover:text-[var(--dark-brown)] hover:border-[var(--gold)]"
+                ? "bg-[linear-gradient(135deg,#C59B27,#A67C1E)] text-white border-[var(--gold)] shadow-md scale-[1.02] ring-2 ring-[var(--gold)]/40"
+                : "bg-white text-[var(--dark-brown)] border-[rgba(197,155,39,0.35)] hover:bg-[var(--cream)] hover:border-[var(--gold)] hover:shadow-xs"
             }`}
             title="Ver formato tarjetas con texto centrado"
           >
-            <LayoutGrid size={18} className={viewMode === "cards" ? "text-white" : "text-[var(--gold)]"} />
+            <LayoutGrid size={19} className={viewMode === "cards" ? "text-white" : "text-[var(--gold)]"} />
             <span>Vista Tarjetas</span>
           </button>
 
           <button
             type="button"
             onClick={() => setViewMode("table")}
-            className={`flex-1 sm:flex-initial flex items-center justify-center gap-2.5 px-6 py-2.5 sm:py-3 rounded-2xl font-jakarta text-xs sm:text-sm font-bold transition-all cursor-pointer border-2 shadow-xs ${
+            className={`flex-1 sm:flex-initial flex items-center justify-center gap-2.5 px-6 py-3 rounded-2xl font-jakarta text-xs sm:text-sm font-bold transition-all cursor-pointer border-2 shadow-sm ${
               viewMode === "table"
-                ? "bg-[linear-gradient(135deg,#C59B27,#A67C1E)] text-white border-[var(--gold)] shadow-md scale-[1.02] ring-2 ring-[var(--gold)]/30"
-                : "bg-[var(--cream)] text-[var(--dark-brown-70)] border-[rgba(197,155,39,0.3)] hover:bg-[rgba(197,155,39,0.12)] hover:text-[var(--dark-brown)] hover:border-[var(--gold)]"
+                ? "bg-[linear-gradient(135deg,#C59B27,#A67C1E)] text-white border-[var(--gold)] shadow-md scale-[1.02] ring-2 ring-[var(--gold)]/40"
+                : "bg-white text-[var(--dark-brown)] border-[rgba(197,155,39,0.35)] hover:bg-[var(--cream)] hover:border-[var(--gold)] hover:shadow-xs"
             }`}
             title="Ver formato tabla compacta"
           >
-            <TableIcon size={18} className={viewMode === "table" ? "text-white" : "text-[var(--gold)]"} />
+            <TableIcon size={19} className={viewMode === "table" ? "text-white" : "text-[var(--gold)]"} />
             <span>Vista Tabla</span>
           </button>
         </div>
@@ -883,7 +883,7 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
                   </form>
 
                   {/* Header: Centered Enumeration & Status Pills */}
-                  <div className="flex flex-col items-center justify-center gap-2.5 pt-3 sm:pt-4 pb-1 w-full">
+                  <div className="flex flex-col items-center justify-center gap-2.5 pt-5 sm:pt-6 pb-1 w-full">
                     {/* Item Number Badge */}
                     <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase bg-[rgba(197,155,39,0.15)] text-[var(--dark-brown)] border border-[rgba(197,155,39,0.35)] shadow-2xs font-jakarta">
                       <span>N° {itemIdx + 1}</span>

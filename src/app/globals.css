@@ -22,22 +22,22 @@
   --white-glass:  rgba(253,251,247,0.85);
 }
 
-/* ─── Base Reset ──────────────────────────────────────── */
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+/* ─── Base Reset & Defaults ──────────────────────────── */
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
 
-html {
-  scroll-behavior: smooth;
-}
+  html {
+    scroll-behavior: smooth;
+  }
 
-body {
-  background-color: var(--cream);
-  color: var(--dark-brown);
-  font-family: var(--font-jakarta);
-  overflow-x: hidden;
+  body {
+    background-color: var(--cream);
+    color: var(--dark-brown);
+    font-family: var(--font-jakarta);
+    overflow-x: hidden;
+  }
 }
 
 .font-cormorant {
