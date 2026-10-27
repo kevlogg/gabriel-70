@@ -236,7 +236,13 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
   const realConfirmedAttendees = useMemo(() => {
     return rsvps
       .filter((r) => r.attending === "yes")
-      .reduce((sum, r) => sum + 1 + (r.companionsCount || 0), 0);
+      .reduce((sum, r) => {
+        const companions =
+          r.companionNames && r.companionNames.length > 0
+            ? r.companionNames.length
+            : r.companionsCount || 0;
+        return sum + 1 + companions;
+      }, 0);
   }, [rsvps]);
 
   // Cálculo de duplicados en confirmaciones (titulares y acompañantes que coinciden en nombre y apellido)
@@ -344,7 +350,11 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
       let startAtt: number | undefined = undefined;
       let endAtt: number | undefined = undefined;
       if (isAttending) {
-        const count = 1 + (rsvp.companionNames?.length || rsvp.companionsCount || 0);
+        const companions =
+          rsvp.companionNames && rsvp.companionNames.length > 0
+            ? rsvp.companionNames.length
+            : rsvp.companionsCount || 0;
+        const count = 1 + companions;
         startAtt = runningAttendee + 1;
         endAtt = runningAttendee + count;
         runningAttendee += count;
@@ -541,7 +551,7 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
         </button>
       </div>
 
-      {/* Action Bar */}
+      {/* Action Bar: Acciones de gestión */}
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-4 sm:p-5 rounded-3xl bg-[rgba(197,155,39,0.06)] border-2 border-[rgba(197,155,39,0.3)] shadow-xs">
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full sm:w-auto">
           <button
@@ -562,54 +572,62 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
           </button>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2.5 self-stretch sm:self-auto justify-between sm:justify-end">
-          {/* View Mode Toggle (Cards vs Table) */}
-          <div className="inline-flex rounded-full p-1 bg-white border border-[rgba(197,155,39,0.3)] shadow-2xs">
-            <button
-              type="button"
-              onClick={() => setViewMode("cards")}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
-                viewMode === "cards"
-                  ? "bg-[var(--gold)] text-white shadow-2xs"
-                  : "text-[var(--dark-brown-70)] hover:text-[var(--dark-brown)]"
-              }`}
-              title="Ver en tarjetas centradas"
-            >
-              <LayoutGrid size={14} />
-              <span>Tarjetas</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setViewMode("table")}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
-                viewMode === "table"
-                  ? "bg-[var(--gold)] text-white shadow-2xs"
-                  : "text-[var(--dark-brown-70)] hover:text-[var(--dark-brown)]"
-              }`}
-              title="Ver en tabla compacta"
-            >
-              <TableIcon size={14} />
-              <span>Tabla</span>
-            </button>
-          </div>
+        {pendingCount > 0 && (
+          <button
+            type="button"
+            onClick={handleCopyPending}
+            className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-full font-jakarta font-semibold text-xs bg-amber-100 text-amber-900 border-2 border-amber-300 hover:bg-amber-200 transition-colors cursor-pointer shadow-xs w-full sm:w-auto"
+          >
+            {copiedPending ? (
+              <>
+                <Check size={15} color="#16a34a" /> ¡Copiados!
+              </>
+            ) : (
+              <>
+                <Copy size={15} /> Copiar faltantes ({pendingCount})
+              </>
+            )}
+          </button>
+        )}
+      </div>
 
-          {pendingCount > 0 && (
-            <button
-              type="button"
-              onClick={handleCopyPending}
-              className="flex items-center justify-center gap-2 px-4 py-2 rounded-full font-jakarta font-semibold text-xs bg-amber-100 text-amber-900 border-2 border-amber-300 hover:bg-amber-200 transition-colors cursor-pointer shadow-xs"
-            >
-              {copiedPending ? (
-                <>
-                  <Check size={15} color="#16a34a" /> ¡Copiados!
-                </>
-              ) : (
-                <>
-                  <Copy size={15} /> Copiar faltantes ({pendingCount})
-                </>
-              )}
-            </button>
-          )}
+      {/* Switcher de Vista (Tarjetas vs Tabla) - Muy Visible y con Márgenes */}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-3.5 p-4 sm:p-5 rounded-3xl bg-white border-2 border-[rgba(197,155,39,0.35)] shadow-xs">
+        <div className="flex items-center gap-2.5">
+          <span className="w-2.5 h-2.5 rounded-full bg-[var(--gold)] shrink-0" />
+          <span className="font-jakarta font-bold text-xs sm:text-sm uppercase tracking-wider text-[var(--dark-brown)]">
+            Modo de vista de invitados:
+          </span>
+        </div>
+
+        <div className="flex items-center gap-3 w-full sm:w-auto">
+          <button
+            type="button"
+            onClick={() => setViewMode("cards")}
+            className={`flex-1 sm:flex-initial flex items-center justify-center gap-2.5 px-6 py-2.5 sm:py-3 rounded-2xl font-jakarta text-xs sm:text-sm font-bold transition-all cursor-pointer border-2 shadow-xs ${
+              viewMode === "cards"
+                ? "bg-[linear-gradient(135deg,#C59B27,#A67C1E)] text-white border-[var(--gold)] shadow-md scale-[1.02] ring-2 ring-[var(--gold)]/30"
+                : "bg-[var(--cream)] text-[var(--dark-brown-70)] border-[rgba(197,155,39,0.3)] hover:bg-[rgba(197,155,39,0.12)] hover:text-[var(--dark-brown)] hover:border-[var(--gold)]"
+            }`}
+            title="Ver formato tarjetas con texto centrado"
+          >
+            <LayoutGrid size={18} className={viewMode === "cards" ? "text-white" : "text-[var(--gold)]"} />
+            <span>Vista Tarjetas</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setViewMode("table")}
+            className={`flex-1 sm:flex-initial flex items-center justify-center gap-2.5 px-6 py-2.5 sm:py-3 rounded-2xl font-jakarta text-xs sm:text-sm font-bold transition-all cursor-pointer border-2 shadow-xs ${
+              viewMode === "table"
+                ? "bg-[linear-gradient(135deg,#C59B27,#A67C1E)] text-white border-[var(--gold)] shadow-md scale-[1.02] ring-2 ring-[var(--gold)]/30"
+                : "bg-[var(--cream)] text-[var(--dark-brown-70)] border-[rgba(197,155,39,0.3)] hover:bg-[rgba(197,155,39,0.12)] hover:text-[var(--dark-brown)] hover:border-[var(--gold)]"
+            }`}
+            title="Ver formato tabla compacta"
+          >
+            <TableIcon size={18} className={viewMode === "table" ? "text-white" : "text-[var(--gold)]"} />
+            <span>Vista Tabla</span>
+          </button>
         </div>
       </div>
 
@@ -813,7 +831,7 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
 
       {/* ─── VISTA 1: CARDS CENTRADAS CON MÁRGENES Y ESPACIOS ─── */}
       {viewMode === "cards" ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 w-full">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7 w-full px-1 sm:px-0">
           {filteredList.length === 0 ? (
             <div className="col-span-full text-center py-12 px-6 rounded-3xl bg-[var(--cream-2)] border-2 border-dashed border-[rgba(197,155,39,0.3)] font-jakarta text-sm text-[var(--dark-brown-40)]">
               {masterGuests.length === 0 && rsvps.length === 0
@@ -830,7 +848,7 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
               return (
                 <div
                   key={item.id}
-                  className={`rounded-3xl p-6 sm:p-7 flex flex-col justify-between gap-5 shadow-sm border-2 transition-all text-center relative overflow-hidden ${
+                  className={`rounded-3xl p-6 sm:p-8 flex flex-col justify-between gap-6 shadow-sm border-2 transition-all text-center relative overflow-hidden mx-auto w-full ${
                     item.hasDuplicates
                       ? "bg-gradient-to-b from-rose-50/90 via-white to-rose-50/50 border-rose-300 hover:border-rose-400 hover:shadow-md"
                       : item.status === "confirmed"
@@ -865,9 +883,9 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
                   </form>
 
                   {/* Header: Centered Enumeration & Status Pills */}
-                  <div className="flex flex-col items-center justify-center gap-2 pt-1 w-full">
+                  <div className="flex flex-col items-center justify-center gap-2.5 pt-3 sm:pt-4 pb-1 w-full">
                     {/* Item Number Badge */}
-                    <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-bold tracking-widest uppercase bg-[rgba(197,155,39,0.15)] text-[var(--dark-brown)] border border-[rgba(197,155,39,0.35)] shadow-2xs font-jakarta">
+                    <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase bg-[rgba(197,155,39,0.15)] text-[var(--dark-brown)] border border-[rgba(197,155,39,0.35)] shadow-2xs font-jakarta">
                       <span>N° {itemIdx + 1}</span>
                     </div>
 
@@ -878,7 +896,11 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
                           <CheckCircle size={14} className="text-emerald-700" />
                           <span>
                             Confirmado{" "}
-                            {item.companionsCount > 0
+                            {item.attendeeStart && item.attendeeEnd
+                              ? `(${item.attendeeEnd - item.attendeeStart + 1} pers.)`
+                              : item.companionNames.length > 0
+                              ? `(${1 + item.companionNames.length} pers.)`
+                              : item.companionsCount > 0
                               ? `(${1 + item.companionsCount} pers.)`
                               : "(1 pers.)"}
                           </span>
