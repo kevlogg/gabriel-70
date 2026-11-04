@@ -90,6 +90,12 @@ async function main() {
   const outDir = path.resolve(__dirname, '../capturas-mensajes-1080p');
   if (!fs.existsSync(outDir)) {
     fs.mkdirSync(outDir, { recursive: true });
+  } else {
+    // Limpiar tarjetas PNG anteriores para evitar duplicados por corrimiento de índices
+    const existingPngs = fs.readdirSync(outDir).filter((f) => f.endsWith('.png'));
+    for (const f of existingPngs) {
+      fs.unlinkSync(path.join(outDir, f));
+    }
   }
 
   // 1. Export TXT
