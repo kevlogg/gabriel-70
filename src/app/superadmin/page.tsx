@@ -17,7 +17,7 @@ interface SuperAdminPageProps {
 export default async function SuperAdminPage({ searchParams }: SuperAdminPageProps) {
   const params = await searchParams;
   const providedKey = Array.isArray(params.key) ? params.key[0] : params.key;
-  const superadminKey = process.env.SUPERADMIN_SECRET_KEY || process.env.ADMIN_SECRET_KEY || "superadmin123";
+  const superadminKey = process.env.SUPERADMIN_SECRET_KEY || "Jorg3lin!";
 
   const isAuthorized = providedKey === superadminKey;
 
