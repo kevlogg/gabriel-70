@@ -247,13 +247,11 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
   // Cálculo de duplicados en confirmaciones (titulares y acompañantes que coinciden en nombre y apellido)
   const { duplicateGroups, duplicatesMap, duplicateRsvpIds, totalDuplicateExcess, uniqueConfirmedCount } = useMemo(() => {
     const map = new Map<string, DuplicateOccurrence[]>();
-    let totalConfirmedInstances = 0;
 
     rsvps
       .filter((r) => r.attending === "yes")
       .forEach((r) => {
         // 1. Titular
-        totalConfirmedInstances += 1;
         const keyTitular = normalizePersonName(r.name);
         if (keyTitular) {
           if (!map.has(keyTitular)) map.set(keyTitular, []);
@@ -270,7 +268,6 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
         if (r.companionNames && r.companionNames.length > 0) {
           r.companionNames.forEach((cName) => {
             if (cName && typeof cName === "string" && cName.trim()) {
-              totalConfirmedInstances += 1;
               const keyComp = normalizePersonName(cName);
               if (keyComp) {
                 if (!map.has(keyComp)) map.set(keyComp, []);
@@ -284,8 +281,6 @@ export default function GuestListManager({ masterGuests, rsvps }: GuestListManag
               }
             }
           });
-        } else if (r.companionsCount && r.companionsCount > 0) {
-          totalConfirmedInstances += r.companionsCount;
         }
       });
 

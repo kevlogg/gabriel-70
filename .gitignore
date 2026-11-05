@@ -43,6 +43,8 @@ next-env.d.ts
 *-wal
 auth*
 db*
+backup*.json
+*.json.bak
 
 # local media captures & generated videos
 capturas-mensajes-1080p/

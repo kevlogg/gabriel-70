@@ -3,9 +3,22 @@ import type { VenueConfig } from "@/config/event";
 
 interface VenueCardProps {
   venue: VenueConfig;
+  eventDateText?: string;
+  eventTimeText?: string;
+  badgeText?: string;
+  slug?: string;
 }
 
-export default function VenueCard({ venue }: VenueCardProps) {
+export default function VenueCard({
+  venue,
+  eventDateText = "Sábado 7 de Noviembre",
+  eventTimeText = "20:30 hs",
+  badgeText,
+  slug,
+}: VenueCardProps) {
+  // If badgeText provided, we can show it or use provided date/time
+  const displayDate = eventDateText || (badgeText ? badgeText.split("·")[1]?.trim() || badgeText : "Fecha a confirmar");
+  const displayTime = eventTimeText || (badgeText ? badgeText.split("·")[2]?.trim() || "Puntual" : "20:30 hs");
   return (
     <div
       className="glass-card flex flex-col gap-6 sm:gap-8"
@@ -70,7 +83,7 @@ export default function VenueCard({ venue }: VenueCardProps) {
               Fecha del evento
             </span>
             <span className="font-jakarta font-bold text-base sm:text-lg text-[var(--dark-brown)]">
-              Sábado 7 de Noviembre
+              {displayDate}
             </span>
           </div>
         </div>
@@ -88,7 +101,7 @@ export default function VenueCard({ venue }: VenueCardProps) {
               <span>⏰ Horario importante</span>
             </span>
             <span className="font-jakarta font-black text-xl sm:text-2xl text-[var(--dark-brown)] tracking-tight flex items-center gap-2">
-              20:30 hs <span className="font-semibold text-xs text-[var(--gold)] uppercase tracking-wider">(Puntual)</span>
+              {displayTime} <span className="font-semibold text-xs text-[var(--gold)] uppercase tracking-wider">(Puntual)</span>
             </span>
           </div>
         </div>
@@ -120,8 +133,8 @@ export default function VenueCard({ venue }: VenueCardProps) {
 
       {/* .ics download */}
       <a
-        href="/api/calendar"
-        download="gabriel-70.ics"
+        href={slug ? `/api/calendar?slug=${encodeURIComponent(slug)}` : "/api/calendar"}
+        download={`${slug || "evento"}.ics`}
         className="font-jakarta text-center text-sm font-medium underline underline-offset-4 transition-opacity hover:opacity-75 pt-1"
         style={{ color: "var(--dark-brown-70)" }}
         aria-label="Descargar archivo .ics para agregar a tu calendario"

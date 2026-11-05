@@ -19,7 +19,10 @@ export async function submitRsvp(
     .map((v) => (typeof v === "string" ? v.trim() : ""))
     .filter((v) => v.length > 0);
 
+  const invitationSlug = String(formData.get("invitationSlug") || "gabriel70");
+
   const raw = {
+    invitationSlug,
     name: formData.get("name"),
     attending: formData.get("attending") ?? "yes",
     companionsCount: formData.get("companionsCount") ?? 0,
@@ -46,8 +49,10 @@ export async function submitRsvp(
 
   try {
     await createRsvp(parsed.data);
-    revalidatePath("/admin");
     revalidatePath("/");
+    revalidatePath("/admin");
+    revalidatePath(`/${invitationSlug}`);
+    revalidatePath(`/${invitationSlug}/admin`);
     return {
       status: "success",
       message: "¡Gracias! Tu confirmación fue recibida. ¡Nos vemos en la fiesta! 🎉",

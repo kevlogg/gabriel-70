@@ -35,13 +35,18 @@ export default function Countdown({ targetDate }: CountdownProps) {
   const [timeLeft, setTimeLeft] = useState<TimeLeft | null>(null);
 
   useEffect(() => {
-    setTimeLeft(calculateTimeLeft(targetDate));
+    const timer = setTimeout(() => {
+      setTimeLeft(calculateTimeLeft(targetDate));
+    }, 0);
 
     const interval = setInterval(() => {
       setTimeLeft(calculateTimeLeft(targetDate));
     }, 1000);
 
-    return () => clearInterval(interval);
+    return () => {
+      clearTimeout(timer);
+      clearInterval(interval);
+    };
   }, [targetDate]);
 
   const units: { label: string; key: keyof TimeLeft }[] = [

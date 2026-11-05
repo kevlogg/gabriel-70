@@ -21,6 +21,7 @@ export const DIETARY_LABELS: Record<DietaryRestrictionType, string> = {
 };
 
 export const RsvpFormSchema = z.object({
+  invitationSlug: z.string().default("gabriel70"),
   name: z
     .string()
     .min(2, "El nombre debe tener al menos 2 caracteres")
@@ -40,5 +41,6 @@ export type RsvpFormData = z.infer<typeof RsvpFormSchema>;
 
 export interface RsvpRecord extends RsvpFormData {
   id: string;
+  invitationSlug: string;
   createdAt: string;
 }

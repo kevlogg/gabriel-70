@@ -5,9 +5,11 @@ import { EVENT_DATA } from "@/config/event";
 
 interface EnvelopeModalProps {
   onOpen: () => void;
+  personName?: string;
+  eventNumber?: string;
 }
 
-export default function EnvelopeModal({ onOpen }: EnvelopeModalProps) {
+export default function EnvelopeModal({ onOpen, personName = EVENT_DATA.personName, eventNumber = "70" }: EnvelopeModalProps) {
   const [isOpening, setIsOpening] = useState(false);
   const [isGone, setIsGone] = useState(false);
 
@@ -22,6 +24,8 @@ export default function EnvelopeModal({ onOpen }: EnvelopeModalProps) {
   }, [isOpening, onOpen]);
 
   if (isGone) return null;
+
+  const sealText = eventNumber || "✦";
 
   return (
     <div
@@ -124,13 +128,13 @@ export default function EnvelopeModal({ onOpen }: EnvelopeModalProps) {
               x="160"
               y="135"
               textAnchor="middle"
-              fontSize="11"
+              fontSize={sealText.length > 2 ? "9" : "11"}
               fontWeight="700"
               fill="#EDD9A3"
               fontFamily="Georgia, serif"
               letterSpacing="1"
             >
-              70
+              {sealText}
             </text>
           </svg>
         </div>
@@ -145,7 +149,7 @@ export default function EnvelopeModal({ onOpen }: EnvelopeModalProps) {
               letterSpacing: "0.02em",
             }}
           >
-            {EVENT_DATA.personName} te invita
+            {personName} te invita
           </p>
           <span
             className="btn-terracotta animate-wax-pulse py-4 px-8 text-base font-semibold shadow-lg"

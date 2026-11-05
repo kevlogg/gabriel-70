@@ -7,7 +7,12 @@ import { CheckCircle, Loader2, Send, Plus, Minus, Users } from "lucide-react";
 
 const INITIAL_STATE: RsvpActionState = { status: "idle" };
 
-export default function RsvpForm() {
+interface RsvpFormProps {
+  invitationSlug?: string;
+  personName?: string;
+}
+
+export default function RsvpForm({ invitationSlug = "gabriel70", personName = "Gabriel" }: RsvpFormProps) {
   const [state, formAction, isPending] = useActionState(submitRsvp, INITIAL_STATE);
   const [companionsCount, setCompanionsCount] = useState<number>(0);
   const formRef = useRef<HTMLFormElement>(null);
@@ -16,8 +21,9 @@ export default function RsvpForm() {
   useEffect(() => {
     if (state.status === "success") {
       formRef.current?.reset();
-      setCompanionsCount(0);
+      const timer = setTimeout(() => setCompanionsCount(0), 0);
       successRef.current?.focus();
+      return () => clearTimeout(timer);
     }
   }, [state.status]);
 
@@ -122,6 +128,8 @@ export default function RsvpForm() {
       )}
 
       <form ref={formRef} action={formAction} noValidate className="flex flex-col gap-6">
+        {/* Hidden field for invitationSlug */}
+        <input type="hidden" name="invitationSlug" value={invitationSlug} />
         {/* Hidden field for default attending status */}
         <input type="hidden" name="attending" value="yes" />
 
@@ -285,7 +293,7 @@ export default function RsvpForm() {
         {/* Mensaje / Dedicatoria */}
         <fieldset className="border-none p-0 flex flex-col gap-1.5" style={{ width: "100%", boxSizing: "border-box" }}>
           <label htmlFor="rsvp-message" className="form-label" style={{ marginBottom: "0.25rem" }}>
-            Dedicatoria o mensaje para Gabriel{" "}
+            Dedicatoria o mensaje para {personName}{" "}
             <span className="font-normal opacity-50">(opcional)</span>
           </label>
           <textarea
