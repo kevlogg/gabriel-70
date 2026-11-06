@@ -7,7 +7,7 @@ import VenueCard from "@/components/invitation/VenueCard";
 import GiftCard from "@/components/invitation/GiftCard";
 import RsvpForm from "@/components/invitation/RsvpForm";
 import AudioController from "@/components/invitation/AudioController";
-import PhotoCarousel from "@/components/invitation/PhotoCarousel";
+import PhotoCarousel, { parseCarouselSlides } from "@/components/invitation/PhotoCarousel";
 import { Heart, Sparkles } from "lucide-react";
 
 interface TemplateProps {
@@ -217,6 +217,7 @@ export default function BodaBotanicaTemplate({ invitation }: TemplateProps) {
               subtitle="Tres momentos que marcaron nuestro camino hacia el altar"
             />
             <PhotoCarousel
+              slides={parseCarouselSlides(invitation.carouselImages)}
               theme="boda-botanica"
               title="Momentos Inolvidables"
               subtitle="Cada paso juntos nos trajo hasta este gran día"

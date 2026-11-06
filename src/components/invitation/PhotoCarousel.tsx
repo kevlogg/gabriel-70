@@ -18,7 +18,7 @@ interface PhotoCarouselProps {
   subtitle?: string;
 }
 
-const DEFAULT_SLIDES: CarouselSlide[] = [
+export const DEFAULT_SLIDES: CarouselSlide[] = [
   {
     src: "/images/wedding/wedding-1.jpg",
     alt: "Nuestra historia - El comienzo",
@@ -38,6 +38,19 @@ const DEFAULT_SLIDES: CarouselSlide[] = [
     tag: "Nuestro Gran Día",
   },
 ];
+
+export function parseCarouselSlides(raw?: string): CarouselSlide[] | undefined {
+  if (!raw || !raw.trim()) return undefined;
+  try {
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed) && parsed.length > 0 && parsed[0]?.src) {
+      return parsed;
+    }
+  } catch {
+    // ignore
+  }
+  return undefined;
+}
 
 export default function PhotoCarousel({
   slides = DEFAULT_SLIDES,

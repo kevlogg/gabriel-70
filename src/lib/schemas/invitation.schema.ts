@@ -156,6 +156,7 @@ export const InvitationSchema = z.object({
   giftHolderName: z.string().default(""),
   audioTrackPath: z.string().default(""),
   footerPhrase: z.string().default(""),
+  carouselImages: z.string().default("").optional(),
   template: z.enum(TEMPLATE_IDS).default("classic-gold"),
   allowCompanions: z.boolean().default(true),
   allowDietary: z.boolean().default(true),

@@ -80,6 +80,13 @@ export async function initializeInvitationsDb(): Promise<void> {
     // Column already exists
   }
 
+  // Ensure invitations has carouselImages column
+  try {
+    await client.execute(`ALTER TABLE invitations ADD COLUMN carouselImages TEXT DEFAULT ''`);
+  } catch {
+    // Column already exists
+  }
+
   // Auto-seed gabriel70 if it doesn't exist
   const existing = await client.execute({
     sql: `SELECT id FROM invitations WHERE slug = ? LIMIT 1`,
@@ -145,6 +152,7 @@ function rowToInvitation(row: Record<string, unknown>): InvitationRecord {
     giftHolderName: String(row.giftHolderName ?? ""),
     audioTrackPath: String(row.audioTrackPath ?? ""),
     footerPhrase: String(row.footerPhrase ?? ""),
+    carouselImages: String(row.carouselImages ?? ""),
     template: ((row.template as string) || "classic-gold") as any,
     allowCompanions: Number(row.allowCompanions ?? 1) === 1,
     allowDietary: Number(row.allowDietary ?? 1) === 1,
@@ -234,8 +242,8 @@ export async function createInvitation(data: InvitationFormData): Promise<Invita
       id, slug, personName, headline, subheadline, eventNumber, badgeText,
       targetDate, venueName, venueAddress, venueMapsUrl, venueCalendarUrl,
       giftBankName, giftAlias, giftCbu, giftHolderName, audioTrackPath,
-      footerPhrase, template, allowCompanions, allowDietary, isDefault, clientToken, createdAt, updatedAt
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      footerPhrase, carouselImages, template, allowCompanions, allowDietary, isDefault, clientToken, createdAt, updatedAt
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     args: [
       id,
       data.slug,
@@ -255,6 +263,7 @@ export async function createInvitation(data: InvitationFormData): Promise<Invita
       data.giftHolderName || "",
       data.audioTrackPath || "",
       data.footerPhrase || "",
+      data.carouselImages || "",
       data.template || "classic-gold",
       data.allowCompanions !== false ? 1 : 0,
       data.allowDietary !== false ? 1 : 0,
@@ -302,7 +311,7 @@ export async function updateInvitation(
       eventNumber = ?, badgeText = ?, targetDate = ?,
       venueName = ?, venueAddress = ?, venueMapsUrl = ?, venueCalendarUrl = ?,
       giftBankName = ?, giftAlias = ?, giftCbu = ?, giftHolderName = ?,
-      audioTrackPath = ?, footerPhrase = ?, template = ?,
+      audioTrackPath = ?, footerPhrase = ?, carouselImages = ?, template = ?,
       allowCompanions = ?, allowDietary = ?,
       isDefault = ?, clientToken = ?,
       updatedAt = ?
@@ -325,6 +334,7 @@ export async function updateInvitation(
       updated.giftHolderName || "",
       updated.audioTrackPath || "",
       updated.footerPhrase || "",
+      updated.carouselImages || "",
       updated.template || "classic-gold",
       updated.allowCompanions !== false ? 1 : 0,
       updated.allowDietary !== false ? 1 : 0,

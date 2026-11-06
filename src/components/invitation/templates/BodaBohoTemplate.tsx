@@ -7,7 +7,7 @@ import VenueCard from "@/components/invitation/VenueCard";
 import GiftCard from "@/components/invitation/GiftCard";
 import RsvpForm from "@/components/invitation/RsvpForm";
 import AudioController from "@/components/invitation/AudioController";
-import PhotoCarousel from "@/components/invitation/PhotoCarousel";
+import PhotoCarousel, { parseCarouselSlides } from "@/components/invitation/PhotoCarousel";
 import { Sun, Heart } from "lucide-react";
 
 interface TemplateProps {
@@ -217,6 +217,7 @@ export default function BodaBohoTemplate({ invitation }: TemplateProps) {
               subtitle="Tres momentos mágicos que sellaron nuestro destino"
             />
             <PhotoCarousel
+              slides={parseCarouselSlides(invitation.carouselImages)}
               theme="boda-boho"
               title="Momentos Únicos"
               subtitle="Bajo el sol y las estrellas, nuestro amor crece cada día"

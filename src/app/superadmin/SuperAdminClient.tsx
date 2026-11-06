@@ -36,8 +36,14 @@ import {
   Play,
   Square,
   AlertTriangle,
+  Camera,
 } from "lucide-react";
 import { logoutSuperadminAction } from "@/app/actions/auth-actions";
+import {
+  type CarouselSlide,
+  DEFAULT_SLIDES,
+  parseCarouselSlides,
+} from "@/components/invitation/PhotoCarousel";
 
 interface SuperAdminClientProps {
   invitations: InvitationRecord[];
@@ -536,6 +542,42 @@ function datetimeLocalToIsoWithOffset(localVal: string): string {
   return `${localVal}:00-03:00`;
 }
 
+// Client-side fast image downscaler for carousel photos
+function compressImageFile(
+  file: File,
+  maxWidth = 1200,
+  quality = 0.82
+): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        let width = img.width;
+        let height = img.height;
+        if (width > maxWidth) {
+          height = Math.round((height * maxWidth) / width);
+          width = maxWidth;
+        }
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) {
+          resolve(e.target?.result as string);
+          return;
+        }
+        ctx.drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL("image/jpeg", quality));
+      };
+      img.onerror = reject;
+      img.src = e.target?.result as string;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
 // Modal Form Component for Creating and Editing Invitations
 interface InvitationFormModalProps {
   title: string;
@@ -558,6 +600,55 @@ function InvitationFormModal({
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateId>(
     (invitation?.template as TemplateId) || "classic-gold"
   );
+
+  const isWedding =
+    selectedTemplate === "boda-botanica" ||
+    selectedTemplate === "boda-clasica" ||
+    selectedTemplate === "boda-boho";
+
+  // Carousel slides state for wedding templates
+  const initialSlides: CarouselSlide[] = (() => {
+    const parsed = parseCarouselSlides(invitation?.carouselImages);
+    if (parsed && parsed.length === 3) return parsed;
+    return DEFAULT_SLIDES;
+  })();
+  const [carouselSlides, setCarouselSlides] =
+    useState<CarouselSlide[]>(initialSlides);
+
+  const handleImageUpload = async (index: number, file: File) => {
+    try {
+      const base64 = await compressImageFile(file, 1200, 0.82);
+      setCarouselSlides((prev) => {
+        const copy = [...prev];
+        copy[index] = {
+          ...copy[index],
+          src: base64,
+        };
+        return copy;
+      });
+    } catch (err) {
+      console.error("Error compressing image:", err);
+    }
+  };
+
+  const handleCaptionChange = (index: number, caption: string) => {
+    setCarouselSlides((prev) => {
+      const copy = [...prev];
+      copy[index] = {
+        ...copy[index],
+        caption,
+      };
+      return copy;
+    });
+  };
+
+  const handleResetSlot = (index: number) => {
+    setCarouselSlides((prev) => {
+      const copy = [...prev];
+      copy[index] = DEFAULT_SLIDES[index] || DEFAULT_SLIDES[0];
+      return copy;
+    });
+  };
 
   // Category state for template selection
   const initialCategory: TemplateCategoryKey = (() => {
@@ -725,6 +816,12 @@ function InvitationFormModal({
 
     // Always delete raw audioFile so the Server Action request stays light and never exceeds limits
     formData.delete("audioFile");
+
+    // Carousel and Wedding specifics
+    if (isWedding) {
+      formData.set("eventNumber", "");
+      formData.set("carouselImages", JSON.stringify(carouselSlides));
+    }
 
     // If gifts are not included, clear gift values
     if (!includeGifts) {
@@ -916,49 +1013,55 @@ function InvitationFormModal({
 
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-bold text-[var(--dark-brown)]">
-                  Nombre del Homenajeado/a <span className="text-red-600">*</span>
+                  {isWedding ? "Nombres de los Novios / Pareja" : "Nombre del Homenajeado/a"}{" "}
+                  <span className="text-red-600">*</span>
                 </label>
                 <input
                   name="personName"
                   type="text"
                   required
                   defaultValue={invitation?.personName || ""}
-                  placeholder="ej: Mateo, Sofía, Gabriel"
+                  placeholder={isWedding ? "ej: Lucas & Valentina" : "ej: Mateo, Sofía, Gabriel"}
                   className="form-input text-sm p-3"
                 />
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="sm:col-span-2 flex flex-col gap-1">
+            <div className={`grid grid-cols-1 ${isWedding ? "sm:grid-cols-1" : "sm:grid-cols-3"} gap-4`}>
+              <div className={`${isWedding ? "sm:col-span-1" : "sm:col-span-2"} flex flex-col gap-1`}>
                 <label className="text-xs font-bold text-[var(--dark-brown)]">
-                  Título Principal (Headline) <span className="text-red-600">*</span>
+                  {isWedding ? "Título Principal de la Boda" : "Título Principal (Headline)"}{" "}
+                  <span className="text-red-600">*</span>
                 </label>
                 <input
                   name="headline"
                   type="text"
                   required
                   defaultValue={invitation?.headline || ""}
-                  placeholder="ej: Los 5 Años de Mateo, Mis 15 Sofía"
+                  placeholder={isWedding ? "ej: Nuestra Boda: Lucas & Valentina" : "ej: Los 5 Años de Mateo, Mis 15 Sofía"}
                   className="form-input text-sm p-3"
                 />
               </div>
 
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-bold text-[var(--dark-brown)]">
-                  Número Central o Edad
-                </label>
-                <input
-                  name="eventNumber"
-                  type="text"
-                  defaultValue={invitation?.eventNumber ?? "5"}
-                  placeholder="ej: 5, 10, 15, 70"
-                  className="form-input text-sm p-3 text-center font-bold"
-                />
-                <span className="text-[11px] text-[var(--dark-brown-40)]">
-                  Aparece en el sobre y en el número central
-                </span>
-              </div>
+              {!isWedding ? (
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs font-bold text-[var(--dark-brown)]">
+                    Número Central o Edad
+                  </label>
+                  <input
+                    name="eventNumber"
+                    type="text"
+                    defaultValue={invitation?.eventNumber ?? "5"}
+                    placeholder="ej: 5, 10, 15, 70"
+                    className="form-input text-sm p-3 text-center font-bold"
+                  />
+                  <span className="text-[11px] text-[var(--dark-brown-40)]">
+                    Aparece en el sobre y en el número central
+                  </span>
+                </div>
+              ) : (
+                <input type="hidden" name="eventNumber" value="" />
+              )}
             </div>
 
             <div className="flex flex-col gap-1">
@@ -970,11 +1073,116 @@ function InvitationFormModal({
                 rows={2}
                 required
                 defaultValue={invitation?.subheadline || ""}
-                placeholder="ej: ¡Vení a festejar y jugar conmigo una tarde inolvidable llena de sorpresas!"
+                placeholder={isWedding ? "ej: Hay momentos en la vida que son inolvidables, y compartirlos con ustedes los hace eternos." : "ej: ¡Vení a festejar y jugar conmigo una tarde inolvidable llena de sorpresas!"}
                 className="form-input text-sm p-3 resize-none"
               />
             </div>
           </fieldset>
+
+          {/* ─── SECCIÓN FOTOS: CARRUSEL DE FOTOS (SOLO PARA BODAS) ─── */}
+          {isWedding && (
+            <fieldset className="flex flex-col gap-4 border-b border-[rgba(197,155,39,0.15)] pb-6 bg-amber-50/40 p-4 sm:p-5 rounded-2xl border border-amber-200/60">
+              <legend className="font-jakarta font-bold text-sm text-[var(--gold)] uppercase tracking-wider flex items-center gap-2 mb-1">
+                <Camera size={16} /> Carrusel de 3 Fotos de la Boda (Con Marco Decorativo)
+              </legend>
+              <p className="text-xs text-[var(--dark-brown-70)]">
+                Cargá las 3 fotos que se mostrarán enmarcadas en la sección "Nuestra Historia de Amor" de la invitación.
+              </p>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
+                {carouselSlides.map((slide, idx) => {
+                  const defaultSlide = DEFAULT_SLIDES[idx] || DEFAULT_SLIDES[0];
+                  const isCustom = slide.src !== defaultSlide.src;
+
+                  return (
+                    <div
+                      key={idx}
+                      className="flex flex-col gap-2.5 p-3.5 rounded-2xl bg-white border border-stone-200 shadow-xs"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-[var(--dark-brown)]">
+                          {slide.tag || `Foto ${idx + 1}`}
+                        </span>
+                        {isCustom ? (
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">
+                            ✓ Personalizada
+                          </span>
+                        ) : (
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-stone-100 text-stone-600">
+                            Predeterminada
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Photo Thumbnail Preview */}
+                      <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden bg-stone-100 border border-stone-200 group">
+                        <img
+                          src={slide.src}
+                          alt={slide.alt || `Foto ${idx + 1}`}
+                          className="w-full h-full object-cover"
+                        />
+                        <label
+                          htmlFor={`carousel-file-${idx}`}
+                          className="absolute inset-0 bg-black/40 text-white opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-1 cursor-pointer text-xs font-bold"
+                        >
+                          <Upload size={18} />
+                          <span>Cambiar foto</span>
+                        </label>
+                      </div>
+
+                      {/* Upload Button */}
+                      <div className="flex items-center gap-2">
+                        <input
+                          id={`carousel-file-${idx}`}
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={async (e) => {
+                            const file = e.target.files?.[0];
+                            if (!file) return;
+                            await handleImageUpload(idx, file);
+                            e.target.value = "";
+                          }}
+                        />
+                        <label
+                          htmlFor={`carousel-file-${idx}`}
+                          className="flex-1 btn-outline py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer hover:border-[var(--gold)]"
+                        >
+                          <Upload size={14} />
+                          <span>{isCustom ? "Cambiar foto" : "Subir foto"}</span>
+                        </label>
+
+                        {isCustom && (
+                          <button
+                            type="button"
+                            onClick={() => handleResetSlot(idx)}
+                            className="p-2 rounded-xl text-stone-400 hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
+                            title="Restablecer foto predeterminada"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        )}
+                      </div>
+
+                      {/* Caption Input */}
+                      <div className="flex flex-col gap-1 mt-1">
+                        <label className="text-[11px] font-semibold text-stone-600">
+                          Frase / Epígrafe de la foto
+                        </label>
+                        <input
+                          type="text"
+                          value={slide.caption || ""}
+                          onChange={(e) => handleCaptionChange(idx, e.target.value)}
+                          placeholder="Frase romántica de esta foto..."
+                          className="form-input text-xs p-2.5 rounded-xl"
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </fieldset>
+          )}
 
           {/* ─── SECCIÓN 2: FECHA Y CUENTA REGRESIVA (CALENDARIO) ─── */}
           <fieldset className="flex flex-col gap-4 border-b border-[rgba(197,155,39,0.15)] pb-6">

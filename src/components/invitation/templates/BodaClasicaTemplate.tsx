@@ -7,7 +7,7 @@ import VenueCard from "@/components/invitation/VenueCard";
 import GiftCard from "@/components/invitation/GiftCard";
 import RsvpForm from "@/components/invitation/RsvpForm";
 import AudioController from "@/components/invitation/AudioController";
-import PhotoCarousel from "@/components/invitation/PhotoCarousel";
+import PhotoCarousel, { parseCarouselSlides } from "@/components/invitation/PhotoCarousel";
 import { Sparkles } from "lucide-react";
 
 interface TemplateProps {
@@ -226,6 +226,7 @@ export default function BodaClasicaTemplate({ invitation }: TemplateProps) {
               subtitle="Tres instantes inolvidables que nos guiaron a este momento único"
             />
             <PhotoCarousel
+              slides={parseCarouselSlides(invitation.carouselImages)}
               theme="boda-clasica"
               title="Momentos Inolvidables"
               subtitle="El camino recorrido para llegar a este instante"
