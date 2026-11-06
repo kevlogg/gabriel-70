@@ -41,8 +41,10 @@ next-env.d.ts
 # databases
 *.db
 *-wal
-auth*
-db*
+/auth
+/auth-wal
+/db
+/db-wal
 backup*.json
 *.json.bak
 

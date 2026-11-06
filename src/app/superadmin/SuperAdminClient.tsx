@@ -31,18 +31,18 @@ import {
   RefreshCw,
   Volume2,
   VolumeX,
+  LogOut,
 } from "lucide-react";
+import { logoutSuperadminAction } from "@/app/actions/auth-actions";
 
 interface SuperAdminClientProps {
   invitations: InvitationRecord[];
   rsvpsCounts: Record<string, number>;
-  authKey: string;
 }
 
 export default function SuperAdminClient({
   invitations,
   rsvpsCounts,
-  authKey,
 }: SuperAdminClientProps) {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [editingInv, setEditingInv] = useState<InvitationRecord | null>(null);
@@ -133,10 +133,26 @@ export default function SuperAdminClient({
           <div className="flex items-center gap-3 w-full sm:w-auto">
             <button
               onClick={() => setIsCreateOpen(true)}
-              className="btn-gold flex items-center justify-center gap-2 text-xs py-2.5 px-4 rounded-xl font-bold shadow-md w-full sm:w-auto"
+              className="btn-gold flex items-center justify-center gap-2 text-xs py-2.5 px-4 rounded-xl font-bold shadow-md w-full sm:w-auto cursor-pointer"
             >
               <Plus size={16} />
               <span>Crear Nueva Invitación</span>
+            </button>
+
+            <button
+              onClick={() => {
+                if (confirm("¿Estás seguro de que deseás cerrar la sesión de Superadmin?")) {
+                  startTransition(async () => {
+                    await logoutSuperadminAction();
+                  });
+                }
+              }}
+              disabled={isPending}
+              className="btn-outline flex items-center justify-center gap-1.5 text-xs py-2.5 px-3.5 rounded-xl font-bold text-gray-700 hover:text-red-700 hover:border-red-300 transition-colors cursor-pointer shrink-0"
+              title="Cerrar sesión de administrador"
+            >
+              <LogOut size={15} />
+              <span className="hidden sm:inline">Cerrar Sesión</span>
             </button>
           </div>
         </div>
@@ -357,7 +373,6 @@ export default function SuperAdminClient({
         {isCreateOpen && (
           <InvitationFormModal
             title="Crear Nueva Invitación Digital"
-            authKey={authKey}
             onClose={() => setIsCreateOpen(false)}
             onSaved={() => {
               setIsCreateOpen(false);
@@ -372,7 +387,6 @@ export default function SuperAdminClient({
           <InvitationFormModal
             title={`Editar: ${editingInv.headline}`}
             invitation={editingInv}
-            authKey={authKey}
             onClose={() => setEditingInv(null)}
             onSaved={() => {
               setEditingInv(null);
@@ -455,7 +469,6 @@ function datetimeLocalToIsoWithOffset(localVal: string): string {
 interface InvitationFormModalProps {
   title: string;
   invitation?: InvitationRecord;
-  authKey: string;
   onClose: () => void;
   onSaved: () => void;
 }

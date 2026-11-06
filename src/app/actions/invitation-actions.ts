@@ -10,6 +10,7 @@ import {
   setDefaultInvitation,
 } from "@/lib/dal/invitations";
 import { InvitationSchema, type TemplateId } from "@/lib/schemas/invitation.schema";
+import { isSuperadminAuthenticated } from "@/lib/auth";
 
 export interface ActionResult {
   success: boolean;
@@ -63,6 +64,14 @@ export async function createInvitationAction(
   _prevState: ActionResult | null,
   formData: FormData
 ): Promise<ActionResult> {
+  const isAuth = await isSuperadminAuthenticated();
+  if (!isAuth) {
+    return {
+      success: false,
+      message: "No autorizado. Tu sesión expiró o no tenés permisos de administrador.",
+    };
+  }
+
   const audioTrackPath = await extractAudioPath(formData, "");
 
   const raw = {
@@ -123,6 +132,14 @@ export async function updateInvitationAction(
   _prevState: ActionResult | null,
   formData: FormData
 ): Promise<ActionResult> {
+  const isAuth = await isSuperadminAuthenticated();
+  if (!isAuth) {
+    return {
+      success: false,
+      message: "No autorizado. Tu sesión expiró o no tenés permisos de administrador.",
+    };
+  }
+
   const currentAudio = String(formData.get("currentAudioTrackPath") || "").trim();
   const audioTrackPath = await extractAudioPath(formData, currentAudio);
 
@@ -179,6 +196,14 @@ export async function updateInvitationAction(
 }
 
 export async function deleteInvitationAction(id: string): Promise<ActionResult> {
+  const isAuth = await isSuperadminAuthenticated();
+  if (!isAuth) {
+    return {
+      success: false,
+      message: "No autorizado. Tu sesión expiró o no tenés permisos de administrador.",
+    };
+  }
+
   try {
     await deleteInvitation(id);
     revalidatePath("/superadmin");
@@ -195,6 +220,14 @@ export async function deleteInvitationAction(id: string): Promise<ActionResult> 
 }
 
 export async function setDefaultInvitationAction(id: string): Promise<ActionResult> {
+  const isAuth = await isSuperadminAuthenticated();
+  if (!isAuth) {
+    return {
+      success: false,
+      message: "No autorizado. Tu sesión expiró o no tenés permisos de administrador.",
+    };
+  }
+
   try {
     await setDefaultInvitation(id);
     revalidatePath("/superadmin");
