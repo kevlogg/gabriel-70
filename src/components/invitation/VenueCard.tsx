@@ -1,4 +1,4 @@
-import { MapPin, CalendarPlus, Navigation, Calendar, Clock, Rocket, Ticket, Crown, Trophy } from "lucide-react";
+import { MapPin, CalendarPlus, Navigation, Calendar, Clock, Rocket, Ticket, Crown, Trophy, Heart } from "lucide-react";
 import type { VenueConfig } from "@/config/event";
 import type { TemplateId } from "@/lib/schemas/invitation.schema";
 
@@ -107,6 +107,9 @@ export default function VenueCard({
   const isKpop = theme === "k-pop";
   const isPrincess = theme === "princesas";
   const isFootball = theme === "futbol-infantil";
+  const isBotanica = theme === "boda-botanica";
+  const isClasica = theme === "boda-clasica";
+  const isBoho = theme === "boda-boho";
 
   // Card container styling
   const cardContainerClass = isToyStory
@@ -117,6 +120,12 @@ export default function VenueCard({
     ? "bg-white/95 rounded-3xl border-2 border-pink-300 shadow-xl p-6 sm:p-10 flex flex-col gap-6 text-pink-950"
     : isFootball
     ? "bg-white rounded-3xl border-4 border-emerald-500 shadow-xl p-6 sm:p-10 flex flex-col gap-6 text-emerald-950"
+    : isBotanica
+    ? "bg-[#FAF7F2] rounded-3xl border-2 border-[#556B2F]/30 shadow-xl p-6 sm:p-10 flex flex-col gap-6 text-[#2D3E1E]"
+    : isClasica
+    ? "bg-[#18181B] rounded-3xl border border-[#D4AF37]/50 shadow-[0_20px_50px_rgba(0,0,0,0.5)] p-6 sm:p-10 flex flex-col gap-6 text-[#FAF5EE] backdrop-blur-xl"
+    : isBoho
+    ? "bg-[#FDF8F5] rounded-3xl border-2 border-[#C86D51]/30 shadow-xl p-6 sm:p-10 flex flex-col gap-6 text-[#6D2B19]"
     : "glass-card p-6 sm:p-10 flex flex-col gap-6 sm:gap-8 text-[var(--dark-brown)]";
 
   // Header icon background
@@ -128,6 +137,12 @@ export default function VenueCard({
     ? "bg-gradient-to-tr from-pink-400 via-rose-400 to-amber-300 text-white shadow-md"
     : isFootball
     ? "bg-emerald-600 text-white shadow-md"
+    : isBotanica
+    ? "bg-[#556B2F] text-white shadow-md"
+    : isClasica
+    ? "bg-gradient-to-tr from-[#D4AF37] to-[#F5E6C8] text-black shadow-md"
+    : isBoho
+    ? "bg-[#C86D51] text-white shadow-md"
     : "bg-gradient-to-br from-[#C59B27] to-[#D4A373] text-white shadow-md";
 
   // Title styling
@@ -139,6 +154,12 @@ export default function VenueCard({
     ? "font-bold text-2xl sm:text-3xl text-pink-950"
     : isFootball
     ? "font-black text-2xl sm:text-3xl text-emerald-950 tracking-tight uppercase"
+    : isBotanica
+    ? "font-serif font-bold text-2xl sm:text-3xl text-[#2D3E1E]"
+    : isClasica
+    ? "font-serif font-bold text-2xl sm:text-3xl text-transparent bg-clip-text bg-gradient-to-r from-[#F5E6C8] via-[#FAF5EE] to-[#D4AF37] tracking-wider"
+    : isBoho
+    ? "font-serif font-bold text-2xl sm:text-3xl text-[#8C3D26]"
     : "font-cormorant font-bold text-2xl sm:text-3xl text-[var(--dark-brown)]";
 
   // Datetime block styling
@@ -150,6 +171,12 @@ export default function VenueCard({
     ? "flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 p-5 rounded-2xl bg-pink-50/70 border border-pink-200 shadow-xs"
     : isFootball
     ? "flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 p-5 rounded-2xl bg-emerald-50/70 border-2 border-emerald-200 shadow-xs"
+    : isBotanica
+    ? "flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 p-5 rounded-2xl bg-white/80 border border-[#556B2F]/20 shadow-xs"
+    : isClasica
+    ? "flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 p-5 rounded-2xl bg-black/60 border border-[#D4AF37]/30 shadow-xs"
+    : isBoho
+    ? "flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 p-5 rounded-2xl bg-[#F7EBE1] border border-[#C86D51]/20 shadow-xs"
     : "flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 p-5 sm:p-6 rounded-2xl bg-[rgba(197,155,39,0.08)] border-1.5 border-[rgba(197,155,39,0.3)] shadow-xs";
 
   // Action Buttons
@@ -161,6 +188,12 @@ export default function VenueCard({
     ? "flex-1 py-3.5 px-5 rounded-2xl font-bold text-white text-sm shadow-md bg-gradient-to-r from-pink-500 via-rose-400 to-amber-400 hover:opacity-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
     : isFootball
     ? "flex-1 py-3.5 px-5 rounded-2xl font-black text-white text-sm shadow-md bg-emerald-600 hover:bg-emerald-700 transition-all flex items-center justify-center gap-2 cursor-pointer"
+    : isBotanica
+    ? "flex-1 py-3.5 px-5 rounded-2xl font-bold text-white text-sm shadow-md bg-[#556B2F] hover:bg-[#435424] transition-all flex items-center justify-center gap-2 cursor-pointer"
+    : isClasica
+    ? "flex-1 py-3.5 px-5 rounded-2xl font-bold text-black text-sm shadow-md bg-gradient-to-r from-[#D4AF37] to-[#F5E6C8] hover:opacity-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
+    : isBoho
+    ? "flex-1 py-3.5 px-5 rounded-2xl font-bold text-white text-sm shadow-md bg-[#C86D51] hover:bg-[#B3583D] transition-all flex items-center justify-center gap-2 cursor-pointer"
     : "btn-gold flex-1 justify-center py-4 flex items-center gap-2";
 
   const calendarBtnClass = isToyStory
@@ -171,6 +204,12 @@ export default function VenueCard({
     ? "flex-1 py-3.5 px-5 rounded-2xl font-bold text-pink-900 text-sm border-2 border-pink-300 bg-white hover:bg-pink-50 transition-all flex items-center justify-center gap-2 cursor-pointer"
     : isFootball
     ? "flex-1 py-3.5 px-5 rounded-2xl font-black text-gray-950 text-sm shadow-sm bg-amber-400 hover:bg-amber-500 border-2 border-amber-500 transition-all flex items-center justify-center gap-2 cursor-pointer"
+    : isBotanica
+    ? "flex-1 py-3.5 px-5 rounded-2xl font-bold text-[#556B2F] text-sm border-2 border-[#556B2F]/40 bg-white hover:bg-[#FAF7F2] transition-all flex items-center justify-center gap-2 cursor-pointer"
+    : isClasica
+    ? "flex-1 py-3.5 px-5 rounded-2xl font-bold text-[#D4AF37] text-sm border border-[#D4AF37]/50 bg-white/5 hover:bg-white/10 transition-all flex items-center justify-center gap-2 cursor-pointer"
+    : isBoho
+    ? "flex-1 py-3.5 px-5 rounded-2xl font-bold text-[#C86D51] text-sm border-2 border-[#C86D51]/40 bg-white hover:bg-[#FDF8F5] transition-all flex items-center justify-center gap-2 cursor-pointer"
     : "btn-outline flex-1 justify-center py-4 flex items-center gap-2";
 
   return (
@@ -189,6 +228,8 @@ export default function VenueCard({
             <Crown size={26} />
           ) : isFootball ? (
             <Trophy size={26} />
+          ) : isBotanica || isClasica || isBoho ? (
+            <Heart size={24} className="fill-current" />
           ) : (
             <MapPin size={26} />
           )}

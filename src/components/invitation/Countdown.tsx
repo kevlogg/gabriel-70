@@ -61,6 +61,9 @@ export default function Countdown({ targetDate, theme = "classic-gold" }: Countd
   const isKpop = theme === "k-pop";
   const isPrincess = theme === "princesas";
   const isFootball = theme === "futbol-infantil";
+  const isBotanica = theme === "boda-botanica";
+  const isClasica = theme === "boda-clasica";
+  const isBoho = theme === "boda-boho";
 
   return (
     <div className="flex flex-col items-center gap-6 py-2 w-full">
@@ -74,10 +77,22 @@ export default function Countdown({ targetDate, theme = "classic-gold" }: Countd
             ? "text-pink-900 font-bold"
             : isFootball
             ? "text-emerald-950 font-black"
+            : isBotanica
+            ? "text-[#556B2F] font-serif text-sm tracking-wider"
+            : isClasica
+            ? "text-[#D4AF37] font-serif text-sm tracking-widest"
+            : isBoho
+            ? "text-[#8C3D26] font-serif text-sm tracking-wider"
             : "font-cormorant text-[var(--dark-brown-70)] text-base"
         }`}
       >
-        — Faltan solo —
+        {isBotanica
+          ? "— Faltan solo para el Sí, quiero —"
+          : isClasica
+          ? "✦ Cuenta regresiva para nuestra Boda ✦"
+          : isBoho
+          ? "— Cada vez falta menos para el gran día —"
+          : "— Faltan solo —"}
       </p>
 
       <div
@@ -145,6 +160,54 @@ export default function Countdown({ targetDate, theme = "classic-gold" }: Countd
                   {timeLeft ? padTwo(timeLeft[key]) : "00"}
                 </span>
                 <span className="text-[10px] sm:text-xs font-black uppercase tracking-wider text-white mt-1.5">
+                  {label}
+                </span>
+              </div>
+            );
+          }
+
+          if (isBotanica) {
+            return (
+              <div
+                key={key}
+                className="flex-1 min-w-0 flex flex-col items-center justify-center p-3 sm:p-5 rounded-2xl bg-white border-2 border-[#556B2F]/30 shadow-md"
+              >
+                <span className="font-serif font-bold text-2xl sm:text-4xl md:text-5xl leading-none text-[#2D3E1E]">
+                  {timeLeft ? padTwo(timeLeft[key]) : "00"}
+                </span>
+                <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#556B2F] mt-1.5">
+                  {label}
+                </span>
+              </div>
+            );
+          }
+
+          if (isClasica) {
+            return (
+              <div
+                key={key}
+                className="flex-1 min-w-0 flex flex-col items-center justify-center p-3 sm:p-5 rounded-2xl bg-black/85 border border-[#D4AF37]/50 shadow-[0_0_20px_rgba(212,175,55,0.25)]"
+              >
+                <span className="font-serif font-bold text-2xl sm:text-4xl md:text-5xl leading-none text-[#F5E6C8]">
+                  {timeLeft ? padTwo(timeLeft[key]) : "00"}
+                </span>
+                <span className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-[#D4AF37] mt-1.5">
+                  {label}
+                </span>
+              </div>
+            );
+          }
+
+          if (isBoho) {
+            return (
+              <div
+                key={key}
+                className="flex-1 min-w-0 flex flex-col items-center justify-center p-3 sm:p-5 rounded-2xl bg-[#FAF1EC] border-2 border-[#C86D51]/30 shadow-sm"
+              >
+                <span className="font-serif font-bold text-2xl sm:text-4xl md:text-5xl leading-none text-[#8C3D26]">
+                  {timeLeft ? padTwo(timeLeft[key]) : "00"}
+                </span>
+                <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#A8583E] mt-1.5">
                   {label}
                 </span>
               </div>

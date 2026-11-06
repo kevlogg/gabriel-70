@@ -26,6 +26,9 @@ export default function TreasureChest({
   const isKpop = theme === "k-pop";
   const isPrincess = theme === "princesas";
   const isFootball = theme === "futbol-infantil";
+  const isBotanica = theme === "boda-botanica";
+  const isClasica = theme === "boda-clasica";
+  const isBoho = theme === "boda-boho";
 
   const handleOpen = useCallback(() => {
     setIsOpen(true);
@@ -68,6 +71,12 @@ export default function TreasureChest({
     ? "bg-white/95 rounded-3xl border-2 border-pink-300 shadow-xl flex flex-col items-center justify-center w-full relative overflow-hidden text-pink-950 font-sans p-6 sm:p-10"
     : isFootball
     ? "bg-white rounded-3xl border-4 border-emerald-500 shadow-xl flex flex-col items-center justify-center w-full relative overflow-hidden text-emerald-950 font-sans p-6 sm:p-10"
+    : isBotanica
+    ? "bg-[#FAF7F2] rounded-3xl border-2 border-[#556B2F]/30 shadow-xl flex flex-col items-center justify-center w-full relative overflow-hidden text-[#2D3E1E] p-6 sm:p-10"
+    : isClasica
+    ? "bg-gradient-to-b from-[#1C1917] to-[#0C0A09] rounded-3xl border border-[#D4AF37]/50 shadow-[0_25px_50px_rgba(0,0,0,0.6)] flex flex-col items-center justify-center w-full relative overflow-hidden text-[#FAF5EE] p-6 sm:p-10"
+    : isBoho
+    ? "bg-[#FDF8F5] rounded-3xl border-2 border-[#C86D51]/30 shadow-xl flex flex-col items-center justify-center w-full relative overflow-hidden text-[#6D2B19] p-6 sm:p-10"
     : "glass-card flex flex-col items-center justify-center w-full relative overflow-hidden text-[var(--dark-brown)]";
 
   // Glow aura behind closed chest
@@ -79,6 +88,12 @@ export default function TreasureChest({
     ? "radial-gradient(circle, rgba(244,114,182,0.35) 0%, rgba(253,230,138,0.2) 55%, transparent 75%)"
     : isFootball
     ? "radial-gradient(circle, rgba(16,185,129,0.35) 0%, rgba(251,191,36,0.2) 55%, transparent 75%)"
+    : isBotanica
+    ? "radial-gradient(circle, rgba(85,107,47,0.3) 0%, rgba(212,175,55,0.2) 55%, transparent 75%)"
+    : isClasica
+    ? "radial-gradient(circle, rgba(212,175,55,0.35) 0%, rgba(245,230,200,0.15) 55%, transparent 75%)"
+    : isBoho
+    ? "radial-gradient(circle, rgba(200,109,81,0.35) 0%, rgba(235,213,200,0.2) 55%, transparent 75%)"
     : "radial-gradient(circle, rgba(197,155,39,0.35) 0%, rgba(212,163,115,0.18) 55%, transparent 75%)";
 
   // Open button styling
@@ -90,6 +105,12 @@ export default function TreasureChest({
     ? "px-8 py-3.5 text-base font-bold text-white bg-gradient-to-r from-pink-500 via-rose-400 to-amber-300 hover:opacity-95 rounded-2xl shadow-md cursor-pointer transition-transform hover:scale-105 flex items-center gap-2"
     : isFootball
     ? "px-8 py-3.5 text-base font-black text-white bg-emerald-600 hover:bg-emerald-700 border-2 border-emerald-800 rounded-2xl shadow-lg cursor-pointer transition-transform hover:scale-105 flex items-center gap-2"
+    : isBotanica
+    ? "px-8 py-3.5 text-base font-bold text-white bg-[#556B2F] hover:bg-[#435424] rounded-2xl shadow-md cursor-pointer transition-transform hover:scale-105 flex items-center gap-2"
+    : isClasica
+    ? "px-8 py-3.5 text-base font-bold text-black bg-gradient-to-r from-[#D4AF37] to-[#F5E6C8] hover:opacity-95 rounded-2xl shadow-[0_0_20px_rgba(212,175,55,0.4)] cursor-pointer transition-transform hover:scale-105 flex items-center gap-2"
+    : isBoho
+    ? "px-8 py-3.5 text-base font-bold text-white bg-[#C86D51] hover:bg-[#B3583D] rounded-2xl shadow-md cursor-pointer transition-transform hover:scale-105 flex items-center gap-2"
     : "btn-gold px-8 py-3.5 text-base shadow-lg animate-wax-pulse cursor-pointer flex items-center gap-2";
 
   const openBtnText = isToyStory
@@ -100,6 +121,12 @@ export default function TreasureChest({
     ? "👑 Tocá para abrir el cofre real"
     : isFootball
     ? "🏆 Tocá para abrir la copa de regalos"
+    : isBotanica
+    ? "🌿 Abrir Datos para Luna de Miel / Regalo"
+    : isClasica
+    ? "🥂 Abrir Mesa de Regalos / Luna de Miel"
+    : isBoho
+    ? "🌾 Abrir Alcancía de Nuestra Aventura"
     : "✨ Tocá para abrir el cofre";
 
   // Opened phrases
@@ -111,6 +138,12 @@ export default function TreasureChest({
     ? "“Un deseo se pide con el corazón.”"
     : isFootball
     ? "“¡El mejor equipo es con vos en la cancha!”"
+    : isBotanica
+    ? "“El amor no mira con los ojos, sino con el alma.”"
+    : isClasica
+    ? "“Para siempre comienza hoy.”"
+    : isBoho
+    ? "“Donde tú vayas, yo iré.”"
     : "“Menos chiches, más chanchito.”";
 
   const phraseSubtitle = isToyStory
@@ -121,6 +154,12 @@ export default function TreasureChest({
     ? "Tu presencia iluminará este baile real. Si deseás hacernos un obsequio:"
     : isFootball
     ? "Tu aliento en este gran partido es lo que más vale. Si querés sumarte a la jugada con un regalo:"
+    : isBotanica
+    ? "Tu presencia en nuestra boda es el regalo más valioso. Si deseás hacernos un presente o colaborar con nuestra Luna de Miel:"
+    : isClasica
+    ? "Compartir este día con vos es nuestro mejor regalo. Si querés ayudarnos a comenzar nuestra vida juntos o sumar a nuestra Luna de Miel:"
+    : isBoho
+    ? "Tu compañía en nuestra boda lo es todo. Si querés darnos una mano para nuestra nueva etapa juntos o el viaje de novios:"
     : "Tu presencia es mi mejor regalo, tu transferencia, el combustible para seguir festejando.";
 
   const phraseTitleClass = isToyStory
@@ -131,6 +170,12 @@ export default function TreasureChest({
     ? "font-bold text-2xl sm:text-3xl text-pink-900"
     : isFootball
     ? "font-black text-2xl sm:text-3xl text-emerald-950 uppercase"
+    : isBotanica
+    ? "font-serif font-bold text-2xl sm:text-3xl text-[#2D3E1E]"
+    : isClasica
+    ? "font-serif font-bold text-2xl sm:text-3xl text-transparent bg-clip-text bg-gradient-to-r from-[#F5E6C8] via-[#FAF5EE] to-[#D4AF37]"
+    : isBoho
+    ? "font-serif font-bold text-2xl sm:text-3xl text-[#8C3D26]"
     : "font-cormorant italic font-bold text-2xl sm:text-3xl text-[var(--gold)]";
 
   const phraseSubtitleClass = isToyStory
@@ -141,6 +186,12 @@ export default function TreasureChest({
     ? "font-medium text-sm sm:text-base text-pink-950/80"
     : isFootball
     ? "font-bold text-sm sm:text-base text-emerald-900"
+    : isBotanica
+    ? "font-serif text-sm sm:text-base text-[#556B2F]"
+    : isClasica
+    ? "font-serif text-sm sm:text-base text-[#FAF5EE]/80"
+    : isBoho
+    ? "font-serif text-sm sm:text-base text-[#A8583E]"
     : "font-cormorant italic font-semibold text-lg sm:text-xl text-[var(--dark-brown)]";
 
   // Bank box styling
@@ -152,6 +203,12 @@ export default function TreasureChest({
     ? "rounded-2xl p-5 sm:p-8 flex flex-col gap-5 w-full bg-pink-50/70 border border-pink-200 shadow-sm"
     : isFootball
     ? "rounded-2xl p-5 sm:p-8 flex flex-col gap-5 w-full bg-emerald-50/70 border-2 border-emerald-200 shadow-sm"
+    : isBotanica
+    ? "rounded-2xl p-5 sm:p-8 flex flex-col gap-5 w-full bg-white border border-[#556B2F]/25 shadow-sm"
+    : isClasica
+    ? "rounded-2xl p-5 sm:p-8 flex flex-col gap-5 w-full bg-black/80 border border-[#D4AF37]/40 shadow-sm"
+    : isBoho
+    ? "rounded-2xl p-5 sm:p-8 flex flex-col gap-5 w-full bg-[#FAF1EC] border border-[#C86D51]/25 shadow-sm"
     : "rounded-2xl p-5 sm:p-8 flex flex-col gap-5 w-full bg-gradient-to-br from-[#FDFBF7] to-[#FAF5EE] border-1.5 border-[rgba(197,155,39,0.35)] shadow-md";
 
   const bankNameClass = isToyStory
@@ -162,6 +219,12 @@ export default function TreasureChest({
     ? "font-bold text-xs sm:text-sm tracking-widest uppercase text-pink-800"
     : isFootball
     ? "font-black text-xs sm:text-sm tracking-widest uppercase text-emerald-800"
+    : isBotanica
+    ? "font-serif font-bold text-xs sm:text-sm tracking-widest uppercase text-[#556B2F]"
+    : isClasica
+    ? "font-serif font-bold text-xs sm:text-sm tracking-widest uppercase text-[#D4AF37]"
+    : isBoho
+    ? "font-serif font-bold text-xs sm:text-sm tracking-widest uppercase text-[#8C3D26]"
     : "font-jakarta text-xs font-bold tracking-widest uppercase text-[var(--gold)]";
 
   // RSVP link pill class
@@ -173,6 +236,12 @@ export default function TreasureChest({
     ? "flex items-center gap-2.5 px-6 py-3 rounded-full shadow-md bg-pink-100 border border-pink-300 text-pink-900 font-bold text-xs sm:text-sm uppercase tracking-wider"
     : isFootball
     ? "flex items-center gap-2.5 px-6 py-3 rounded-full shadow-md bg-emerald-600 border-2 border-emerald-800 text-white font-black text-xs sm:text-sm uppercase tracking-wider"
+    : isBotanica
+    ? "flex items-center gap-2.5 px-6 py-3 rounded-full shadow-md bg-[#556B2F] border-2 border-[#556B2F] text-white font-serif font-bold text-xs sm:text-sm uppercase tracking-wider"
+    : isClasica
+    ? "flex items-center gap-2.5 px-6 py-3 rounded-full shadow-[0_0_15px_rgba(212,175,55,0.4)] bg-gradient-to-r from-[#D4AF37] to-[#B38F24] text-black font-serif font-bold text-xs sm:text-sm uppercase tracking-wider"
+    : isBoho
+    ? "flex items-center gap-2.5 px-6 py-3 rounded-full shadow-md bg-[#C86D51] border-2 border-[#C86D51] text-white font-serif font-bold text-xs sm:text-sm uppercase tracking-wider"
     : "flex items-center gap-2.5 px-6 py-3 rounded-full shadow-md bg-[rgba(197,155,39,0.18)] border-1.5 border-[rgba(197,155,39,0.5)] text-[var(--dark-brown)] font-bold text-xs sm:text-sm uppercase tracking-wider";
 
   return (
@@ -330,6 +399,9 @@ function CopyRow({ label, value, isCopied, onCopy, theme = "classic-gold" }: Cop
   const isKpop = theme === "k-pop";
   const isPrincess = theme === "princesas";
   const isFootball = theme === "futbol-infantil";
+  const isBotanica = theme === "boda-botanica";
+  const isClasica = theme === "boda-clasica";
+  const isBoho = theme === "boda-boho";
 
   const rowContainerClass = isToyStory
     ? "flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 sm:p-4 rounded-2xl w-full bg-white border-2 border-sky-300 shadow-xs"
@@ -339,6 +411,12 @@ function CopyRow({ label, value, isCopied, onCopy, theme = "classic-gold" }: Cop
     ? "flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 sm:p-4 rounded-2xl w-full bg-white border border-pink-200 shadow-xs"
     : isFootball
     ? "flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 sm:p-4 rounded-2xl w-full bg-white border-2 border-emerald-300 shadow-xs"
+    : isBotanica
+    ? "flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 sm:p-4 rounded-2xl w-full bg-white border border-[#556B2F]/30 shadow-xs"
+    : isClasica
+    ? "flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 sm:p-4 rounded-2xl w-full bg-black/60 border border-[#D4AF37]/40 shadow-xs"
+    : isBoho
+    ? "flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 sm:p-4 rounded-2xl w-full bg-white border border-[#C86D51]/30 shadow-xs"
     : "flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 sm:p-4 rounded-2xl w-full bg-[rgba(197,155,39,0.09)] border-1.5 border-[rgba(197,155,39,0.28)]";
 
   const labelClass = isToyStory
@@ -349,6 +427,12 @@ function CopyRow({ label, value, isCopied, onCopy, theme = "classic-gold" }: Cop
     ? "text-[11px] font-bold uppercase tracking-wider text-pink-700"
     : isFootball
     ? "text-[11px] font-black uppercase tracking-wider text-emerald-800"
+    : isBotanica
+    ? "text-[11px] font-bold uppercase tracking-wider text-[#556B2F]"
+    : isClasica
+    ? "text-[11px] font-bold uppercase tracking-wider text-[#D4AF37]"
+    : isBoho
+    ? "text-[11px] font-bold uppercase tracking-wider text-[#8C3D26]"
     : "text-[11px] font-bold uppercase tracking-wider text-[var(--gold)]";
 
   const buttonClass = isCopied
@@ -361,6 +445,12 @@ function CopyRow({ label, value, isCopied, onCopy, theme = "classic-gold" }: Cop
     ? "bg-pink-500 hover:bg-pink-600 text-white font-bold"
     : isFootball
     ? "bg-emerald-600 hover:bg-emerald-700 text-white font-black"
+    : isBotanica
+    ? "bg-[#556B2F] hover:bg-[#435424] text-white font-bold"
+    : isClasica
+    ? "bg-gradient-to-r from-[#D4AF37] to-[#F5E6C8] text-black font-bold"
+    : isBoho
+    ? "bg-[#C86D51] hover:bg-[#B3583D] text-white font-bold"
     : "bg-gradient-to-r from-[#C59B27] to-[#D4A373] text-white font-semibold";
 
   return (

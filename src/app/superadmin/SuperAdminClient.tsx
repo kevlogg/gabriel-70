@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useTransition, useRef } from "react";
-import type { InvitationRecord, TemplateId } from "@/lib/schemas/invitation.schema";
-import { TEMPLATES } from "@/lib/schemas/invitation.schema";
+import type { InvitationRecord, TemplateId, TemplateCategoryKey } from "@/lib/schemas/invitation.schema";
+import { TEMPLATES, TEMPLATE_CATEGORIES } from "@/lib/schemas/invitation.schema";
 import {
   createInvitationAction,
   updateInvitationAction,
@@ -55,6 +55,16 @@ export default function SuperAdminClient({
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+  const [dashboardCategoryFilter, setDashboardCategoryFilter] =
+    useState<TemplateCategoryKey>("all");
+
+  const filteredInvitations =
+    dashboardCategoryFilter === "all"
+      ? invitations
+      : invitations.filter((inv) => {
+          const tmpl = TEMPLATES.find((t) => t.id === inv.template);
+          return tmpl?.category === dashboardCategoryFilter;
+        });
 
   const handleCopyLink = (slug: string) => {
     const origin = typeof window !== "undefined" ? window.location.origin : "";
@@ -223,15 +233,71 @@ export default function SuperAdminClient({
 
         {/* Invitations Grid / List */}
         <section className="flex flex-col gap-4">
-          <h2 className="font-cormorant font-bold text-2xl text-[var(--dark-brown)] flex items-center gap-2">
-            <span>Invitaciones Creadas</span>
-            <span className="text-xs font-jakarta font-semibold px-2.5 py-0.5 rounded-full bg-[rgba(197,155,39,0.15)] text-[var(--gold)]">
-              {invitations.length}
-            </span>
-          </h2>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <h2 className="font-cormorant font-bold text-2xl text-[var(--dark-brown)] flex items-center gap-2">
+              <span>Invitaciones Creadas</span>
+              <span className="text-xs font-jakarta font-semibold px-2.5 py-0.5 rounded-full bg-[rgba(197,155,39,0.15)] text-[var(--gold)]">
+                {invitations.length}
+              </span>
+            </h2>
+
+            {/* Category Filter Pills for Invitations */}
+            <div className="flex flex-wrap items-center gap-1.5 p-1 bg-white/70 backdrop-blur-sm rounded-2xl border border-[rgba(197,155,39,0.2)]">
+              {TEMPLATE_CATEGORIES.map((cat) => {
+                const count =
+                  cat.id === "all"
+                    ? invitations.length
+                    : invitations.filter((inv) => {
+                        const tmpl = TEMPLATES.find((t) => t.id === inv.template);
+                        return tmpl?.category === cat.id;
+                      }).length;
+                const isActive = dashboardCategoryFilter === cat.id;
+
+                return (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    onClick={() => setDashboardCategoryFilter(cat.id)}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                      isActive
+                        ? "bg-[var(--gold)] text-white shadow-xs font-bold"
+                        : "text-stone-600 hover:text-stone-900 hover:bg-stone-100"
+                    }`}
+                  >
+                    <span>{cat.emoji}</span>
+                    <span className="hidden md:inline">{cat.label}</span>
+                    <span
+                      className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
+                        isActive
+                          ? "bg-white/20 text-white"
+                          : "bg-stone-100 text-stone-600"
+                      }`}
+                    >
+                      {count}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
 
           <div className="grid grid-cols-1 gap-4">
-            {invitations.map((inv) => {
+            {filteredInvitations.length === 0 ? (
+              <div className="p-8 rounded-2xl bg-white border border-stone-200 text-center flex flex-col items-center gap-3">
+                <span className="text-3xl">🔍</span>
+                <p className="text-sm font-semibold text-stone-600">
+                  No hay invitaciones creadas en esta categoría.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setDashboardCategoryFilter("all")}
+                  className="text-xs font-bold text-[var(--gold)] hover:underline cursor-pointer"
+                >
+                  Ver todas las invitaciones
+                </button>
+              </div>
+            ) : (
+              filteredInvitations.map((inv) => {
               const confirmados = rsvpsCounts[inv.slug] || 0;
               const isGabriel = inv.slug === "gabriel70";
               const currentTemplate =
@@ -369,7 +435,8 @@ export default function SuperAdminClient({
                   </div>
                 </div>
               );
-            })}
+            })
+          )}
           </div>
         </section>
 
@@ -491,6 +558,17 @@ function InvitationFormModal({
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateId>(
     (invitation?.template as TemplateId) || "classic-gold"
   );
+
+  // Category state for template selection
+  const initialCategory: TemplateCategoryKey = (() => {
+    if (invitation?.template) {
+      const match = TEMPLATES.find((t) => t.id === invitation.template);
+      if (match) return match.category;
+    }
+    return "all";
+  })();
+  const [selectedCategory, setSelectedCategory] =
+    useState<TemplateCategoryKey>(initialCategory);
 
   // Date and Badge state
   const initialLocal =
@@ -718,41 +796,88 @@ function InvitationFormModal({
             <legend className="font-jakarta font-bold text-sm text-[var(--gold)] uppercase tracking-wider flex items-center gap-2 mb-1">
               <Palette size={16} /> Plantilla de Diseño Temática
             </legend>
-            <p className="text-xs text-[var(--dark-brown-70)] mb-2">
+            <p className="text-xs text-[var(--dark-brown-70)]">
               Elegí la estética y animación visual de esta invitación:
             </p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              {TEMPLATES.map((tmpl) => {
+            {/* Category Filter Tabs */}
+            <div className="flex flex-wrap items-center gap-1.5 p-1 bg-stone-100/90 rounded-xl border border-stone-200">
+              {TEMPLATE_CATEGORIES.map((cat) => {
+                const count =
+                  cat.id === "all"
+                    ? TEMPLATES.length
+                    : TEMPLATES.filter((t) => t.category === cat.id).length;
+                const isActive = selectedCategory === cat.id;
+
+                return (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    onClick={() => setSelectedCategory(cat.id)}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                      isActive
+                        ? "bg-white text-[var(--dark-brown)] shadow-xs font-bold border border-amber-300/50"
+                        : "text-stone-600 hover:text-stone-900 hover:bg-white/60"
+                    }`}
+                  >
+                    <span>{cat.emoji}</span>
+                    <span>{cat.label}</span>
+                    <span
+                      className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
+                        isActive
+                          ? "bg-amber-100 text-amber-900"
+                          : "bg-stone-200 text-stone-600"
+                      }`}
+                    >
+                      {count}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-1">
+              {TEMPLATES.filter(
+                (tmpl) =>
+                  selectedCategory === "all" || tmpl.category === selectedCategory
+              ).map((tmpl) => {
                 const isSelected = selectedTemplate === tmpl.id;
                 return (
                   <button
                     key={tmpl.id}
                     type="button"
                     onClick={() => setSelectedTemplate(tmpl.id)}
-                    className={`relative p-3.5 rounded-2xl text-left border-2 transition-all flex flex-col gap-1.5 cursor-pointer ${
+                    className={`relative p-3.5 rounded-2xl text-left border-2 transition-all flex flex-col gap-2 cursor-pointer ${
                       isSelected
                         ? "border-[var(--gold)] bg-[rgba(197,155,39,0.08)] shadow-md ring-2 ring-[var(--gold)]/20"
                         : "border-gray-200 hover:border-gray-300 bg-white"
                     }`}
                   >
                     <div className="flex items-center justify-between">
-                      <span className="text-2xl">{tmpl.emoji}</span>
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-gray-100 text-gray-700">
-                        {tmpl.category}
+                      <div className="flex items-center gap-2">
+                        <span className="text-2xl">{tmpl.emoji}</span>
+                        {tmpl.badge && (
+                          <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-amber-500 text-white tracking-wider uppercase">
+                            {tmpl.badge}
+                          </span>
+                        )}
+                      </div>
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-stone-100 text-stone-700">
+                        {tmpl.categoryLabel}
                       </span>
                     </div>
+
                     <div className="flex flex-col">
                       <span className="font-bold text-sm text-[var(--dark-brown)]">
                         {tmpl.name}
                       </span>
-                      <span className="text-[11px] text-[var(--dark-brown-70)] line-clamp-2 leading-tight">
+                      <span className="text-[11px] text-[var(--dark-brown-70)] line-clamp-2 leading-tight mt-0.5">
                         {tmpl.description}
                       </span>
                     </div>
 
                     {isSelected && (
-                      <span className="absolute top-2.5 right-2.5 w-5 h-5 rounded-full bg-[var(--gold)] text-white flex items-center justify-center text-xs font-bold">
+                      <span className="absolute top-2.5 right-2.5 w-5 h-5 rounded-full bg-[var(--gold)] text-white flex items-center justify-center text-xs font-bold shadow-xs">
                         ✓
                       </span>
                     )}

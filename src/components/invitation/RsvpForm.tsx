@@ -42,6 +42,9 @@ export default function RsvpForm({
   const isKpop = theme === "k-pop";
   const isPrincess = theme === "princesas";
   const isFootball = theme === "futbol-infantil";
+  const isBotanica = theme === "boda-botanica";
+  const isClasica = theme === "boda-clasica";
+  const isBoho = theme === "boda-boho";
 
   const cardContainerClass = isToyStory
     ? "bg-white rounded-3xl border-4 border-amber-400 shadow-xl p-6 sm:p-10 text-blue-950"
@@ -51,6 +54,12 @@ export default function RsvpForm({
     ? "bg-white/95 rounded-3xl border-2 border-pink-300 shadow-xl p-6 sm:p-10 text-pink-950"
     : isFootball
     ? "bg-white rounded-3xl border-4 border-emerald-500 shadow-xl p-6 sm:p-10 text-emerald-950"
+    : isBotanica
+    ? "bg-[#FAF7F2] rounded-3xl border-2 border-[#556B2F]/30 shadow-xl p-6 sm:p-10 text-[#2D3E1E]"
+    : isClasica
+    ? "bg-[#18181B] rounded-3xl border border-[#D4AF37]/50 shadow-[0_20px_50px_rgba(0,0,0,0.5)] p-6 sm:p-10 text-[#FAF5EE] backdrop-blur-xl"
+    : isBoho
+    ? "bg-[#FDF8F5] rounded-3xl border-2 border-[#C86D51]/30 shadow-xl p-6 sm:p-10 text-[#6D2B19]"
     : "glass-card p-6 sm:p-10 flex flex-col gap-6 text-[var(--dark-brown)]";
 
   const inputClass = isToyStory
@@ -61,6 +70,12 @@ export default function RsvpForm({
     ? "w-full p-3.5 rounded-2xl border border-pink-200 focus:border-pink-400 bg-pink-50/30 text-pink-950 font-medium text-sm outline-none transition-all"
     : isFootball
     ? "w-full p-3.5 rounded-2xl border-2 border-emerald-200 focus:border-emerald-500 bg-emerald-50/20 text-emerald-950 font-medium text-sm outline-none transition-all"
+    : isBotanica
+    ? "w-full p-3.5 rounded-2xl border border-[#556B2F]/30 focus:border-[#556B2F] bg-white text-[#2D3E1E] font-medium text-sm outline-none transition-all"
+    : isClasica
+    ? "w-full p-3.5 rounded-2xl border border-[#D4AF37]/40 focus:border-[#D4AF37] bg-white/10 text-white placeholder-gray-400 font-medium text-sm outline-none transition-all"
+    : isBoho
+    ? "w-full p-3.5 rounded-2xl border border-[#C86D51]/30 focus:border-[#C86D51] bg-white text-[#6D2B19] font-medium text-sm outline-none transition-all"
     : "form-input p-3.5 text-sm w-full";
 
   const labelClass = isToyStory
@@ -71,6 +86,12 @@ export default function RsvpForm({
     ? "text-xs font-bold uppercase tracking-wider text-pink-900"
     : isFootball
     ? "text-xs font-black uppercase tracking-wider text-emerald-900"
+    : isBotanica
+    ? "text-xs font-bold uppercase tracking-wider text-[#556B2F]"
+    : isClasica
+    ? "text-xs font-bold uppercase tracking-wider text-[#D4AF37]"
+    : isBoho
+    ? "text-xs font-bold uppercase tracking-wider text-[#8C3D26]"
     : "form-label text-xs";
 
   const submitButtonClass = isToyStory
@@ -81,6 +102,12 @@ export default function RsvpForm({
     ? "w-full py-4 px-6 rounded-2xl font-bold text-white text-base shadow-md bg-gradient-to-r from-pink-500 via-rose-400 to-amber-300 hover:opacity-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
     : isFootball
     ? "w-full py-4 px-6 rounded-2xl font-black text-white text-base shadow-lg bg-emerald-600 hover:bg-emerald-700 border-2 border-emerald-800 transition-all flex items-center justify-center gap-2 cursor-pointer"
+    : isBotanica
+    ? "w-full py-4 px-6 rounded-2xl font-bold text-white text-base shadow-md bg-[#556B2F] hover:bg-[#435424] transition-all flex items-center justify-center gap-2 cursor-pointer"
+    : isClasica
+    ? "w-full py-4 px-6 rounded-2xl font-bold text-black text-base shadow-[0_0_20px_rgba(212,175,55,0.4)] bg-gradient-to-r from-[#D4AF37] to-[#F5E6C8] hover:opacity-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
+    : isBoho
+    ? "w-full py-4 px-6 rounded-2xl font-bold text-white text-base shadow-md bg-[#C86D51] hover:bg-[#B3583D] transition-all flex items-center justify-center gap-2 cursor-pointer"
     : "btn-gold mt-2 py-4 text-base shadow-md w-full flex items-center justify-center gap-2";
 
   if (state.status === "success") {
@@ -103,6 +130,12 @@ export default function RsvpForm({
               ? "linear-gradient(135deg, #F472B6, #FBBF24)"
               : isFootball
               ? "#16A34A"
+              : isBotanica
+              ? "#556B2F"
+              : isClasica
+              ? "linear-gradient(135deg, #D4AF37, #F5E6C8)"
+              : isBoho
+              ? "#C86D51"
               : "linear-gradient(135deg, #C59B27, #D4A373)",
           }}
         >
