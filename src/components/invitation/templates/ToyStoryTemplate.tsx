@@ -208,9 +208,7 @@ export default function ToyStoryTemplate({ invitation }: TemplateProps) {
               <div className="flex items-center justify-center gap-2 text-blue-950 font-black text-xl sm:text-2xl drop-shadow-sm">
                 <span>🐷 La Alcancía de Hamm (Mesa de Regalos)</span>
               </div>
-              <div className="bg-white rounded-3xl border-4 border-amber-400 shadow-xl p-4">
-                <GiftCard gift={giftConfig} onChestOpen={handleChestOpen} />
-              </div>
+              <GiftCard gift={giftConfig} onChestOpen={handleChestOpen} theme="toy-story" />
             </section>
           )}
 

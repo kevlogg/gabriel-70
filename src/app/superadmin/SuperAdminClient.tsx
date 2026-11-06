@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useRef } from "react";
 import type { InvitationRecord, TemplateId } from "@/lib/schemas/invitation.schema";
 import { TEMPLATES } from "@/lib/schemas/invitation.schema";
 import {
@@ -32,6 +32,10 @@ import {
   Volume2,
   VolumeX,
   LogOut,
+  Link as LinkIcon,
+  Play,
+  Square,
+  AlertTriangle,
 } from "lucide-react";
 import { logoutSuperadminAction } from "@/app/actions/auth-actions";
 
@@ -516,13 +520,84 @@ function InvitationFormModal({
   );
 
   // Audio state
-  const [audioMode, setAudioMode] = useState<"preset" | "upload" | "none" | "keep">(
-    isEditing && invitation?.audioTrackPath ? "keep" : "none"
+  const initialAudioMode = (): "preset" | "upload" | "url" | "none" | "keep" => {
+    if (isEditing && invitation?.audioTrackPath) return "keep";
+    return "preset";
+  };
+
+  const [audioMode, setAudioMode] = useState<"preset" | "upload" | "url" | "none" | "keep">(
+    initialAudioMode()
   );
   const [uploadedAudioFileName, setUploadedAudioFileName] = useState<string>("");
-  const [selectedPresetAudio, setSelectedPresetAudio] = useState<string>(
-    invitation?.audioTrackPath || "/audio/LosAngelesAzules-LaCumbiadelInfinito.mp3"
+  const [uploadedAudioDataUrl, setUploadedAudioDataUrl] = useState<string>("");
+  const [audioUrlInput, setAudioUrlInput] = useState<string>(
+    isEditing && invitation?.audioTrackPath && !invitation.audioTrackPath.startsWith("/audio/") && !invitation.audioTrackPath.startsWith("data:")
+      ? invitation.audioTrackPath
+      : ""
   );
+  const [audioError, setAudioError] = useState<string | null>(null);
+  const [selectedPresetAudio, setSelectedPresetAudio] = useState<string>(
+    invitation?.audioTrackPath && invitation.audioTrackPath.startsWith("/audio/")
+      ? invitation.audioTrackPath
+      : "/audio/LosAngelesAzules-LaCumbiadelInfinito.mp3"
+  );
+  const [isPlayingPreview, setIsPlayingPreview] = useState<boolean>(false);
+  const previewAudioRef = useRef<HTMLAudioElement | null>(null);
+
+  const handleAudioFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAudioError(null);
+    setIsPlayingPreview(false);
+    if (previewAudioRef.current) {
+      previewAudioRef.current.pause();
+    }
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 4.5 * 1024 * 1024) {
+      setAudioError(
+        `⚠️ El archivo seleccionado pesa ${(file.size / (1024 * 1024)).toFixed(1)}MB. El límite de subida directa en el servidor es de 4.5MB. Podés usar "🔗 Enlace URL" o una canción predeterminada.`
+      );
+      e.target.value = "";
+      setUploadedAudioFileName("");
+      setUploadedAudioDataUrl("");
+      return;
+    }
+
+    setUploadedAudioFileName(file.name);
+    const reader = new FileReader();
+    reader.onload = () => {
+      setUploadedAudioDataUrl(reader.result as string);
+    };
+    reader.onerror = () => {
+      setAudioError("Error al procesar el archivo de audio.");
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const currentPreviewSrc =
+    audioMode === "preset"
+      ? selectedPresetAudio
+      : audioMode === "upload"
+      ? uploadedAudioDataUrl
+      : audioMode === "url"
+      ? audioUrlInput
+      : audioMode === "keep"
+      ? invitation?.audioTrackPath || ""
+      : "";
+
+  const togglePreview = () => {
+    if (!previewAudioRef.current || !currentPreviewSrc) return;
+    if (isPlayingPreview) {
+      previewAudioRef.current.pause();
+      setIsPlayingPreview(false);
+    } else {
+      previewAudioRef.current.src = currentPreviewSrc;
+      previewAudioRef.current
+        .play()
+        .then(() => setIsPlayingPreview(true))
+        .catch(() => setIsPlayingPreview(false));
+    }
+  };
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newVal = e.target.value;
@@ -560,9 +635,18 @@ function InvitationFormModal({
       formData.set("audioTrackPath", "");
     } else if (audioMode === "preset") {
       formData.set("audioTrackPath", selectedPresetAudio);
+    } else if (audioMode === "url") {
+      formData.set("audioTrackPath", audioUrlInput.trim());
+    } else if (audioMode === "upload") {
+      if (uploadedAudioDataUrl) {
+        formData.set("audioTrackPath", uploadedAudioDataUrl);
+      }
     } else if (audioMode === "keep" && invitation?.audioTrackPath) {
       formData.set("audioTrackPath", invitation.audioTrackPath);
     }
+
+    // Always delete raw audioFile so the Server Action request stays light and never exceeds limits
+    formData.delete("audioFile");
 
     // If gifts are not included, clear gift values
     if (!includeGifts) {
@@ -1036,22 +1120,31 @@ function InvitationFormModal({
                 Música de Fondo:
               </span>
 
+              {/* Selector de modo de música */}
               <div className="flex flex-wrap gap-2">
                 <button
                   type="button"
-                  onClick={() => setAudioMode("none")}
+                  onClick={() => {
+                    setIsPlayingPreview(false);
+                    if (previewAudioRef.current) previewAudioRef.current.pause();
+                    setAudioMode("preset");
+                  }}
                   className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-colors cursor-pointer ${
-                    audioMode === "none"
-                      ? "bg-gray-800 text-white border-gray-800"
+                    audioMode === "preset"
+                      ? "bg-[var(--gold)] text-white border-[var(--gold)]"
                       : "bg-white text-gray-700 border-gray-300"
                   }`}
                 >
-                  🔇 Sin Música
+                  📻 Canción Predeterminada
                 </button>
 
                 <button
                   type="button"
-                  onClick={() => setAudioMode("upload")}
+                  onClick={() => {
+                    setIsPlayingPreview(false);
+                    if (previewAudioRef.current) previewAudioRef.current.pause();
+                    setAudioMode("upload");
+                  }}
                   className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-colors flex items-center gap-1.5 cursor-pointer ${
                     audioMode === "upload"
                       ? "bg-[var(--gold)] text-white border-[var(--gold)]"
@@ -1063,20 +1156,44 @@ function InvitationFormModal({
 
                 <button
                   type="button"
-                  onClick={() => setAudioMode("preset")}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-colors cursor-pointer ${
-                    audioMode === "preset"
+                  onClick={() => {
+                    setIsPlayingPreview(false);
+                    if (previewAudioRef.current) previewAudioRef.current.pause();
+                    setAudioMode("url");
+                  }}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-colors flex items-center gap-1.5 cursor-pointer ${
+                    audioMode === "url"
                       ? "bg-[var(--gold)] text-white border-[var(--gold)]"
                       : "bg-white text-gray-700 border-gray-300"
                   }`}
                 >
-                  📻 Canción Predeterminada
+                  <LinkIcon size={13} /> Enlace / URL Directa
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsPlayingPreview(false);
+                    if (previewAudioRef.current) previewAudioRef.current.pause();
+                    setAudioMode("none");
+                  }}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-colors cursor-pointer ${
+                    audioMode === "none"
+                      ? "bg-gray-800 text-white border-gray-800"
+                      : "bg-white text-gray-700 border-gray-300"
+                  }`}
+                >
+                  🔇 Sin Música
                 </button>
 
                 {isEditing && invitation?.audioTrackPath && (
                   <button
                     type="button"
-                    onClick={() => setAudioMode("keep")}
+                    onClick={() => {
+                      setIsPlayingPreview(false);
+                      if (previewAudioRef.current) previewAudioRef.current.pause();
+                      setAudioMode("keep");
+                    }}
                     className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-colors cursor-pointer ${
                       audioMode === "keep"
                         ? "bg-blue-600 text-white border-blue-600"
@@ -1088,56 +1205,119 @@ function InvitationFormModal({
                 )}
               </div>
 
-              {/* Subir archivo de audio desde PC */}
-              {audioMode === "upload" && (
-                <div className="flex flex-col gap-2 pt-2 animate-fade-in">
-                  <label className="text-xs font-bold text-[var(--dark-brown)] flex items-center gap-1">
-                    <Upload size={14} /> Seleccionar archivo de audio desde tu computadora:
-                  </label>
-                  <input
-                    type="file"
-                    name="audioFile"
-                    accept="audio/*"
-                    onChange={(e) => {
-                      if (e.target.files && e.target.files[0]) {
-                        setUploadedAudioFileName(e.target.files[0].name);
-                      }
-                    }}
-                    className="text-xs file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-[var(--gold)] file:text-white file:cursor-pointer p-2 border border-dashed border-[var(--gold)] rounded-xl bg-white"
-                  />
-                  {uploadedAudioFileName && (
-                    <span className="text-[11px] text-emerald-700 font-bold">
-                      ✓ Seleccionado: {uploadedAudioFileName}
-                    </span>
-                  )}
+              {/* Mensaje de error de audio */}
+              {audioError && (
+                <div className="p-3 bg-red-50 border border-red-300 rounded-xl text-xs text-red-800 font-medium flex items-start gap-2">
+                  <AlertTriangle size={16} className="shrink-0 text-red-600 mt-0.5" />
+                  <span>{audioError}</span>
                 </div>
               )}
 
-              {/* Pista predeterminada */}
+              {/* Modo: Canción predeterminada */}
               {audioMode === "preset" && (
                 <div className="flex flex-col gap-2 pt-2 animate-fade-in">
                   <label className="text-xs font-bold text-[var(--dark-brown)]">
-                    Elegí una canción predeterminada:
+                    Elegí una canción predeterminada lista para usar:
                   </label>
                   <select
                     value={selectedPresetAudio}
-                    onChange={(e) => setSelectedPresetAudio(e.target.value)}
+                    onChange={(e) => {
+                      setSelectedPresetAudio(e.target.value);
+                      setIsPlayingPreview(false);
+                      if (previewAudioRef.current) previewAudioRef.current.pause();
+                    }}
                     className="form-input text-xs p-2.5 bg-white"
                   >
                     <option value="/audio/LosAngelesAzules-LaCumbiadelInfinito.mp3">
-                      🎺 Los Ángeles Azules - La Cumbia del Infinito
+                      🎺 Los Ángeles Azules - La Cumbia del Infinito (Cumbia / Fiesta)
                     </option>
                     <option value="/audio/celebration.mp3">
-                      🎉 Celebration (Música Festiva Instrumental)
+                      🎉 Celebration (Música Festiva Instrumental Universal)
                     </option>
                   </select>
                 </div>
               )}
 
-              {/* Conservar actual */}
+              {/* Modo: Subir archivo */}
+              {audioMode === "upload" && (
+                <div className="flex flex-col gap-2 pt-2 animate-fade-in">
+                  <div className="flex flex-col gap-1">
+                    <label className="text-xs font-bold text-[var(--dark-brown)] flex items-center gap-1">
+                      <Upload size={14} /> Seleccionar archivo MP3 desde tu dispositivo:
+                    </label>
+                    <p className="text-[11px] text-[var(--dark-brown-70)]">
+                      Límite recomendado: hasta 4.5MB para garantizar carga ultrarrápida en móviles.
+                    </p>
+                  </div>
+                  <input
+                    type="file"
+                    accept="audio/*,.mp3,.m4a,.ogg"
+                    onChange={handleAudioFileChange}
+                    className="text-xs file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-[var(--gold)] file:text-white file:cursor-pointer p-2 border border-dashed border-[var(--gold)] rounded-xl bg-white"
+                  />
+                  {uploadedAudioFileName && (
+                    <span className="text-[11px] text-emerald-700 font-bold flex items-center gap-1">
+                      ✓ Archivo cargado y procesado: {uploadedAudioFileName}
+                    </span>
+                  )}
+                </div>
+              )}
+
+              {/* Modo: Enlace / URL directa */}
+              {audioMode === "url" && (
+                <div className="flex flex-col gap-2 pt-2 animate-fade-in">
+                  <label className="text-xs font-bold text-[var(--dark-brown)] flex items-center gap-1">
+                    <LinkIcon size={14} /> Pegar URL directa de archivo de audio (MP3):
+                  </label>
+                  <input
+                    type="url"
+                    value={audioUrlInput}
+                    onChange={(e) => {
+                      setAudioUrlInput(e.target.value);
+                      setIsPlayingPreview(false);
+                      if (previewAudioRef.current) previewAudioRef.current.pause();
+                    }}
+                    placeholder="https://ejemplo.com/cancion.mp3 o enlace público directo"
+                    className="form-input text-xs p-2.5 bg-white"
+                  />
+                  <p className="text-[11px] text-[var(--dark-brown-70)]">
+                    Tip: Si tenés una canción en Dropbox, podés reemplazar el final <code>dl=0</code> por <code>raw=1</code> para obtener el enlace directo de audio.
+                  </p>
+                </div>
+              )}
+
+              {/* Modo: Conservar actual */}
               {audioMode === "keep" && invitation?.audioTrackPath && (
                 <div className="text-xs text-blue-800 font-medium pt-1">
-                  Se mantendrá el audio actual: <code className="font-mono text-[11px] bg-blue-50 px-2 py-0.5 rounded">{invitation.audioTrackPath}</code>
+                  Se mantendrá el audio actual: <code className="font-mono text-[11px] bg-blue-50 px-2 py-0.5 rounded break-all">{invitation.audioTrackPath.startsWith("data:") ? "Audio personalizado grabado en Base de Datos" : invitation.audioTrackPath}</code>
+                </div>
+              )}
+
+              {/* Reproductor de prueba integrado */}
+              {currentPreviewSrc && audioMode !== "none" && (
+                <div className="flex items-center gap-3 p-3 rounded-xl bg-white border border-amber-200/80 shadow-2xs mt-1 animate-fade-in">
+                  <button
+                    type="button"
+                    onClick={togglePreview}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                      isPlayingPreview
+                        ? "bg-red-500 text-white hover:bg-red-600"
+                        : "bg-[var(--gold)] text-white hover:opacity-90"
+                    }`}
+                  >
+                    {isPlayingPreview ? (
+                      <Square size={13} className="fill-current" />
+                    ) : (
+                      <Play size={13} className="fill-current" />
+                    )}
+                    <span>{isPlayingPreview ? "Pausar prueba" : "Escuchar prueba"}</span>
+                  </button>
+                  <span className="text-[11px] text-[var(--dark-brown-70)] truncate max-w-xs">
+                    {isPlayingPreview
+                      ? "🔊 Reproduciendo prueba de música..."
+                      : "Tocá para escuchar cómo sonará en la invitación."}
+                  </span>
+                  <audio ref={previewAudioRef} onEnded={() => setIsPlayingPreview(false)} />
                 </div>
               )}
             </div>

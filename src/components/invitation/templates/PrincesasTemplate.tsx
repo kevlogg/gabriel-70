@@ -217,9 +217,7 @@ export default function PrincesasTemplate({ invitation }: TemplateProps) {
                 <Crown size={22} className="text-amber-500 fill-amber-400" />
                 <span>El Baúl de los Deseos Reales</span>
               </div>
-              <div className="bg-white rounded-3xl p-4 border-2 border-pink-200 shadow-xl">
-                <GiftCard gift={giftConfig} onChestOpen={handleChestOpen} />
-              </div>
+              <GiftCard gift={giftConfig} onChestOpen={handleChestOpen} theme="princesas" />
             </section>
           )}
 

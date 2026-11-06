@@ -213,9 +213,7 @@ export default function KpopTemplate({ invitation }: TemplateProps) {
               <div className="flex items-center justify-center gap-2 text-pink-300 font-extrabold text-lg sm:text-xl uppercase tracking-wider">
                 <span>🎁 VIP Backstage Pass (Mesa de Regalos)</span>
               </div>
-              <div className="bg-black/60 rounded-3xl p-4 border border-pink-500/40 shadow-2xl">
-                <GiftCard gift={giftConfig} onChestOpen={handleChestOpen} />
-              </div>
+              <GiftCard gift={giftConfig} onChestOpen={handleChestOpen} theme="k-pop" />
             </section>
           )}
 

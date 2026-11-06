@@ -111,3 +111,4 @@ export default function FootballCharacter({ jerseyNumber = "10" }: FootballChara
     </div>
   );
 }
+

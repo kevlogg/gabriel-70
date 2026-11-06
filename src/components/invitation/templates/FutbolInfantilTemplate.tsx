@@ -204,9 +204,7 @@ export default function FutbolInfantilTemplate({ invitation }: TemplateProps) {
                 <Trophy size={24} className="text-amber-400" />
                 <span>Mesa de Regalos / Copa del Homenajeado</span>
               </div>
-              <div className="bg-white rounded-3xl p-4 border-4 border-amber-400 shadow-2xl">
-                <GiftCard gift={giftConfig} onChestOpen={handleChestOpen} />
-              </div>
+              <GiftCard gift={giftConfig} onChestOpen={handleChestOpen} theme="futbol-infantil" />
             </section>
           )}
 

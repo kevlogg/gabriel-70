@@ -288,7 +288,7 @@ export default function ClassicGoldTemplate({ invitation }: TemplateProps) {
                   title="Mesa de Regalos"
                   centered
                 />
-                <GiftCard gift={giftConfig} onChestOpen={handleChestOpen} />
+                <GiftCard gift={giftConfig} onChestOpen={handleChestOpen} theme="classic-gold" />
               </section>
             </>
           )}

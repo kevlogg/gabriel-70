@@ -24,6 +24,13 @@ async function extractAudioPath(formData: FormData, existingPath: string = ""): 
     return "";
   }
 
+  // 1. Direct text path, preset audio URL, or client-side Base64 Data URI
+  const audioTrackPath = String(formData.get("audioTrackPath") || "").trim();
+  if (audioTrackPath) {
+    return audioTrackPath;
+  }
+
+  // 2. Uploaded audio file fallback
   const audioFile = formData.get("audioFile");
   if (
     audioFile &&
@@ -33,28 +40,36 @@ async function extractAudioPath(formData: FormData, existingPath: string = ""): 
   ) {
     try {
       const file = audioFile as File;
-      const originalName = file.name || "audio.mp3";
-      const ext = path.extname(originalName).toLowerCase() || ".mp3";
-      const safeBase = path
-        .basename(originalName, ext)
-        .replace(/[^a-zA-Z0-9_-]/g, "_")
-        .slice(0, 40);
-      const fileName = `${Date.now()}_${safeBase}${ext}`;
-      const dir = path.join(process.cwd(), "public", "audio");
-
-      await fs.mkdir(dir, { recursive: true });
+      const mimeType = file.type || "audio/mpeg";
       const buffer = Buffer.from(await file.arrayBuffer());
-      await fs.writeFile(path.join(dir, fileName), buffer);
-      return `/audio/${fileName}`;
+
+      // On Vercel, the filesystem is read-only. We store as Data URI so it works reliably in serverless
+      const isServerless = Boolean(process.env.VERCEL || process.env.VERCEL_ENV);
+      if (!isServerless) {
+        try {
+          const originalName = file.name || "audio.mp3";
+          const ext = path.extname(originalName).toLowerCase() || ".mp3";
+          const safeBase = path
+            .basename(originalName, ext)
+            .replace(/[^a-zA-Z0-9_-]/g, "_")
+            .slice(0, 40);
+          const fileName = `${Date.now()}_${safeBase}${ext}`;
+          const dir = path.join(process.cwd(), "public", "audio");
+
+          await fs.mkdir(dir, { recursive: true });
+          await fs.writeFile(path.join(dir, fileName), buffer);
+          return `/audio/${fileName}`;
+        } catch (fsErr) {
+          console.warn("Could not save to public/audio, falling back to data URL:", fsErr);
+        }
+      }
+
+      // Safe Data URL stored in database:
+      const base64Audio = buffer.toString("base64");
+      return `data:${mimeType};base64,${base64Audio}`;
     } catch (err) {
       console.error("Error saving uploaded audio:", err);
-      // Fallback to existing or string input if upload fails
     }
-  }
-
-  const audioTrackPath = String(formData.get("audioTrackPath") || "").trim();
-  if (audioTrackPath) {
-    return audioTrackPath;
   }
 
   return existingPath;
@@ -64,51 +79,51 @@ export async function createInvitationAction(
   _prevState: ActionResult | null,
   formData: FormData
 ): Promise<ActionResult> {
-  const isAuth = await isSuperadminAuthenticated();
-  if (!isAuth) {
-    return {
-      success: false,
-      message: "No autorizado. Tu sesión expiró o no tenés permisos de administrador.",
-    };
-  }
-
-  const audioTrackPath = await extractAudioPath(formData, "");
-
-  const raw = {
-    slug: String(formData.get("slug") || "").trim().toLowerCase(),
-    personName: String(formData.get("personName") || "").trim(),
-    headline: String(formData.get("headline") || "").trim(),
-    subheadline: String(formData.get("subheadline") || "").trim(),
-    eventNumber: String(formData.get("eventNumber") || "").trim(),
-    badgeText: String(formData.get("badgeText") || "").trim(),
-    targetDate: String(formData.get("targetDate") || "").trim(),
-    venueName: String(formData.get("venueName") || "").trim(),
-    venueAddress: String(formData.get("venueAddress") || "").trim(),
-    venueMapsUrl: String(formData.get("venueMapsUrl") || "").trim(),
-    venueCalendarUrl: String(formData.get("venueCalendarUrl") || "").trim(),
-    giftBankName: String(formData.get("giftBankName") || "").trim(),
-    giftAlias: String(formData.get("giftAlias") || "").trim(),
-    giftCbu: String(formData.get("giftCbu") || "").trim(),
-    giftHolderName: String(formData.get("giftHolderName") || "").trim(),
-    audioTrackPath,
-    footerPhrase: String(formData.get("footerPhrase") || "").trim(),
-    template: (String(formData.get("template") || "classic-gold").trim() as TemplateId),
-    allowCompanions: formData.get("allowCompanions") === "on" || formData.get("allowCompanions") === "true",
-    allowDietary: formData.get("allowDietary") === "on" || formData.get("allowDietary") === "true",
-    isDefault: formData.get("isDefault") === "on" || formData.get("isDefault") === "true",
-  };
-
-  const parsed = InvitationSchema.safeParse(raw);
-
-  if (!parsed.success) {
-    return {
-      success: false,
-      message: "Por favor revisá los campos del formulario.",
-      errors: parsed.error.flatten().fieldErrors,
-    };
-  }
-
   try {
+    const isAuth = await isSuperadminAuthenticated();
+    if (!isAuth) {
+      return {
+        success: false,
+        message: "No autorizado. Tu sesión expiró o no tenés permisos de administrador.",
+      };
+    }
+
+    const audioTrackPath = await extractAudioPath(formData, "");
+
+    const raw = {
+      slug: String(formData.get("slug") || "").trim().toLowerCase(),
+      personName: String(formData.get("personName") || "").trim(),
+      headline: String(formData.get("headline") || "").trim(),
+      subheadline: String(formData.get("subheadline") || "").trim(),
+      eventNumber: String(formData.get("eventNumber") || "").trim(),
+      badgeText: String(formData.get("badgeText") || "").trim(),
+      targetDate: String(formData.get("targetDate") || "").trim(),
+      venueName: String(formData.get("venueName") || "").trim(),
+      venueAddress: String(formData.get("venueAddress") || "").trim(),
+      venueMapsUrl: String(formData.get("venueMapsUrl") || "").trim(),
+      venueCalendarUrl: String(formData.get("venueCalendarUrl") || "").trim(),
+      giftBankName: String(formData.get("giftBankName") || "").trim(),
+      giftAlias: String(formData.get("giftAlias") || "").trim(),
+      giftCbu: String(formData.get("giftCbu") || "").trim(),
+      giftHolderName: String(formData.get("giftHolderName") || "").trim(),
+      audioTrackPath,
+      footerPhrase: String(formData.get("footerPhrase") || "").trim(),
+      template: (String(formData.get("template") || "classic-gold").trim() as TemplateId),
+      allowCompanions: formData.get("allowCompanions") === "on" || formData.get("allowCompanions") === "true",
+      allowDietary: formData.get("allowDietary") === "on" || formData.get("allowDietary") === "true",
+      isDefault: formData.get("isDefault") === "on" || formData.get("isDefault") === "true",
+    };
+
+    const parsed = InvitationSchema.safeParse(raw);
+
+    if (!parsed.success) {
+      return {
+        success: false,
+        message: "Por favor revisá los campos del formulario.",
+        errors: parsed.error.flatten().fieldErrors,
+      };
+    }
+
     await createInvitation(parsed.data);
     revalidatePath("/superadmin");
     revalidatePath("/");
@@ -134,52 +149,52 @@ export async function updateInvitationAction(
   _prevState: ActionResult | null,
   formData: FormData
 ): Promise<ActionResult> {
-  const isAuth = await isSuperadminAuthenticated();
-  if (!isAuth) {
-    return {
-      success: false,
-      message: "No autorizado. Tu sesión expiró o no tenés permisos de administrador.",
-    };
-  }
-
-  const currentAudio = String(formData.get("currentAudioTrackPath") || "").trim();
-  const audioTrackPath = await extractAudioPath(formData, currentAudio);
-
-  const raw = {
-    slug: String(formData.get("slug") || "").trim().toLowerCase(),
-    personName: String(formData.get("personName") || "").trim(),
-    headline: String(formData.get("headline") || "").trim(),
-    subheadline: String(formData.get("subheadline") || "").trim(),
-    eventNumber: String(formData.get("eventNumber") || "").trim(),
-    badgeText: String(formData.get("badgeText") || "").trim(),
-    targetDate: String(formData.get("targetDate") || "").trim(),
-    venueName: String(formData.get("venueName") || "").trim(),
-    venueAddress: String(formData.get("venueAddress") || "").trim(),
-    venueMapsUrl: String(formData.get("venueMapsUrl") || "").trim(),
-    venueCalendarUrl: String(formData.get("venueCalendarUrl") || "").trim(),
-    giftBankName: String(formData.get("giftBankName") || "").trim(),
-    giftAlias: String(formData.get("giftAlias") || "").trim(),
-    giftCbu: String(formData.get("giftCbu") || "").trim(),
-    giftHolderName: String(formData.get("giftHolderName") || "").trim(),
-    audioTrackPath,
-    footerPhrase: String(formData.get("footerPhrase") || "").trim(),
-    template: (String(formData.get("template") || "classic-gold").trim() as TemplateId),
-    allowCompanions: formData.get("allowCompanions") === "on" || formData.get("allowCompanions") === "true",
-    allowDietary: formData.get("allowDietary") === "on" || formData.get("allowDietary") === "true",
-    isDefault: formData.get("isDefault") === "on" || formData.get("isDefault") === "true",
-  };
-
-  const parsed = InvitationSchema.safeParse(raw);
-
-  if (!parsed.success) {
-    return {
-      success: false,
-      message: "Por favor revisá los campos del formulario.",
-      errors: parsed.error.flatten().fieldErrors,
-    };
-  }
-
   try {
+    const isAuth = await isSuperadminAuthenticated();
+    if (!isAuth) {
+      return {
+        success: false,
+        message: "No autorizado. Tu sesión expiró o no tenés permisos de administrador.",
+      };
+    }
+
+    const currentAudio = String(formData.get("currentAudioTrackPath") || "").trim();
+    const audioTrackPath = await extractAudioPath(formData, currentAudio);
+
+    const raw = {
+      slug: String(formData.get("slug") || "").trim().toLowerCase(),
+      personName: String(formData.get("personName") || "").trim(),
+      headline: String(formData.get("headline") || "").trim(),
+      subheadline: String(formData.get("subheadline") || "").trim(),
+      eventNumber: String(formData.get("eventNumber") || "").trim(),
+      badgeText: String(formData.get("badgeText") || "").trim(),
+      targetDate: String(formData.get("targetDate") || "").trim(),
+      venueName: String(formData.get("venueName") || "").trim(),
+      venueAddress: String(formData.get("venueAddress") || "").trim(),
+      venueMapsUrl: String(formData.get("venueMapsUrl") || "").trim(),
+      venueCalendarUrl: String(formData.get("venueCalendarUrl") || "").trim(),
+      giftBankName: String(formData.get("giftBankName") || "").trim(),
+      giftAlias: String(formData.get("giftAlias") || "").trim(),
+      giftCbu: String(formData.get("giftCbu") || "").trim(),
+      giftHolderName: String(formData.get("giftHolderName") || "").trim(),
+      audioTrackPath,
+      footerPhrase: String(formData.get("footerPhrase") || "").trim(),
+      template: (String(formData.get("template") || "classic-gold").trim() as TemplateId),
+      allowCompanions: formData.get("allowCompanions") === "on" || formData.get("allowCompanions") === "true",
+      allowDietary: formData.get("allowDietary") === "on" || formData.get("allowDietary") === "true",
+      isDefault: formData.get("isDefault") === "on" || formData.get("isDefault") === "true",
+    };
+
+    const parsed = InvitationSchema.safeParse(raw);
+
+    if (!parsed.success) {
+      return {
+        success: false,
+        message: "Por favor revisá los campos del formulario.",
+        errors: parsed.error.flatten().fieldErrors,
+      };
+    }
+
     await updateInvitation(id, parsed.data);
     revalidatePath("/superadmin");
     revalidatePath("/");
