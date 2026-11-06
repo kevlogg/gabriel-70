@@ -37,3 +37,4 @@ export async function logoutSuperadminAction(): Promise<void> {
   revalidatePath("/superadmin");
   redirect("/superadmin");
 }
+

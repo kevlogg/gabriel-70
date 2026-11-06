@@ -7,6 +7,7 @@ import VenueCard from "@/components/invitation/VenueCard";
 import GiftCard from "@/components/invitation/GiftCard";
 import RsvpForm from "@/components/invitation/RsvpForm";
 import AudioController from "@/components/invitation/AudioController";
+import KpopIdolCharacter from "@/components/invitation/characters/KpopIdolCharacter";
 import { Sparkles, Music, Star, Heart, Ticket, Radio } from "lucide-react";
 
 interface TemplateProps {
@@ -94,10 +95,6 @@ export default function KpopTemplate({ invitation }: TemplateProps) {
           aria-hidden="true"
           className="absolute top-1/3 -right-20 w-96 h-96 rounded-full bg-purple-500/25 blur-3xl pointer-events-none"
         />
-        <div
-          aria-hidden="true"
-          className="absolute bottom-20 left-1/4 w-96 h-96 rounded-full bg-cyan-500/15 blur-3xl pointer-events-none"
-        />
 
         {/* Neon top line */}
         <div
@@ -111,17 +108,17 @@ export default function KpopTemplate({ invitation }: TemplateProps) {
         />
 
         <div
-          className="max-w-3xl w-full mx-auto flex flex-col gap-16 sm:gap-24 relative z-10"
+          className="max-w-3xl w-full mx-auto flex flex-col gap-14 sm:gap-20 relative z-10"
           style={{
             paddingLeft: "clamp(1.25rem, 5vw, 2.5rem)",
             paddingRight: "clamp(1.25rem, 5vw, 2.5rem)",
-            paddingTop: "clamp(2.5rem, 5vw, 4.5rem)",
+            paddingTop: "clamp(2rem, 5vw, 4rem)",
             paddingBottom: "clamp(4rem, 8vw, 7rem)",
             boxSizing: "border-box",
           }}
         >
           {/* ─── HERO SECTION ─── */}
-          <section className="flex flex-col items-center gap-6 sm:gap-8 text-center py-4">
+          <section className="flex flex-col items-center gap-5 sm:gap-7 text-center py-2">
             {/* Holographic Badge */}
             <div className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-gradient-to-r from-pink-500/30 via-purple-500/30 to-cyan-500/30 border border-pink-400/60 shadow-[0_0_20px_rgba(236,72,153,0.4)] backdrop-blur-md">
               <Sparkles size={16} className="text-pink-400 animate-spin" />
@@ -143,7 +140,7 @@ export default function KpopTemplate({ invitation }: TemplateProps) {
             <h1
               className="font-black tracking-tight leading-tight uppercase"
               style={{
-                fontSize: "clamp(2.8rem, 9vw, 5.2rem)",
+                fontSize: "clamp(2.6rem, 9vw, 5rem)",
                 background:
                   "linear-gradient(135deg, #FFFFFF 0%, #F472B6 40%, #C084FC 80%, #38BDF8 100%)",
                 WebkitBackgroundClip: "text",
@@ -155,13 +152,16 @@ export default function KpopTemplate({ invitation }: TemplateProps) {
               {invitation.headline}
             </h1>
 
+            {/* K-Pop Idol Character Illustration */}
+            <KpopIdolCharacter />
+
             {/* Neon Event Number */}
             {invitation.eventNumber && (
               <div className="relative my-1">
                 <div
                   className="font-black px-8 py-2 rounded-3xl border-2 border-pink-400/80 shadow-[0_0_35px_rgba(236,72,153,0.5)]"
                   style={{
-                    fontSize: "clamp(5rem, 18vw, 9rem)",
+                    fontSize: "clamp(4.5rem, 16vw, 8rem)",
                     lineHeight: 1,
                     background: "rgba(236, 72, 153, 0.12)",
                     color: "#F472B6",
@@ -190,7 +190,7 @@ export default function KpopTemplate({ invitation }: TemplateProps) {
               <span>Conteo para el Live Show</span>
               <Music className="text-cyan-400 animate-bounce" size={22} />
             </div>
-            <Countdown targetDate={invitation.targetDate} />
+            <Countdown targetDate={invitation.targetDate} theme="k-pop" />
           </section>
 
           {/* ─── VENUE SECTION ─── */}
@@ -199,13 +199,12 @@ export default function KpopTemplate({ invitation }: TemplateProps) {
               <Ticket size={22} className="text-pink-400" />
               <span>Coordenadas del Concierto</span>
             </div>
-            <div className="bg-white rounded-3xl text-gray-900 overflow-hidden shadow-2xl">
-              <VenueCard
-                venue={venueConfig}
-                badgeText={invitation.badgeText}
-                slug={invitation.slug}
-              />
-            </div>
+            <VenueCard
+              venue={venueConfig}
+              badgeText={invitation.badgeText}
+              slug={invitation.slug}
+              theme="k-pop"
+            />
           </section>
 
           {/* ─── GIFTS SECTION (OPTIONAL) ─── */}
@@ -214,7 +213,7 @@ export default function KpopTemplate({ invitation }: TemplateProps) {
               <div className="flex items-center justify-center gap-2 text-pink-300 font-extrabold text-lg sm:text-xl uppercase tracking-wider">
                 <span>🎁 VIP Backstage Pass (Mesa de Regalos)</span>
               </div>
-              <div className="bg-white/95 rounded-3xl p-4 text-gray-900 shadow-2xl">
+              <div className="bg-black/60 rounded-3xl p-4 border border-pink-500/40 shadow-2xl">
                 <GiftCard gift={giftConfig} onChestOpen={handleChestOpen} />
               </div>
             </section>
@@ -227,15 +226,16 @@ export default function KpopTemplate({ invitation }: TemplateProps) {
                 <Sparkles size={22} className="text-pink-400" />
                 <span>Confirmá tu Entrada al Show</span>
               </div>
-              <div className="bg-white rounded-3xl p-4 sm:p-6 text-gray-900 shadow-2xl">
-                <RsvpForm
-                  invitationSlug={invitation.slug}
-                  personName={invitation.personName}
-                />
-              </div>
+              <RsvpForm
+                invitationSlug={invitation.slug}
+                personName={invitation.personName}
+                allowCompanions={invitation.allowCompanions}
+                allowDietary={invitation.allowDietary}
+                theme="k-pop"
+              />
 
               {invitation.footerPhrase && (
-                <footer className="text-center py-6">
+                <footer className="text-center py-4">
                   <p className="font-extrabold text-base sm:text-xl text-pink-200 bg-black/40 p-5 rounded-2xl border border-pink-500/30 backdrop-blur-md">
                     {invitation.footerPhrase}
                   </p>
@@ -256,7 +256,6 @@ export default function KpopTemplate({ invitation }: TemplateProps) {
   );
 }
 
-// Custom K-Pop Holographic Envelope Modal
 function KpopEnvelopeModal({
   onOpen,
   personName,
@@ -308,7 +307,6 @@ function KpopEnvelopeModal({
             {personName}
           </h2>
 
-          {/* Lightstick Star Seal */}
           <div className="mt-2 w-16 h-16 rounded-full bg-gradient-to-tr from-pink-500 to-purple-500 border-2 border-white shadow-[0_0_20px_rgba(236,72,153,0.8)] flex flex-col items-center justify-center animate-pulse">
             <Heart size={22} className="fill-white text-white" />
             <span className="text-[10px] font-black text-white leading-none">
@@ -324,4 +322,3 @@ function KpopEnvelopeModal({
     </div>
   );
 }
-

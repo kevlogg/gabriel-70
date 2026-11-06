@@ -91,6 +91,8 @@ export const InvitationSchema = z.object({
   audioTrackPath: z.string().default(""),
   footerPhrase: z.string().default(""),
   template: z.enum(TEMPLATE_IDS).default("classic-gold"),
+  allowCompanions: z.boolean().default(true),
+  allowDietary: z.boolean().default(true),
   isDefault: z.boolean().default(false),
   clientToken: z.string().optional(),
 });

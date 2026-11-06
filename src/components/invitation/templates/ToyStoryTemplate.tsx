@@ -7,7 +7,8 @@ import VenueCard from "@/components/invitation/VenueCard";
 import GiftCard from "@/components/invitation/GiftCard";
 import RsvpForm from "@/components/invitation/RsvpForm";
 import AudioController from "@/components/invitation/AudioController";
-import { Rocket, Star, MapPin, Sparkles, Trophy, Heart } from "lucide-react";
+import WoodyAndBuzzCharacter from "@/components/invitation/characters/WoodyAndBuzzCharacter";
+import { Rocket, Star, MapPin, Sparkles } from "lucide-react";
 
 interface TemplateProps {
   invitation: InvitationRecord;
@@ -106,17 +107,17 @@ export default function ToyStoryTemplate({ invitation }: TemplateProps) {
         />
 
         <div
-          className="max-w-3xl w-full mx-auto flex flex-col gap-16 sm:gap-24 relative z-10"
+          className="max-w-3xl w-full mx-auto flex flex-col gap-14 sm:gap-20 relative z-10"
           style={{
             paddingLeft: "clamp(1.25rem, 5vw, 2.5rem)",
             paddingRight: "clamp(1.25rem, 5vw, 2.5rem)",
-            paddingTop: "clamp(2.5rem, 5vw, 4.5rem)",
+            paddingTop: "clamp(2rem, 5vw, 4rem)",
             paddingBottom: "clamp(4rem, 8vw, 7rem)",
             boxSizing: "border-box",
           }}
         >
           {/* ─── HERO SECTION ─── */}
-          <section className="flex flex-col items-center gap-6 sm:gap-8 text-center py-4">
+          <section className="flex flex-col items-center gap-5 sm:gap-7 text-center py-2">
             {/* Sheriff Badge Tag */}
             <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-amber-400 text-amber-950 font-black text-xs sm:text-sm uppercase tracking-widest shadow-md border-2 border-amber-500 animate-bounce">
               <Star size={18} className="fill-amber-950 text-amber-950" />
@@ -126,16 +127,16 @@ export default function ToyStoryTemplate({ invitation }: TemplateProps) {
 
             {/* Date Badge */}
             {invitation.badgeText && (
-              <div className="inline-flex items-center justify-center px-6 py-2.5 rounded-2xl bg-white/90 text-blue-900 font-bold text-xs sm:text-sm border-2 border-blue-400 shadow-sm">
+              <div className="inline-flex items-center justify-center px-6 py-2.5 rounded-2xl bg-white text-blue-900 font-black text-xs sm:text-sm border-2 border-blue-400 shadow-sm">
                 <span>📅 {invitation.badgeText}</span>
               </div>
             )}
 
             {/* Main Headline */}
             <h1
-              className="font-extrabold text-blue-950 tracking-tight leading-tight"
+              className="font-black text-blue-950 tracking-tight leading-tight"
               style={{
-                fontSize: "clamp(3rem, 10vw, 5.5rem)",
+                fontSize: "clamp(2.8rem, 9.5vw, 5.2rem)",
                 textShadow: "3px 3px 0px #FBBF24, 6px 6px 0px rgba(0,0,0,0.12)",
                 fontFamily: "var(--font-jakarta)",
               }}
@@ -143,14 +144,17 @@ export default function ToyStoryTemplate({ invitation }: TemplateProps) {
               {invitation.headline}
             </h1>
 
+            {/* Woody & Buzz Characters Illustration */}
+            <WoodyAndBuzzCharacter />
+
             {/* Huge Event Number with Cowboy/Rocket Flair */}
             {invitation.eventNumber && (
-              <div className="relative my-2">
+              <div className="relative my-1">
                 <div
-                  className="font-black text-white px-8 py-3 rounded-3xl shadow-xl border-4 border-amber-400 transform -rotate-3"
+                  className="font-black text-white px-8 py-3 rounded-3xl shadow-xl border-4 border-amber-400 transform -rotate-2"
                   style={{
                     background: "linear-gradient(135deg, #EF4444 0%, #DC2626 100%)",
-                    fontSize: "clamp(4.5rem, 16vw, 8.5rem)",
+                    fontSize: "clamp(4.5rem, 16vw, 8rem)",
                     lineHeight: 1,
                     textShadow: "4px 4px 0px #991B1B",
                   }}
@@ -164,73 +168,79 @@ export default function ToyStoryTemplate({ invitation }: TemplateProps) {
             )}
 
             {/* Subheadline */}
-            <p className="text-base sm:text-xl font-bold text-blue-900 max-w-lg leading-relaxed bg-white/80 p-4 rounded-2xl border-2 border-blue-200 shadow-xs">
+            <p className="text-base sm:text-xl font-bold text-blue-900 max-w-lg leading-relaxed bg-white/90 p-5 rounded-3xl border-3 border-blue-200 shadow-sm">
               {invitation.subheadline}
             </p>
 
             {/* Woody catchphrase badge */}
-            <div className="text-xs font-black uppercase tracking-wider text-amber-800 bg-amber-100 px-4 py-2 rounded-xl border border-amber-300">
+            <div className="text-xs font-black uppercase tracking-wider text-amber-900 bg-amber-200/90 px-4 py-2 rounded-xl border border-amber-400 shadow-xs">
               🤠 ¡Al infinito y más allá! · Misión de Cumpleaños 🚀
             </div>
           </section>
 
           {/* ─── COUNTDOWN SECTION ─── */}
-          <section className="bg-white/95 rounded-3xl p-6 sm:p-10 border-4 border-amber-400 shadow-xl flex flex-col items-center gap-6">
-            <div className="flex items-center gap-2 text-blue-900 font-black text-xl sm:text-2xl uppercase tracking-wider">
+          <section className="bg-white rounded-3xl p-6 sm:p-10 border-4 border-amber-400 shadow-xl flex flex-col items-center gap-6">
+            <div className="flex items-center gap-2 text-blue-950 font-black text-lg sm:text-2xl uppercase tracking-wider">
               <Rocket className="text-red-500 animate-pulse" size={26} />
               <span>Cuenta Regresiva del Despegue</span>
               <Rocket className="text-red-500 animate-pulse" size={26} />
             </div>
-            <Countdown targetDate={invitation.targetDate} />
+            <Countdown targetDate={invitation.targetDate} theme="toy-story" />
           </section>
 
           {/* ─── VENUE SECTION ─── */}
           <section className="flex flex-col gap-4">
-            <div className="flex items-center justify-center gap-2 text-white font-black text-xl sm:text-2xl drop-shadow-md">
-              <MapPin size={24} className="text-amber-300" />
+            <div className="flex items-center justify-center gap-2 text-blue-950 font-black text-xl sm:text-2xl drop-shadow-sm">
+              <MapPin size={24} className="text-blue-700" />
               <span>¿Dónde es la Base de Operaciones?</span>
             </div>
             <VenueCard
               venue={venueConfig}
               badgeText={invitation.badgeText}
               slug={invitation.slug}
+              theme="toy-story"
             />
           </section>
 
           {/* ─── GIFTS SECTION (OPTIONAL) ─── */}
           {hasGifts && (
             <section className="flex flex-col gap-4">
-              <div className="flex items-center justify-center gap-2 text-white font-black text-xl sm:text-2xl drop-shadow-md">
+              <div className="flex items-center justify-center gap-2 text-blue-950 font-black text-xl sm:text-2xl drop-shadow-sm">
                 <span>🐷 La Alcancía de Hamm (Mesa de Regalos)</span>
               </div>
-              <GiftCard gift={giftConfig} onChestOpen={handleChestOpen} />
+              <div className="bg-white rounded-3xl border-4 border-amber-400 shadow-xl p-4">
+                <GiftCard gift={giftConfig} onChestOpen={handleChestOpen} />
+              </div>
             </section>
           )}
 
           {/* ─── RSVP SECTION ─── */}
           {canShowRsvp ? (
             <section className="flex flex-col gap-4">
-              <div className="flex items-center justify-center gap-2 text-white font-black text-xl sm:text-2xl drop-shadow-md">
-                <Sparkles size={24} className="text-amber-300" />
+              <div className="flex items-center justify-center gap-2 text-blue-950 font-black text-xl sm:text-2xl drop-shadow-sm">
+                <Sparkles size={24} className="text-amber-500" />
                 <span>Comando Estelar: Confirmá tu Asistencia</span>
               </div>
               <RsvpForm
                 invitationSlug={invitation.slug}
                 personName={invitation.personName}
+                allowCompanions={invitation.allowCompanions}
+                allowDietary={invitation.allowDietary}
+                theme="toy-story"
               />
 
               {invitation.footerPhrase && (
-                <footer className="text-center py-6">
-                  <p className="font-black text-lg sm:text-2xl text-blue-950 bg-white/90 p-5 rounded-2xl border-3 border-amber-400 shadow-md">
+                <footer className="text-center py-4">
+                  <p className="font-black text-lg sm:text-2xl text-blue-950 bg-white p-5 rounded-2xl border-4 border-amber-400 shadow-md">
                     {invitation.footerPhrase}
                   </p>
                 </footer>
               )}
             </section>
           ) : (
-            <div className="flex flex-col items-center text-center p-6 bg-white/90 rounded-3xl border-3 border-dashed border-amber-500 shadow-md gap-2">
+            <div className="flex flex-col items-center text-center p-6 bg-white rounded-3xl border-4 border-dashed border-amber-500 shadow-md gap-2">
               <span className="text-3xl">🔒</span>
-              <p className="font-bold text-sm text-blue-950">
+              <p className="font-black text-sm text-blue-950">
                 ¡Abrí la alcancía en la sección anterior para confirmar tu lugar en la misión!
               </p>
             </div>
@@ -241,7 +251,6 @@ export default function ToyStoryTemplate({ invitation }: TemplateProps) {
   );
 }
 
-// Toy Story Cloud component
 function Cloud({ top, left, scale = 1 }: { top: string; left: string; scale?: number }) {
   return (
     <div
@@ -266,7 +275,6 @@ function Cloud({ top, left, scale = 1 }: { top: string; left: string; scale?: nu
   );
 }
 
-// Custom Toy Story Envelope
 function ToyStoryEnvelopeModal({
   onOpen,
   personName,
@@ -306,7 +314,6 @@ function ToyStoryEnvelopeModal({
         className="group flex flex-col items-center gap-6 cursor-pointer border-none bg-transparent"
       >
         <div className="relative w-[340px] sm:w-[380px] h-[230px] rounded-3xl bg-amber-100 border-4 border-amber-500 shadow-2xl flex flex-col items-center justify-center p-6 text-center transform transition-transform group-hover:scale-105">
-          {/* Cloud decorations */}
           <div className="absolute top-3 left-4 text-xs font-black uppercase text-amber-700 bg-amber-200 px-3 py-1 rounded-full">
             ⭐ Correo de Juguetes
           </div>
@@ -319,7 +326,6 @@ function ToyStoryEnvelopeModal({
             {personName}
           </h2>
 
-          {/* Sheriff Star Stamp */}
           <div className="mt-2 w-16 h-16 rounded-full bg-amber-400 border-3 border-amber-600 shadow-lg flex flex-col items-center justify-center animate-bounce">
             <Star size={24} className="fill-amber-900 text-amber-900" />
             <span className="text-[10px] font-black text-amber-950 leading-none">
@@ -335,4 +341,3 @@ function ToyStoryEnvelopeModal({
     </div>
   );
 }
-

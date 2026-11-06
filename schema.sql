@@ -21,6 +21,8 @@ CREATE TABLE IF NOT EXISTS invitations (
   audioTrackPath      TEXT,
   footerPhrase        TEXT,
   template            TEXT NOT NULL DEFAULT 'classic-gold',
+  allowCompanions     INTEGER NOT NULL DEFAULT 1,
+  allowDietary        INTEGER NOT NULL DEFAULT 1,
   isDefault           INTEGER NOT NULL DEFAULT 0,
   clientToken         TEXT,
   createdAt           TEXT NOT NULL,

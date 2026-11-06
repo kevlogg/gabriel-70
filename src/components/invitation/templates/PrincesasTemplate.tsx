@@ -7,6 +7,7 @@ import VenueCard from "@/components/invitation/VenueCard";
 import GiftCard from "@/components/invitation/GiftCard";
 import RsvpForm from "@/components/invitation/RsvpForm";
 import AudioController from "@/components/invitation/AudioController";
+import PrincessCharacter from "@/components/invitation/characters/PrincessCharacter";
 import { Crown, Sparkles, Heart, Castle, Clock } from "lucide-react";
 
 interface TemplateProps {
@@ -115,17 +116,17 @@ export default function PrincesasTemplate({ invitation }: TemplateProps) {
         />
 
         <div
-          className="max-w-3xl w-full mx-auto flex flex-col gap-16 sm:gap-24 relative z-10"
+          className="max-w-3xl w-full mx-auto flex flex-col gap-14 sm:gap-20 relative z-10"
           style={{
             paddingLeft: "clamp(1.25rem, 5vw, 2.5rem)",
             paddingRight: "clamp(1.25rem, 5vw, 2.5rem)",
-            paddingTop: "clamp(2.5rem, 5vw, 4.5rem)",
+            paddingTop: "clamp(2rem, 5vw, 4rem)",
             paddingBottom: "clamp(4rem, 8vw, 7rem)",
             boxSizing: "border-box",
           }}
         >
           {/* ─── HERO SECTION ─── */}
-          <section className="flex flex-col items-center gap-6 sm:gap-8 text-center py-4">
+          <section className="flex flex-col items-center gap-5 sm:gap-7 text-center py-2">
             {/* Fairy tale ornament */}
             <div className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-white/90 border border-pink-300 shadow-sm text-pink-700 font-bold text-xs sm:text-sm tracking-wider uppercase">
               <Crown size={18} className="text-amber-500 fill-amber-400" />
@@ -144,7 +145,7 @@ export default function PrincesasTemplate({ invitation }: TemplateProps) {
             <h1
               className="font-bold text-pink-950 tracking-tight leading-tight"
               style={{
-                fontSize: "clamp(3rem, 10vw, 5.5rem)",
+                fontSize: "clamp(2.8rem, 9.5vw, 5.2rem)",
                 fontFamily: "var(--font-cormorant), Georgia, serif",
                 textShadow: "2px 2px 10px rgba(244,114,182,0.25)",
               }}
@@ -152,14 +153,17 @@ export default function PrincesasTemplate({ invitation }: TemplateProps) {
               {invitation.headline}
             </h1>
 
+            {/* Fairytale Princess Character Illustration */}
+            <PrincessCharacter />
+
             {/* Princess Tiara Number */}
             {invitation.eventNumber && (
-              <div className="relative my-2">
+              <div className="relative my-1">
                 <div
                   className="font-bold px-8 py-3 rounded-3xl bg-white border-3 border-amber-300 shadow-xl"
                   style={{
                     fontFamily: "var(--font-cormorant), Georgia, serif",
-                    fontSize: "clamp(5rem, 18vw, 9rem)",
+                    fontSize: "clamp(4.5rem, 16vw, 8rem)",
                     lineHeight: 1,
                     color: "#D97706",
                     textShadow: "2px 2px 0px #FDE68A",
@@ -189,7 +193,7 @@ export default function PrincesasTemplate({ invitation }: TemplateProps) {
               <span>Antes de la Medianoche</span>
               <Sparkles className="text-pink-400" size={24} />
             </div>
-            <Countdown targetDate={invitation.targetDate} />
+            <Countdown targetDate={invitation.targetDate} theme="princesas" />
           </section>
 
           {/* ─── VENUE SECTION ─── */}
@@ -202,6 +206,7 @@ export default function PrincesasTemplate({ invitation }: TemplateProps) {
               venue={venueConfig}
               badgeText={invitation.badgeText}
               slug={invitation.slug}
+              theme="princesas"
             />
           </section>
 
@@ -212,7 +217,9 @@ export default function PrincesasTemplate({ invitation }: TemplateProps) {
                 <Crown size={22} className="text-amber-500 fill-amber-400" />
                 <span>El Baúl de los Deseos Reales</span>
               </div>
-              <GiftCard gift={giftConfig} onChestOpen={handleChestOpen} />
+              <div className="bg-white rounded-3xl p-4 border-2 border-pink-200 shadow-xl">
+                <GiftCard gift={giftConfig} onChestOpen={handleChestOpen} />
+              </div>
             </section>
           )}
 
@@ -226,10 +233,13 @@ export default function PrincesasTemplate({ invitation }: TemplateProps) {
               <RsvpForm
                 invitationSlug={invitation.slug}
                 personName={invitation.personName}
+                allowCompanions={invitation.allowCompanions}
+                allowDietary={invitation.allowDietary}
+                theme="princesas"
               />
 
               {invitation.footerPhrase && (
-                <footer className="text-center py-6">
+                <footer className="text-center py-4">
                   <p
                     className="text-xl sm:text-2xl text-pink-900 bg-white/90 p-5 rounded-3xl border border-pink-200 shadow-md italic font-semibold"
                     style={{ fontFamily: "var(--font-cormorant), Georgia, serif" }}
@@ -253,7 +263,6 @@ export default function PrincesasTemplate({ invitation }: TemplateProps) {
   );
 }
 
-// Princess Royal Envelope
 function PrincessEnvelopeModal({
   onOpen,
   personName,
@@ -308,7 +317,6 @@ function PrincessEnvelopeModal({
             Princesa {personName}
           </h2>
 
-          {/* Royal Crown Wax Seal */}
           <div className="mt-2 w-16 h-16 rounded-full bg-gradient-to-tr from-amber-400 to-amber-200 border-2 border-amber-500 shadow-lg flex flex-col items-center justify-center animate-pulse">
             <Crown size={24} className="text-amber-800 fill-amber-700" />
             <span className="text-[10px] font-black text-amber-950 leading-none">
@@ -324,4 +332,3 @@ function PrincessEnvelopeModal({
     </div>
   );
 }
-

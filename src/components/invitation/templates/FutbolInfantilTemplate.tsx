@@ -7,6 +7,7 @@ import VenueCard from "@/components/invitation/VenueCard";
 import GiftCard from "@/components/invitation/GiftCard";
 import RsvpForm from "@/components/invitation/RsvpForm";
 import AudioController from "@/components/invitation/AudioController";
+import FootballCharacter from "@/components/invitation/characters/FootballCharacter";
 import { Trophy, MapPin, Sparkles, CheckCircle2 } from "lucide-react";
 
 interface TemplateProps {
@@ -103,17 +104,17 @@ export default function FutbolInfantilTemplate({ invitation }: TemplateProps) {
         />
 
         <div
-          className="max-w-3xl w-full mx-auto flex flex-col gap-16 sm:gap-24 relative z-10"
+          className="max-w-3xl w-full mx-auto flex flex-col gap-14 sm:gap-20 relative z-10"
           style={{
             paddingLeft: "clamp(1.25rem, 5vw, 2.5rem)",
             paddingRight: "clamp(1.25rem, 5vw, 2.5rem)",
-            paddingTop: "clamp(2.5rem, 5vw, 4.5rem)",
+            paddingTop: "clamp(2rem, 5vw, 4rem)",
             paddingBottom: "clamp(4rem, 8vw, 7rem)",
             boxSizing: "border-box",
           }}
         >
           {/* ─── HERO SECTION ─── */}
-          <section className="flex flex-col items-center gap-6 sm:gap-8 text-center py-4">
+          <section className="flex flex-col items-center gap-5 sm:gap-7 text-center py-2">
             {/* Matchday tag */}
             <div className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-amber-400 text-gray-950 font-black text-xs sm:text-sm uppercase tracking-widest shadow-lg border-2 border-amber-300">
               <span>⚽ ¡HOY SE JUEGA EL GRAN PARTIDO! ⚽</span>
@@ -130,7 +131,7 @@ export default function FutbolInfantilTemplate({ invitation }: TemplateProps) {
             <h1
               className="font-black tracking-tight leading-tight uppercase"
               style={{
-                fontSize: "clamp(3rem, 10vw, 5.5rem)",
+                fontSize: "clamp(2.8rem, 9.5vw, 5.2rem)",
                 textShadow: "3px 3px 0px #047857, 6px 6px 0px rgba(0,0,0,0.3)",
                 fontFamily: "var(--font-jakarta)",
               }}
@@ -138,13 +139,16 @@ export default function FutbolInfantilTemplate({ invitation }: TemplateProps) {
               {invitation.headline}
             </h1>
 
+            {/* Football Champion Character Illustration */}
+            <FootballCharacter jerseyNumber={invitation.eventNumber || "10"} />
+
             {/* Jersey Number */}
             {invitation.eventNumber && (
-              <div className="relative my-2">
+              <div className="relative my-1">
                 <div
                   className="font-black px-10 py-3 rounded-3xl bg-white border-4 border-amber-400 shadow-2xl flex flex-col items-center justify-center"
                   style={{
-                    fontSize: "clamp(5rem, 18vw, 9.5rem)",
+                    fontSize: "clamp(4.5rem, 16vw, 8.5rem)",
                     lineHeight: 0.9,
                     color: "#047857",
                     textShadow: "3px 3px 0px #A7F3D0",
@@ -173,10 +177,10 @@ export default function FutbolInfantilTemplate({ invitation }: TemplateProps) {
 
           {/* ─── COUNTDOWN SECTION ─── */}
           <section className="bg-white rounded-3xl p-6 sm:p-10 border-4 border-amber-400 shadow-2xl text-emerald-950 flex flex-col items-center gap-6">
-            <div className="flex items-center gap-2 font-black text-xl sm:text-2xl uppercase tracking-wider">
+            <div className="flex items-center gap-2 font-black text-lg sm:text-2xl uppercase tracking-wider">
               <span>⏱️ Minutos para el Pitazo Inicial ⏱️</span>
             </div>
-            <Countdown targetDate={invitation.targetDate} />
+            <Countdown targetDate={invitation.targetDate} theme="futbol-infantil" />
           </section>
 
           {/* ─── VENUE SECTION ─── */}
@@ -185,13 +189,12 @@ export default function FutbolInfantilTemplate({ invitation }: TemplateProps) {
               <MapPin size={24} className="text-amber-400" />
               <span>El Estadio / La Cancha</span>
             </div>
-            <div className="bg-white rounded-3xl text-gray-900 overflow-hidden shadow-2xl">
-              <VenueCard
-                venue={venueConfig}
-                badgeText={invitation.badgeText}
-                slug={invitation.slug}
-              />
-            </div>
+            <VenueCard
+              venue={venueConfig}
+              badgeText={invitation.badgeText}
+              slug={invitation.slug}
+              theme="futbol-infantil"
+            />
           </section>
 
           {/* ─── GIFTS SECTION (OPTIONAL) ─── */}
@@ -201,7 +204,7 @@ export default function FutbolInfantilTemplate({ invitation }: TemplateProps) {
                 <Trophy size={24} className="text-amber-400" />
                 <span>Mesa de Regalos / Copa del Homenajeado</span>
               </div>
-              <div className="bg-white rounded-3xl p-4 text-gray-900 shadow-2xl">
+              <div className="bg-white rounded-3xl p-4 border-4 border-amber-400 shadow-2xl">
                 <GiftCard gift={giftConfig} onChestOpen={handleChestOpen} />
               </div>
             </section>
@@ -214,15 +217,16 @@ export default function FutbolInfantilTemplate({ invitation }: TemplateProps) {
                 <CheckCircle2 size={24} className="text-amber-400" />
                 <span>Formación Titular: Confirmá si Jugás</span>
               </div>
-              <div className="bg-white rounded-3xl p-4 sm:p-6 text-gray-900 shadow-2xl">
-                <RsvpForm
-                  invitationSlug={invitation.slug}
-                  personName={invitation.personName}
-                />
-              </div>
+              <RsvpForm
+                invitationSlug={invitation.slug}
+                personName={invitation.personName}
+                allowCompanions={invitation.allowCompanions}
+                allowDietary={invitation.allowDietary}
+                theme="futbol-infantil"
+              />
 
               {invitation.footerPhrase && (
-                <footer className="text-center py-6">
+                <footer className="text-center py-4">
                   <p className="font-black text-lg sm:text-2xl text-emerald-950 bg-white p-5 rounded-2xl border-3 border-amber-400 shadow-xl">
                     {invitation.footerPhrase}
                   </p>
@@ -243,7 +247,6 @@ export default function FutbolInfantilTemplate({ invitation }: TemplateProps) {
   );
 }
 
-// Custom Football Match Ticket Envelope Modal
 function FootballEnvelopeModal({
   onOpen,
   personName,
@@ -295,7 +298,6 @@ function FootballEnvelopeModal({
             {personName}
           </h2>
 
-          {/* Football Ball / Jersey Stamp */}
           <div className="mt-2 w-16 h-16 rounded-full bg-emerald-600 border-3 border-amber-400 shadow-lg flex flex-col items-center justify-center animate-bounce">
             <span className="text-2xl leading-none">⚽</span>
             <span className="text-[10px] font-black text-white leading-none mt-0.5">
@@ -311,4 +313,3 @@ function FootballEnvelopeModal({
     </div>
   );
 }
-

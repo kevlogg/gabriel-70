@@ -269,6 +269,7 @@ export default function ClassicGoldTemplate({ invitation }: TemplateProps) {
               venue={venueConfig}
               badgeText={invitation.badgeText}
               slug={invitation.slug}
+              theme="classic-gold"
             />
           </section>
 
@@ -310,6 +311,9 @@ export default function ClassicGoldTemplate({ invitation }: TemplateProps) {
                 <RsvpForm
                   invitationSlug={invitation.slug}
                   personName={invitation.personName}
+                  allowCompanions={invitation.allowCompanions}
+                  allowDietary={invitation.allowDietary}
+                  theme="classic-gold"
                 />
               </section>
 

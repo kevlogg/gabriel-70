@@ -507,6 +507,14 @@ function InvitationFormModal({
     isEditing ? initialHasGifts : false
   );
 
+  // RSVP Form Options
+  const [allowCompanions, setAllowCompanions] = useState<boolean>(
+    invitation?.allowCompanions ?? true
+  );
+  const [allowDietary, setAllowDietary] = useState<boolean>(
+    invitation?.allowDietary ?? true
+  );
+
   // Audio state
   const [audioMode, setAudioMode] = useState<"preset" | "upload" | "none" | "keep">(
     isEditing && invitation?.audioTrackPath ? "keep" : "none"
@@ -543,6 +551,8 @@ function InvitationFormModal({
     const targetDateIso = datetimeLocalToIsoWithOffset(datetimeLocal);
     formData.set("targetDate", targetDateIso);
     formData.set("template", selectedTemplate);
+    formData.set("allowCompanions", String(allowCompanions));
+    formData.set("allowDietary", String(allowDietary));
 
     // Audio handling in formData
     if (audioMode === "none") {
@@ -963,6 +973,56 @@ function InvitationFormModal({
                 </span>
               </div>
             )}
+          </fieldset>
+
+          {/* ─── SECCIÓN: OPCIONES DE CONFIRMACIÓN (RSVP) ─── */}
+          <fieldset className="flex flex-col gap-3 border-b border-[rgba(197,155,39,0.15)] pb-6">
+            <legend className="font-jakarta font-bold text-sm text-[var(--gold)] uppercase tracking-wider flex items-center gap-2 mb-1">
+              <Users size={16} /> Configuración de la Tarjeta de Confirmación (RSVP)
+            </legend>
+            <p className="text-xs text-[var(--dark-brown-70)]">
+              Personalizá qué opciones verán los invitados al momento de confirmar asistencia:
+            </p>
+
+            <div className="flex flex-col gap-3 p-4 rounded-2xl bg-white border border-gray-200 shadow-xs">
+              <label className="flex items-start gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  name="allowCompanions"
+                  checked={allowCompanions}
+                  onChange={(e) => setAllowCompanions(e.target.checked)}
+                  className="mt-0.5 w-4 h-4 text-[var(--gold)] rounded"
+                />
+                <div className="flex flex-col">
+                  <span className="text-xs font-bold text-[var(--dark-brown)]">
+                    Permitir sumar integrantes / acompañantes adicionales (+1, +2, etc.)
+                  </span>
+                  <span className="text-[11px] text-[var(--dark-brown-70)]">
+                    Si está desmarcado, cada invitado solo podrá confirmar por sí mismo (asistencia individual).
+                  </span>
+                </div>
+              </label>
+
+              <div className="h-px bg-gray-100" />
+
+              <label className="flex items-start gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  name="allowDietary"
+                  checked={allowDietary}
+                  onChange={(e) => setAllowDietary(e.target.checked)}
+                  className="mt-0.5 w-4 h-4 text-[var(--gold)] rounded"
+                />
+                <div className="flex flex-col">
+                  <span className="text-xs font-bold text-[var(--dark-brown)]">
+                    Preguntar por restricciones alimentarias (menú celíaco, vegetariano, vegano, etc.)
+                  </span>
+                  <span className="text-[11px] text-[var(--dark-brown-70)]">
+                    Si está desmarcado, no se mostrará el campo de menú/dietas en el formulario de confirmación.
+                  </span>
+                </div>
+              </label>
+            </div>
           </fieldset>
 
           {/* ─── SECCIÓN 5: AUDIO Y PIE DE PÁGINA (OPCIONAL) ─── */}

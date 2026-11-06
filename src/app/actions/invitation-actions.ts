@@ -93,6 +93,8 @@ export async function createInvitationAction(
     audioTrackPath,
     footerPhrase: String(formData.get("footerPhrase") || "").trim(),
     template: (String(formData.get("template") || "classic-gold").trim() as TemplateId),
+    allowCompanions: formData.get("allowCompanions") === "on" || formData.get("allowCompanions") === "true",
+    allowDietary: formData.get("allowDietary") === "on" || formData.get("allowDietary") === "true",
     isDefault: formData.get("isDefault") === "on" || formData.get("isDefault") === "true",
   };
 
@@ -162,6 +164,8 @@ export async function updateInvitationAction(
     audioTrackPath,
     footerPhrase: String(formData.get("footerPhrase") || "").trim(),
     template: (String(formData.get("template") || "classic-gold").trim() as TemplateId),
+    allowCompanions: formData.get("allowCompanions") === "on" || formData.get("allowCompanions") === "true",
+    allowDietary: formData.get("allowDietary") === "on" || formData.get("allowDietary") === "true",
     isDefault: formData.get("isDefault") === "on" || formData.get("isDefault") === "true",
   };
 

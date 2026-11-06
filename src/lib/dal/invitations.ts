@@ -30,6 +30,8 @@ export async function initializeInvitationsDb(): Promise<void> {
       audioTrackPath   TEXT,
       footerPhrase     TEXT,
       template         TEXT NOT NULL DEFAULT 'classic-gold',
+      allowCompanions  INTEGER NOT NULL DEFAULT 1,
+      allowDietary     INTEGER NOT NULL DEFAULT 1,
       isDefault        INTEGER NOT NULL DEFAULT 0,
       clientToken      TEXT,
       createdAt        TEXT NOT NULL,
@@ -60,6 +62,20 @@ export async function initializeInvitationsDb(): Promise<void> {
   // Ensure invitations has template column
   try {
     await client.execute(`ALTER TABLE invitations ADD COLUMN template TEXT DEFAULT 'classic-gold'`);
+  } catch {
+    // Column already exists
+  }
+
+  // Ensure invitations has allowCompanions column
+  try {
+    await client.execute(`ALTER TABLE invitations ADD COLUMN allowCompanions INTEGER DEFAULT 1`);
+  } catch {
+    // Column already exists
+  }
+
+  // Ensure invitations has allowDietary column
+  try {
+    await client.execute(`ALTER TABLE invitations ADD COLUMN allowDietary INTEGER DEFAULT 1`);
   } catch {
     // Column already exists
   }
@@ -130,6 +146,8 @@ function rowToInvitation(row: Record<string, unknown>): InvitationRecord {
     audioTrackPath: String(row.audioTrackPath ?? ""),
     footerPhrase: String(row.footerPhrase ?? ""),
     template: ((row.template as string) || "classic-gold") as any,
+    allowCompanions: Number(row.allowCompanions ?? 1) === 1,
+    allowDietary: Number(row.allowDietary ?? 1) === 1,
     isDefault: Number(row.isDefault) === 1,
     clientToken: row.clientToken ? String(row.clientToken) : undefined,
     createdAt: String(row.createdAt),
@@ -191,6 +209,8 @@ export async function getDefaultInvitation(): Promise<InvitationRecord> {
     audioTrackPath: EVENT_DATA.audioTrackPath,
     footerPhrase: "70 vueltas al sol merecen una fiesta a la altura. Vení listo para disfrutar sin mirar el reloj. 🥂",
     template: "classic-gold",
+    allowCompanions: true,
+    allowDietary: true,
     isDefault: true,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -214,8 +234,8 @@ export async function createInvitation(data: InvitationFormData): Promise<Invita
       id, slug, personName, headline, subheadline, eventNumber, badgeText,
       targetDate, venueName, venueAddress, venueMapsUrl, venueCalendarUrl,
       giftBankName, giftAlias, giftCbu, giftHolderName, audioTrackPath,
-      footerPhrase, template, isDefault, clientToken, createdAt, updatedAt
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      footerPhrase, template, allowCompanions, allowDietary, isDefault, clientToken, createdAt, updatedAt
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     args: [
       id,
       data.slug,
@@ -236,6 +256,8 @@ export async function createInvitation(data: InvitationFormData): Promise<Invita
       data.audioTrackPath || "",
       data.footerPhrase || "",
       data.template || "classic-gold",
+      data.allowCompanions !== false ? 1 : 0,
+      data.allowDietary !== false ? 1 : 0,
       data.isDefault ? 1 : 0,
       data.clientToken || null,
       now,
@@ -280,7 +302,9 @@ export async function updateInvitation(
       eventNumber = ?, badgeText = ?, targetDate = ?,
       venueName = ?, venueAddress = ?, venueMapsUrl = ?, venueCalendarUrl = ?,
       giftBankName = ?, giftAlias = ?, giftCbu = ?, giftHolderName = ?,
-      audioTrackPath = ?, footerPhrase = ?, template = ?, isDefault = ?, clientToken = ?,
+      audioTrackPath = ?, footerPhrase = ?, template = ?,
+      allowCompanions = ?, allowDietary = ?,
+      isDefault = ?, clientToken = ?,
       updatedAt = ?
       WHERE id = ?`,
     args: [
@@ -302,6 +326,8 @@ export async function updateInvitation(
       updated.audioTrackPath || "",
       updated.footerPhrase || "",
       updated.template || "classic-gold",
+      updated.allowCompanions !== false ? 1 : 0,
+      updated.allowDietary !== false ? 1 : 0,
       updated.isDefault ? 1 : 0,
       updated.clientToken || null,
       now,
