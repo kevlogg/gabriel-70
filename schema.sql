@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS invitations (
   giftHolderName      TEXT,
   audioTrackPath      TEXT,
   footerPhrase        TEXT,
+  template            TEXT NOT NULL DEFAULT 'classic-gold',
   isDefault           INTEGER NOT NULL DEFAULT 0,
   clientToken         TEXT,
   createdAt           TEXT NOT NULL,

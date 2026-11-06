@@ -1,13 +1,15 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import path from "path";
+import fs from "fs/promises";
 import {
   createInvitation,
   updateInvitation,
   deleteInvitation,
   setDefaultInvitation,
 } from "@/lib/dal/invitations";
-import { InvitationSchema } from "@/lib/schemas/invitation.schema";
+import { InvitationSchema, type TemplateId } from "@/lib/schemas/invitation.schema";
 
 export interface ActionResult {
   success: boolean;
@@ -15,10 +17,54 @@ export interface ActionResult {
   errors?: Record<string, string[]>;
 }
 
+async function extractAudioPath(formData: FormData, existingPath: string = ""): Promise<string> {
+  const audioRemove = formData.get("audioRemove") === "true";
+  if (audioRemove) {
+    return "";
+  }
+
+  const audioFile = formData.get("audioFile");
+  if (
+    audioFile &&
+    typeof audioFile === "object" &&
+    "size" in audioFile &&
+    (audioFile as File).size > 0
+  ) {
+    try {
+      const file = audioFile as File;
+      const originalName = file.name || "audio.mp3";
+      const ext = path.extname(originalName).toLowerCase() || ".mp3";
+      const safeBase = path
+        .basename(originalName, ext)
+        .replace(/[^a-zA-Z0-9_-]/g, "_")
+        .slice(0, 40);
+      const fileName = `${Date.now()}_${safeBase}${ext}`;
+      const dir = path.join(process.cwd(), "public", "audio");
+
+      await fs.mkdir(dir, { recursive: true });
+      const buffer = Buffer.from(await file.arrayBuffer());
+      await fs.writeFile(path.join(dir, fileName), buffer);
+      return `/audio/${fileName}`;
+    } catch (err) {
+      console.error("Error saving uploaded audio:", err);
+      // Fallback to existing or string input if upload fails
+    }
+  }
+
+  const audioTrackPath = String(formData.get("audioTrackPath") || "").trim();
+  if (audioTrackPath) {
+    return audioTrackPath;
+  }
+
+  return existingPath;
+}
+
 export async function createInvitationAction(
   _prevState: ActionResult | null,
   formData: FormData
 ): Promise<ActionResult> {
+  const audioTrackPath = await extractAudioPath(formData, "");
+
   const raw = {
     slug: String(formData.get("slug") || "").trim().toLowerCase(),
     personName: String(formData.get("personName") || "").trim(),
@@ -35,8 +81,9 @@ export async function createInvitationAction(
     giftAlias: String(formData.get("giftAlias") || "").trim(),
     giftCbu: String(formData.get("giftCbu") || "").trim(),
     giftHolderName: String(formData.get("giftHolderName") || "").trim(),
-    audioTrackPath: String(formData.get("audioTrackPath") || "/audio/LosAngelesAzules-LaCumbiadelInfinito.mp3").trim(),
+    audioTrackPath,
     footerPhrase: String(formData.get("footerPhrase") || "").trim(),
+    template: (String(formData.get("template") || "classic-gold").trim() as TemplateId),
     isDefault: formData.get("isDefault") === "on" || formData.get("isDefault") === "true",
   };
 
@@ -76,6 +123,9 @@ export async function updateInvitationAction(
   _prevState: ActionResult | null,
   formData: FormData
 ): Promise<ActionResult> {
+  const currentAudio = String(formData.get("currentAudioTrackPath") || "").trim();
+  const audioTrackPath = await extractAudioPath(formData, currentAudio);
+
   const raw = {
     slug: String(formData.get("slug") || "").trim().toLowerCase(),
     personName: String(formData.get("personName") || "").trim(),
@@ -92,8 +142,9 @@ export async function updateInvitationAction(
     giftAlias: String(formData.get("giftAlias") || "").trim(),
     giftCbu: String(formData.get("giftCbu") || "").trim(),
     giftHolderName: String(formData.get("giftHolderName") || "").trim(),
-    audioTrackPath: String(formData.get("audioTrackPath") || "/audio/LosAngelesAzules-LaCumbiadelInfinito.mp3").trim(),
+    audioTrackPath,
     footerPhrase: String(formData.get("footerPhrase") || "").trim(),
+    template: (String(formData.get("template") || "classic-gold").trim() as TemplateId),
     isDefault: formData.get("isDefault") === "on" || formData.get("isDefault") === "true",
   };
 
