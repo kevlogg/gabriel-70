@@ -7,7 +7,6 @@ import VenueCard from "@/components/invitation/VenueCard";
 import GiftCard from "@/components/invitation/GiftCard";
 import RsvpForm from "@/components/invitation/RsvpForm";
 import AudioController from "@/components/invitation/AudioController";
-import KpopIdolCharacter from "@/components/invitation/characters/KpopIdolCharacter";
 import { Sparkles, Music, Star, Heart, Ticket, Radio } from "lucide-react";
 
 interface TemplateProps {
@@ -117,8 +116,17 @@ export default function KpopTemplate({ invitation }: TemplateProps) {
             boxSizing: "border-box",
           }}
         >
-          {/* ─── HERO SECTION ─── */}
-          <section className="flex flex-col items-center gap-5 sm:gap-7 text-center py-2">
+          {/* ─── HERO SECTION WITH INTEGRATED K-POP IDOLS ─── */}
+          <section className="relative flex flex-col items-center gap-5 sm:gap-7 text-center py-4 w-full">
+            {/* Authentic Blackpink / K-Pop Idols cutout in concert lighting */}
+            <div className="absolute -bottom-12 -right-4 sm:right-0 md:-right-16 w-36 sm:w-60 md:w-80 pointer-events-none z-20 transition-transform duration-700 hover:scale-105">
+              <img
+                src="/images/characters/kpop_group.png"
+                alt="K-Pop Idols"
+                className="w-full h-auto drop-shadow-[0_20px_40px_rgba(236,72,153,0.55)] select-none"
+              />
+            </div>
+
             {/* Holographic Badge */}
             <div className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-gradient-to-r from-pink-500/30 via-purple-500/30 to-cyan-500/30 border border-pink-400/60 shadow-[0_0_20px_rgba(236,72,153,0.4)] backdrop-blur-md">
               <Sparkles size={16} className="text-pink-400 animate-spin" />
@@ -151,9 +159,6 @@ export default function KpopTemplate({ invitation }: TemplateProps) {
             >
               {invitation.headline}
             </h1>
-
-            {/* K-Pop Idol Character Illustration */}
-            <KpopIdolCharacter />
 
             {/* Neon Event Number */}
             {invitation.eventNumber && (
@@ -293,6 +298,11 @@ function KpopEnvelopeModal({
         className="group flex flex-col items-center gap-6 cursor-pointer border-none bg-transparent"
       >
         <div className="relative w-[340px] sm:w-[380px] h-[230px] rounded-3xl bg-gradient-to-br from-pink-900/60 via-purple-900/60 to-black/80 border-2 border-pink-400 shadow-[0_0_50px_rgba(236,72,153,0.4)] backdrop-blur-xl flex flex-col items-center justify-center p-6 text-center transform transition-transform group-hover:scale-105">
+          {/* Authentic K-Pop idols cutout peeking */}
+          <div className="absolute -top-12 -right-6 w-28 sm:w-36 h-auto pointer-events-none z-20">
+            <img src="/images/characters/kpop_group.png" alt="K-Pop Idols" className="w-full h-auto drop-shadow-xl" />
+          </div>
+
           <div className="absolute top-3 right-4 text-[10px] font-black uppercase text-pink-300 bg-pink-500/20 px-3 py-1 rounded-full border border-pink-400/40">
             ★ OFFICIAL LIGHTSTICK PASS ★
           </div>

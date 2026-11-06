@@ -7,7 +7,6 @@ import VenueCard from "@/components/invitation/VenueCard";
 import GiftCard from "@/components/invitation/GiftCard";
 import RsvpForm from "@/components/invitation/RsvpForm";
 import AudioController from "@/components/invitation/AudioController";
-import WoodyAndBuzzCharacter from "@/components/invitation/characters/WoodyAndBuzzCharacter";
 import { Rocket, Star, MapPin, Sparkles } from "lucide-react";
 
 interface TemplateProps {
@@ -116,8 +115,26 @@ export default function ToyStoryTemplate({ invitation }: TemplateProps) {
             boxSizing: "border-box",
           }}
         >
-          {/* ─── HERO SECTION ─── */}
-          <section className="flex flex-col items-center gap-5 sm:gap-7 text-center py-2">
+          {/* ─── HERO SECTION WITH INTEGRATED CHARACTERS ─── */}
+          <section className="relative flex flex-col items-center gap-5 sm:gap-7 text-center py-4 w-full">
+            {/* Buzz Lightyear authentic cutout flying across sky */}
+            <div className="absolute -top-10 -right-2 sm:right-2 md:-right-14 w-28 sm:w-44 md:w-56 pointer-events-none z-20 transform rotate-12 transition-transform duration-700 hover:rotate-6">
+              <img
+                src="/images/characters/buzz.png"
+                alt="Buzz Lightyear"
+                className="w-full h-auto drop-shadow-[0_15px_25px_rgba(0,0,0,0.3)] select-none"
+              />
+            </div>
+
+            {/* Woody authentic cutout standing proudly */}
+            <div className="absolute -bottom-10 -left-4 sm:left-2 md:-left-16 w-28 sm:w-44 md:w-56 pointer-events-none z-20 transition-transform duration-700 hover:scale-105">
+              <img
+                src="/images/characters/woody.png"
+                alt="Woody"
+                className="w-full h-auto drop-shadow-[0_18px_30px_rgba(0,0,0,0.35)] select-none"
+              />
+            </div>
+
             {/* Sheriff Badge Tag */}
             <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-amber-400 text-amber-950 font-black text-xs sm:text-sm uppercase tracking-widest shadow-md border-2 border-amber-500 animate-bounce">
               <Star size={18} className="fill-amber-950 text-amber-950" />
@@ -143,9 +160,6 @@ export default function ToyStoryTemplate({ invitation }: TemplateProps) {
             >
               {invitation.headline}
             </h1>
-
-            {/* Woody & Buzz Characters Illustration */}
-            <WoodyAndBuzzCharacter />
 
             {/* Huge Event Number with Cowboy/Rocket Flair */}
             {invitation.eventNumber && (
@@ -312,6 +326,16 @@ function ToyStoryEnvelopeModal({
         className="group flex flex-col items-center gap-6 cursor-pointer border-none bg-transparent"
       >
         <div className="relative w-[340px] sm:w-[380px] h-[230px] rounded-3xl bg-amber-100 border-4 border-amber-500 shadow-2xl flex flex-col items-center justify-center p-6 text-center transform transition-transform group-hover:scale-105">
+          {/* Authentic Buzz cutout peeking */}
+          <div className="absolute -top-12 -right-8 w-24 sm:w-28 h-auto pointer-events-none transform rotate-12 z-20">
+            <img src="/images/characters/buzz.png" alt="Buzz" className="w-full h-auto drop-shadow-xl" />
+          </div>
+
+          {/* Authentic Woody cutout peeking */}
+          <div className="absolute -bottom-8 -left-8 w-24 sm:w-28 h-auto pointer-events-none z-20">
+            <img src="/images/characters/woody.png" alt="Woody" className="w-full h-auto drop-shadow-xl" />
+          </div>
+
           <div className="absolute top-3 left-4 text-xs font-black uppercase text-amber-700 bg-amber-200 px-3 py-1 rounded-full">
             ⭐ Correo de Juguetes
           </div>

@@ -7,7 +7,6 @@ import VenueCard from "@/components/invitation/VenueCard";
 import GiftCard from "@/components/invitation/GiftCard";
 import RsvpForm from "@/components/invitation/RsvpForm";
 import AudioController from "@/components/invitation/AudioController";
-import FootballCharacter from "@/components/invitation/characters/FootballCharacter";
 import { Trophy, MapPin, Sparkles, CheckCircle2 } from "lucide-react";
 
 interface TemplateProps {
@@ -113,8 +112,17 @@ export default function FutbolInfantilTemplate({ invitation }: TemplateProps) {
             boxSizing: "border-box",
           }}
         >
-          {/* ─── HERO SECTION ─── */}
-          <section className="flex flex-col items-center gap-5 sm:gap-7 text-center py-2">
+          {/* ─── HERO SECTION WITH INTEGRATED CHAMPION CHARACTER ─── */}
+          <section className="relative flex flex-col items-center gap-5 sm:gap-7 text-center py-4 w-full">
+            {/* Authentic Messi Champion Celebration cutout */}
+            <div className="absolute -bottom-10 -right-4 sm:right-2 md:-right-16 w-32 sm:w-48 md:w-60 pointer-events-none z-20 transition-transform duration-700 hover:scale-105">
+              <img
+                src="/images/characters/messi.png"
+                alt="Campeón de Fútbol"
+                className="w-full h-auto drop-shadow-[0_20px_35px_rgba(0,0,0,0.45)] select-none"
+              />
+            </div>
+
             {/* Matchday tag */}
             <div className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-amber-400 text-gray-950 font-black text-xs sm:text-sm uppercase tracking-widest shadow-lg border-2 border-amber-300">
               <span>⚽ ¡HOY SE JUEGA EL GRAN PARTIDO! ⚽</span>
@@ -138,9 +146,6 @@ export default function FutbolInfantilTemplate({ invitation }: TemplateProps) {
             >
               {invitation.headline}
             </h1>
-
-            {/* Football Champion Character Illustration */}
-            <FootballCharacter jerseyNumber={invitation.eventNumber || "10"} />
 
             {/* Jersey Number */}
             {invitation.eventNumber && (
@@ -284,6 +289,11 @@ function FootballEnvelopeModal({
         className="group flex flex-col items-center gap-6 cursor-pointer border-none bg-transparent"
       >
         <div className="relative w-[340px] sm:w-[380px] h-[230px] rounded-3xl bg-white border-4 border-amber-400 shadow-2xl flex flex-col items-center justify-center p-6 text-center transform transition-transform group-hover:scale-105">
+          {/* Authentic Messi cutout celebrating */}
+          <div className="absolute -top-12 -right-8 w-24 sm:w-28 h-auto pointer-events-none z-20">
+            <img src="/images/characters/messi.png" alt="Messi Campeón" className="w-full h-auto drop-shadow-xl" />
+          </div>
+
           <div className="absolute top-3 left-4 text-xs font-black uppercase text-white bg-emerald-700 px-3 py-1 rounded-full">
             ⚽ TICKET OFICIAL DE PARTIDO
           </div>

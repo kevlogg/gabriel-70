@@ -7,7 +7,6 @@ import VenueCard from "@/components/invitation/VenueCard";
 import GiftCard from "@/components/invitation/GiftCard";
 import RsvpForm from "@/components/invitation/RsvpForm";
 import AudioController from "@/components/invitation/AudioController";
-import PrincessCharacter from "@/components/invitation/characters/PrincessCharacter";
 import { Crown, Sparkles, Heart, Castle, Clock } from "lucide-react";
 
 interface TemplateProps {
@@ -125,8 +124,26 @@ export default function PrincesasTemplate({ invitation }: TemplateProps) {
             boxSizing: "border-box",
           }}
         >
-          {/* ─── HERO SECTION ─── */}
-          <section className="flex flex-col items-center gap-5 sm:gap-7 text-center py-2">
+          {/* ─── HERO SECTION WITH INTEGRATED PRINCESSES ─── */}
+          <section className="relative flex flex-col items-center gap-5 sm:gap-7 text-center py-4 w-full">
+            {/* Authentic Cinderella cutout floating on top-left */}
+            <div className="absolute -top-12 -left-4 sm:left-2 md:-left-16 w-28 sm:w-44 md:w-56 pointer-events-none z-20 transform -rotate-6 transition-transform duration-700 hover:rotate-0">
+              <img
+                src="/images/characters/cinderella.png"
+                alt="Cenicienta"
+                className="w-full h-auto drop-shadow-[0_15px_30px_rgba(244,114,182,0.4)] select-none"
+              />
+            </div>
+
+            {/* Authentic Disney Princesses group cutout on bottom-right */}
+            <div className="absolute -bottom-12 -right-4 sm:right-0 md:-right-16 w-36 sm:w-56 md:w-72 pointer-events-none z-20 transition-transform duration-700 hover:scale-105">
+              <img
+                src="/images/characters/princesses.png"
+                alt="Princesas Disney"
+                className="w-full h-auto drop-shadow-[0_18px_35px_rgba(244,114,182,0.45)] select-none"
+              />
+            </div>
+
             {/* Fairy tale ornament */}
             <div className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-white/90 border border-pink-300 shadow-sm text-pink-700 font-bold text-xs sm:text-sm tracking-wider uppercase">
               <Crown size={18} className="text-amber-500 fill-amber-400" />
@@ -152,9 +169,6 @@ export default function PrincesasTemplate({ invitation }: TemplateProps) {
             >
               {invitation.headline}
             </h1>
-
-            {/* Fairytale Princess Character Illustration */}
-            <PrincessCharacter />
 
             {/* Princess Tiara Number */}
             {invitation.eventNumber && (
@@ -300,6 +314,16 @@ function PrincessEnvelopeModal({
         className="group flex flex-col items-center gap-6 cursor-pointer border-none bg-transparent"
       >
         <div className="relative w-[340px] sm:w-[380px] h-[230px] rounded-3xl bg-white border-4 border-pink-300 shadow-2xl flex flex-col items-center justify-center p-6 text-center transform transition-transform group-hover:scale-105">
+          {/* Authentic Cinderella cutout peeking */}
+          <div className="absolute -top-12 -left-8 w-24 sm:w-28 h-auto pointer-events-none transform -rotate-12 z-20">
+            <img src="/images/characters/cinderella.png" alt="Cenicienta" className="w-full h-auto drop-shadow-xl" />
+          </div>
+
+          {/* Authentic Princesses group cutout peeking */}
+          <div className="absolute -bottom-10 -right-8 w-28 sm:w-36 h-auto pointer-events-none z-20">
+            <img src="/images/characters/princesses.png" alt="Princesas" className="w-full h-auto drop-shadow-xl" />
+          </div>
+
           <div className="absolute top-3 left-4 text-xs font-bold uppercase text-pink-700 bg-pink-100 px-3 py-1 rounded-full border border-pink-200">
             👑 Decreto Real
           </div>
