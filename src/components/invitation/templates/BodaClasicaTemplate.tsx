@@ -434,36 +434,42 @@ function ClasicaEnvelopeModal({
       >
         {/* Envelope Body */}
         <div
-          className="relative w-full aspect-[16/11] rounded-3xl bg-[#141418] border-2 border-[#D4AF37]/50 shadow-[0_25px_60px_rgba(0,0,0,0.85)] flex flex-col items-center justify-center p-6 text-center transform transition-transform group-hover:scale-[1.02] duration-300"
+          className="relative w-full max-w-sm sm:max-w-md min-h-[310px] rounded-3xl bg-[#141418] border-2 border-[#D4AF37]/50 shadow-[0_25px_60px_rgba(0,0,0,0.85)] flex flex-col items-center justify-between p-6 sm:p-8 text-center transform transition-transform group-hover:scale-[1.02] duration-300"
           style={{
             backgroundImage:
               "radial-gradient(circle at 50% 10%, rgba(212,175,55,0.12), transparent 70%)",
           }}
         >
-          <div className="absolute top-3 left-4 text-xs font-serif text-[#D4AF37]/80 tracking-[0.25em] uppercase font-light">
-            ✦ BLACK TIE
+          {/* Header block with badge, subtitle and headline */}
+          <div className="flex flex-col items-center gap-2 w-full pt-1">
+            <div className="inline-flex items-center gap-2 text-xs font-serif text-[#F5E6C8] uppercase tracking-[0.25em] font-light bg-black/60 border border-[#D4AF37]/40 px-4 py-1.5 rounded-full shadow-xs">
+              <span>✦</span>
+              <span>BLACK TIE · NUESTRA BODA</span>
+              <span>✦</span>
+            </div>
+
+            <div className="text-xs font-sans uppercase tracking-[0.25em] text-[#D4AF37] font-semibold mt-1">
+              Invitación de Boda
+            </div>
+
+            <h2 className="font-serif text-3xl sm:text-4xl text-[#FAF5EE] leading-tight font-light tracking-wide">
+              {headline}
+            </h2>
+
+            <p className="text-xs font-serif italic text-[#E2D7C5] max-w-[28ch] mt-1">
+              Nos complace invitarte a la celebración de nuestra unión matrimonial
+            </p>
           </div>
-
-          <div className="text-xs font-sans uppercase tracking-[0.25em] text-[#D4AF37] font-semibold mt-2">
-            Invitación de Boda
-          </div>
-
-          <h2 className="font-serif text-3xl sm:text-4xl text-[#FAF5EE] my-2 font-light tracking-wide">
-            {headline}
-          </h2>
-
-          <p className="text-xs font-serif italic text-[#E2D7C5] max-w-[28ch]">
-            Nos complace invitarte a la celebración de nuestra unión matrimonial
-          </p>
 
           {/* Champagne Gold seal button */}
-          <div className="mt-4 relative flex items-center justify-center">
+          <div className="my-3 relative flex items-center justify-center shrink-0">
             <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#F5E6C8] via-[#D4AF37] to-[#856D28] border-2 border-[#FFF] shadow-[0_0_20px_rgba(212,175,55,0.4)] flex flex-col items-center justify-center text-black transform group-hover:scale-110 transition-transform duration-300">
               <span className="text-xl">💍</span>
             </div>
           </div>
 
-          <span className="text-[11px] font-sans font-bold text-[#D4AF37] uppercase tracking-[0.2em] mt-3">
+          {/* Footer CTA */}
+          <span className="text-[11px] font-sans font-bold text-[#D4AF37] uppercase tracking-[0.2em]">
             Hacé clic en el sello de oro ✦
           </span>
         </div>

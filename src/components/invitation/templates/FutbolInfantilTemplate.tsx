@@ -289,32 +289,38 @@ function FootballEnvelopeModal({
         onClick={handleOpen}
         className="group flex flex-col items-center gap-6 cursor-pointer border-none bg-transparent"
       >
-        <div className="relative w-[340px] sm:w-[380px] h-[230px] rounded-3xl bg-white border-4 border-amber-400 shadow-2xl flex flex-col items-center justify-center p-6 text-center transform transition-transform group-hover:scale-105">
+        <div className="relative w-[340px] sm:w-[400px] min-h-[285px] rounded-3xl bg-white border-4 border-amber-400 shadow-2xl flex flex-col items-center justify-between p-6 sm:p-7 text-center transform transition-transform group-hover:scale-105">
           {/* Authentic Messi cutout celebrating */}
-          <div className="absolute -top-12 -right-8 w-24 sm:w-28 h-auto pointer-events-none z-20">
+          <div className="absolute -top-12 -right-6 w-24 sm:w-28 h-auto pointer-events-none z-20">
             <img src="/images/characters/messi.png" alt="Messi Campeón" className="w-full h-auto drop-shadow-xl" />
           </div>
 
-          <div className="absolute top-3 left-4 text-xs font-black uppercase text-white bg-emerald-700 px-3 py-1 rounded-full">
-            ⚽ TICKET OFICIAL DE PARTIDO
+          {/* Top Badge & Header */}
+          <div className="flex flex-col items-center gap-2 w-full pt-1">
+            <div className="inline-flex items-center gap-1.5 text-[11px] sm:text-xs font-black uppercase text-white bg-emerald-700 px-4 py-1.5 rounded-full shadow-sm tracking-wider border border-emerald-600">
+              <span>⚽</span>
+              <span>TICKET OFICIAL DE PARTIDO</span>
+            </div>
+
+            <p className="text-xs font-bold text-emerald-800 uppercase tracking-widest mt-1">
+              Pase Oficial para la Celebración de
+            </p>
+
+            <h2 className="text-3xl sm:text-4xl font-black text-emerald-950 leading-tight">
+              {personName}
+            </h2>
           </div>
 
-          <p className="text-xs font-bold text-emerald-800 uppercase tracking-widest mt-2">
-            Pase Oficial para la Celebración de
-          </p>
-
-          <h2 className="text-3xl sm:text-4xl font-black text-emerald-950 my-1">
-            {personName}
-          </h2>
-
-          <div className="mt-2 w-16 h-16 rounded-full bg-emerald-600 border-3 border-amber-400 shadow-lg flex flex-col items-center justify-center animate-bounce">
+          {/* Middle Button */}
+          <div className="my-2.5 w-16 h-16 rounded-full bg-emerald-600 border-3 border-amber-400 shadow-lg flex flex-col items-center justify-center animate-bounce shrink-0">
             <span className="text-2xl leading-none">⚽</span>
             <span className="text-[10px] font-black text-white leading-none mt-0.5">
               N° {eventNumber || "10"}
             </span>
           </div>
 
-          <span className="text-xs font-black text-emerald-800 uppercase tracking-wider mt-3 underline">
+          {/* Footer CTA */}
+          <span className="text-xs font-black text-emerald-800 uppercase tracking-wider underline">
             ¡Tocá la pelota para entrar a la cancha! 🏟️
           </span>
         </div>

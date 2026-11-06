@@ -298,32 +298,39 @@ function KpopEnvelopeModal({
         onClick={handleOpen}
         className="group flex flex-col items-center gap-6 cursor-pointer border-none bg-transparent"
       >
-        <div className="relative w-[340px] sm:w-[380px] h-[230px] rounded-3xl bg-gradient-to-br from-pink-900/60 via-purple-900/60 to-black/80 border-2 border-pink-400 shadow-[0_0_50px_rgba(236,72,153,0.4)] backdrop-blur-xl flex flex-col items-center justify-center p-6 text-center transform transition-transform group-hover:scale-105">
+        <div className="relative w-[340px] sm:w-[400px] min-h-[285px] rounded-3xl bg-gradient-to-br from-pink-900/60 via-purple-900/60 to-black/80 border-2 border-pink-400 shadow-[0_0_50px_rgba(236,72,153,0.4)] backdrop-blur-xl flex flex-col items-center justify-between p-6 sm:p-7 text-center transform transition-transform group-hover:scale-105">
           {/* Authentic K-Pop idols cutout peeking */}
           <div className="absolute -top-12 -right-6 w-28 sm:w-36 h-auto pointer-events-none z-20">
             <img src="/images/characters/kpop_group.png" alt="K-Pop Idols" className="w-full h-auto drop-shadow-xl" />
           </div>
 
-          <div className="absolute top-3 right-4 text-[10px] font-black uppercase text-pink-300 bg-pink-500/20 px-3 py-1 rounded-full border border-pink-400/40">
-            ★ OFFICIAL LIGHTSTICK PASS ★
+          {/* Top Badge & Header */}
+          <div className="flex flex-col items-center gap-2 w-full pt-1">
+            <div className="inline-flex items-center gap-1.5 text-[10px] sm:text-[11px] font-black uppercase text-pink-300 bg-pink-500/20 px-4 py-1.5 rounded-full shadow-sm tracking-widest border border-pink-400/40">
+              <span>★</span>
+              <span>OFFICIAL LIGHTSTICK PASS</span>
+              <span>★</span>
+            </div>
+
+            <p className="text-[11px] font-bold text-purple-200 uppercase tracking-widest mt-1">
+              Invitación Exclusiva
+            </p>
+
+            <h2 className="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-200 via-white to-pink-400 leading-tight">
+              {personName}
+            </h2>
           </div>
 
-          <p className="text-[11px] font-bold text-purple-200 uppercase tracking-widest mt-2">
-            Invitación Exclusiva
-          </p>
-
-          <h2 className="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-200 via-white to-pink-400 my-1">
-            {personName}
-          </h2>
-
-          <div className="mt-2 w-16 h-16 rounded-full bg-gradient-to-tr from-pink-500 to-purple-500 border-2 border-white shadow-[0_0_20px_rgba(236,72,153,0.8)] flex flex-col items-center justify-center animate-pulse">
+          {/* Middle Button */}
+          <div className="my-2.5 w-16 h-16 rounded-full bg-gradient-to-tr from-pink-500 to-purple-500 border-2 border-white shadow-[0_0_20px_rgba(236,72,153,0.8)] flex flex-col items-center justify-center animate-pulse shrink-0">
             <Heart size={22} className="fill-white text-white" />
             <span className="text-[10px] font-black text-white leading-none">
               {eventNumber || "★"}
             </span>
           </div>
 
-          <span className="text-xs font-bold text-pink-300 uppercase tracking-wider mt-3 underline">
+          {/* Footer CTA */}
+          <span className="text-xs font-bold text-pink-300 uppercase tracking-wider underline">
             Tocá el corazón para ingresar al show ✨
           </span>
         </div>

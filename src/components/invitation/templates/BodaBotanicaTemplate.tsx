@@ -481,37 +481,42 @@ function BotanicaEnvelopeModal({
       >
         {/* Envelope Paper Container */}
         <div
-          className="relative w-full aspect-[16/11] rounded-3xl bg-[#FAF8F5] border-2 border-[#556B2F]/35 shadow-[0_25px_60px_rgba(85,107,47,0.25)] flex flex-col items-center justify-center p-6 text-center transform transition-transform group-hover:scale-[1.02] duration-300"
+          className="relative w-full max-w-sm sm:max-w-md min-h-[310px] rounded-3xl bg-[#FAF8F5] border-2 border-[#556B2F]/35 shadow-[0_25px_60px_rgba(85,107,47,0.25)] flex flex-col items-center justify-between p-6 sm:p-8 text-center transform transition-transform group-hover:scale-[1.02] duration-300"
           style={{
             backgroundImage:
               "radial-gradient(circle at 50% 10%, rgba(85,107,47,0.06), transparent 70%)",
           }}
         >
-          {/* Subtle botanical corner wreaths */}
-          <div className="absolute top-3 left-4 text-xs font-serif text-[#556B2F]/80 tracking-widest uppercase">
-            🌿 Nuestra Boda
+          {/* Header block with badge, subtitle and headline */}
+          <div className="flex flex-col items-center gap-2 w-full pt-1">
+            <div className="inline-flex items-center gap-2 text-xs font-serif text-[#4A5D23] uppercase tracking-[0.2em] font-semibold bg-[#EAF0E8] border border-[#556B2F]/30 px-4 py-1.5 rounded-full shadow-xs">
+              <span>🌿</span>
+              <span>Nuestra Boda</span>
+              <span>🌿</span>
+            </div>
+
+            <div className="text-xs font-sans uppercase tracking-[0.2em] text-[#556B2F] font-bold mt-1">
+              Invitación Especial
+            </div>
+
+            <h2 className="font-serif text-3xl sm:text-4xl text-[#2D3E1E] leading-tight font-normal">
+              {headline}
+            </h2>
+
+            <p className="text-xs font-serif italic text-[#4A5D23] max-w-[28ch] mt-1">
+              Con inmensa alegría queremos invitarte a compartir nuestro gran día
+            </p>
           </div>
-
-          <div className="text-xs font-sans uppercase tracking-[0.2em] text-[#556B2F] font-bold mt-2">
-            Invitación Especial
-          </div>
-
-          <h2 className="font-serif text-3xl sm:text-4xl text-[#2D3E1E] my-2 font-normal">
-            {headline}
-          </h2>
-
-          <p className="text-xs font-serif italic text-[#4A5D23] max-w-[28ch]">
-            Con inmensa alegría queremos invitarte a compartir nuestro gran día
-          </p>
 
           {/* Eucalyptus wax seal button */}
-          <div className="mt-4 relative flex items-center justify-center">
+          <div className="my-3 relative flex items-center justify-center shrink-0">
             <div className="w-16 h-16 rounded-full bg-[#4A5D23] border-2 border-[#D4AF37] shadow-xl flex flex-col items-center justify-center text-white transform group-hover:scale-110 transition-transform duration-300">
               <span className="text-xl">🌿</span>
             </div>
           </div>
 
-          <span className="text-[11px] font-sans font-bold text-[#4A5D23] uppercase tracking-wider mt-3">
+          {/* Footer CTA */}
+          <span className="text-[11px] font-sans font-bold text-[#4A5D23] uppercase tracking-wider">
             Hacé clic en el sello para abrir ✉️
           </span>
         </div>

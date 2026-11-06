@@ -314,7 +314,7 @@ function PrincessEnvelopeModal({
         onClick={handleOpen}
         className="group flex flex-col items-center gap-6 cursor-pointer border-none bg-transparent"
       >
-        <div className="relative w-[340px] sm:w-[380px] h-[230px] rounded-3xl bg-white border-4 border-pink-300 shadow-2xl flex flex-col items-center justify-center p-6 text-center transform transition-transform group-hover:scale-105">
+        <div className="relative w-[340px] sm:w-[400px] min-h-[285px] rounded-3xl bg-white border-4 border-pink-300 shadow-2xl flex flex-col items-center justify-between p-6 sm:p-7 text-center transform transition-transform group-hover:scale-105">
           {/* Authentic Cinderella cutout peeking */}
           <div className="absolute -top-12 -left-8 w-24 sm:w-28 h-auto pointer-events-none transform -rotate-12 z-20">
             <img src="/images/characters/cinderella.png" alt="Cenicienta" className="w-full h-auto drop-shadow-xl" />
@@ -325,29 +325,35 @@ function PrincessEnvelopeModal({
             <img src="/images/characters/princesses.png" alt="Princesas" className="w-full h-auto drop-shadow-xl" />
           </div>
 
-          <div className="absolute top-3 left-4 text-xs font-bold uppercase text-pink-700 bg-pink-100 px-3 py-1 rounded-full border border-pink-200">
-            👑 Decreto Real
+          {/* Top Badge & Header */}
+          <div className="flex flex-col items-center gap-2 w-full pt-1">
+            <div className="inline-flex items-center gap-1.5 text-[11px] sm:text-xs font-bold uppercase text-pink-700 bg-pink-100 px-4 py-1.5 rounded-full shadow-sm tracking-wider border border-pink-200">
+              <span>👑</span>
+              <span>Decreto Real</span>
+            </div>
+
+            <p className="text-xs font-bold text-pink-800 uppercase tracking-widest mt-1">
+              Invitación de Honor a la Fiesta de
+            </p>
+
+            <h2
+              className="text-3xl sm:text-4xl font-bold text-pink-950 leading-tight"
+              style={{ fontFamily: "var(--font-cormorant), Georgia, serif" }}
+            >
+              Princesa {personName}
+            </h2>
           </div>
 
-          <p className="text-xs font-bold text-pink-800 uppercase tracking-widest mt-2">
-            Invitación de Honor a la Fiesta de
-          </p>
-
-          <h2
-            className="text-3xl sm:text-4xl font-bold text-pink-950 my-1"
-            style={{ fontFamily: "var(--font-cormorant), Georgia, serif" }}
-          >
-            Princesa {personName}
-          </h2>
-
-          <div className="mt-2 w-16 h-16 rounded-full bg-gradient-to-tr from-amber-400 to-amber-200 border-2 border-amber-500 shadow-lg flex flex-col items-center justify-center animate-pulse">
+          {/* Middle Button */}
+          <div className="my-2.5 w-16 h-16 rounded-full bg-gradient-to-tr from-amber-400 to-amber-200 border-2 border-amber-500 shadow-lg flex flex-col items-center justify-center animate-pulse shrink-0">
             <Crown size={24} className="text-amber-800 fill-amber-700" />
             <span className="text-[10px] font-black text-amber-950 leading-none">
               {eventNumber || "👑"}
             </span>
           </div>
 
-          <span className="text-xs font-bold text-pink-700 uppercase tracking-wider mt-3 underline">
+          {/* Footer CTA */}
+          <span className="text-xs font-bold text-pink-700 uppercase tracking-wider underline">
             Tocá el sello real para abrir el sobre ✨
           </span>
         </div>

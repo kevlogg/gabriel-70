@@ -326,7 +326,7 @@ function ToyStoryEnvelopeModal({
         onClick={handleOpen}
         className="group flex flex-col items-center gap-6 cursor-pointer border-none bg-transparent"
       >
-        <div className="relative w-[340px] sm:w-[380px] h-[230px] rounded-3xl bg-amber-100 border-4 border-amber-500 shadow-2xl flex flex-col items-center justify-center p-6 text-center transform transition-transform group-hover:scale-105">
+        <div className="relative w-[340px] sm:w-[400px] min-h-[285px] rounded-3xl bg-amber-100 border-4 border-amber-500 shadow-2xl flex flex-col items-center justify-between p-6 sm:p-7 text-center transform transition-transform group-hover:scale-105">
           {/* Authentic Buzz cutout peeking */}
           <div className="absolute -top-12 -right-8 w-24 sm:w-28 h-auto pointer-events-none transform rotate-12 z-20">
             <img src="/images/characters/buzz.png" alt="Buzz" className="w-full h-auto drop-shadow-xl" />
@@ -337,26 +337,32 @@ function ToyStoryEnvelopeModal({
             <img src="/images/characters/woody.png" alt="Woody" className="w-full h-auto drop-shadow-xl" />
           </div>
 
-          <div className="absolute top-3 left-4 text-xs font-black uppercase text-amber-700 bg-amber-200 px-3 py-1 rounded-full">
-            ⭐ Correo de Juguetes
+          {/* Top Badge & Header */}
+          <div className="flex flex-col items-center gap-2 w-full pt-1">
+            <div className="inline-flex items-center gap-1.5 text-[11px] sm:text-xs font-black uppercase text-amber-900 bg-amber-300 px-4 py-1.5 rounded-full shadow-sm tracking-wider border border-amber-400">
+              <span>⭐</span>
+              <span>Correo de Juguetes</span>
+            </div>
+
+            <p className="text-xs font-bold text-amber-800 uppercase tracking-widest mt-1">
+              ¡Invitación Especial para la Misión de!
+            </p>
+
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-blue-950 leading-tight">
+              {personName}
+            </h2>
           </div>
 
-          <p className="text-xs font-bold text-amber-800 uppercase tracking-widest mt-2">
-            ¡Invitación Especial para la Misión de!
-          </p>
-
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-blue-950 my-1">
-            {personName}
-          </h2>
-
-          <div className="mt-2 w-16 h-16 rounded-full bg-amber-400 border-3 border-amber-600 shadow-lg flex flex-col items-center justify-center animate-bounce">
+          {/* Middle Button */}
+          <div className="my-2.5 w-16 h-16 rounded-full bg-amber-400 border-3 border-amber-600 shadow-lg flex flex-col items-center justify-center animate-bounce shrink-0">
             <Star size={24} className="fill-amber-900 text-amber-900" />
             <span className="text-[10px] font-black text-amber-950 leading-none">
               {eventNumber || "★"}
             </span>
           </div>
 
-          <span className="text-xs font-black text-blue-800 uppercase tracking-wider mt-3 underline">
+          {/* Footer CTA */}
+          <span className="text-xs font-black text-blue-800 uppercase tracking-wider underline">
             ¡Tocá la estrella para abrir la aventura! 🚀
           </span>
         </div>
