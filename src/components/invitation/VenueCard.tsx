@@ -4,27 +4,104 @@ import type { TemplateId } from "@/lib/schemas/invitation.schema";
 
 interface VenueCardProps {
   venue: VenueConfig;
+  targetDate?: string;
+  badgeText?: string;
   eventDateText?: string;
   eventTimeText?: string;
-  badgeText?: string;
   slug?: string;
   theme?: TemplateId;
 }
 
+function parseVenueDateTime(
+  targetDate?: string,
+  badgeText?: string,
+  explicitDate?: string,
+  explicitTime?: string
+) {
+  if (explicitDate && explicitTime) {
+    return { date: explicitDate, time: explicitTime };
+  }
+
+  // 1. Try parsing from badgeText (e.g. "Sábado · 7 de Noviembre · 20:30 hs")
+  if (badgeText && badgeText.includes("·")) {
+    const parts = badgeText.split("·").map((s) => s.trim());
+    if (parts.length >= 3) {
+      return {
+        date: explicitDate || `${parts[0]} ${parts[1]}`, // "Sábado 7 de Noviembre"
+        time: explicitTime || parts[2], // "20:30 hs"
+      };
+    } else if (parts.length === 2) {
+      return {
+        date: explicitDate || parts[0],
+        time: explicitTime || parts[1],
+      };
+    }
+  }
+
+  // 2. Try parsing from targetDate (e.g. "2026-11-07T20:30:00-03:00")
+  if (targetDate) {
+    try {
+      const cleanIso = targetDate.replace("Z", "").split("+")[0].split("-03:00")[0];
+      const [datePart, timePart] = cleanIso.split("T");
+      if (datePart) {
+        const [year, month, day] = datePart.split("-").map(Number);
+        const [hour, min] = (timePart || "20:00").split(":").map(Number);
+        const d = new Date(year, month - 1, day, hour, min);
+
+        const days = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+        const months = [
+          "Enero",
+          "Febrero",
+          "Marzo",
+          "Abril",
+          "Mayo",
+          "Junio",
+          "Julio",
+          "Agosto",
+          "Septiembre",
+          "Octubre",
+          "Noviembre",
+          "Diciembre",
+        ];
+
+        const dayName = days[d.getDay()] || "";
+        const monthName = months[d.getMonth()] || "";
+        const formattedDate = `${dayName} ${day} de ${monthName}`;
+        const formattedTime = `${String(hour).padStart(2, "0")}:${String(min).padStart(2, "0")} hs`;
+
+        return {
+          date: explicitDate || formattedDate,
+          time: explicitTime || formattedTime,
+        };
+      }
+    } catch {
+      // ignore
+    }
+  }
+
+  return {
+    date: explicitDate || badgeText || "Fecha a confirmar",
+    time: explicitTime || "20:30 hs",
+  };
+}
+
 export default function VenueCard({
   venue,
-  eventDateText = "Sábado 7 de Noviembre",
-  eventTimeText = "20:30 hs",
+  targetDate,
   badgeText,
+  eventDateText,
+  eventTimeText,
   slug,
   theme = "classic-gold",
 }: VenueCardProps) {
-  const displayDate =
-    eventDateText ||
-    (badgeText ? badgeText.split("·")[1]?.trim() || badgeText : "Fecha a confirmar");
-  const displayTime =
-    eventTimeText ||
-    (badgeText ? badgeText.split("·")[2]?.trim() || "Puntual" : "20:30 hs");
+  const { date: displayDate, time: displayTime } = parseVenueDateTime(
+    targetDate,
+    badgeText,
+    eventDateText,
+    eventTimeText
+  );
+
+  const cleanDisplayTime = displayTime.replace(/\(?puntual\)?/gi, "").trim();
 
   const isToyStory = theme === "toy-story";
   const isKpop = theme === "k-pop";
@@ -202,7 +279,7 @@ export default function VenueCard({
               <span>⏰ Horario importante</span>
             </span>
             <span className="font-black text-xl sm:text-2xl tracking-tight flex items-center gap-1.5">
-              {displayTime}
+              {cleanDisplayTime || displayTime}
               <span className="text-xs font-semibold uppercase opacity-75">
                 (Puntual)
               </span>

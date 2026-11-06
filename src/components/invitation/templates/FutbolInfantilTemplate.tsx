@@ -196,6 +196,7 @@ export default function FutbolInfantilTemplate({ invitation }: TemplateProps) {
             </div>
             <VenueCard
               venue={venueConfig}
+              targetDate={invitation.targetDate}
               badgeText={invitation.badgeText}
               slug={invitation.slug}
               theme="futbol-infantil"

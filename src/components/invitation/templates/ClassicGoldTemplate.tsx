@@ -267,6 +267,7 @@ export default function ClassicGoldTemplate({ invitation }: TemplateProps) {
             />
             <VenueCard
               venue={venueConfig}
+              targetDate={invitation.targetDate}
               badgeText={invitation.badgeText}
               slug={invitation.slug}
               theme="classic-gold"

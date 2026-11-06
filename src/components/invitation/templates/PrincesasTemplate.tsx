@@ -218,6 +218,7 @@ export default function PrincesasTemplate({ invitation }: TemplateProps) {
             </div>
             <VenueCard
               venue={venueConfig}
+              targetDate={invitation.targetDate}
               badgeText={invitation.badgeText}
               slug={invitation.slug}
               theme="princesas"

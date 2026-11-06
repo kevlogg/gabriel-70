@@ -206,6 +206,7 @@ export default function KpopTemplate({ invitation }: TemplateProps) {
             </div>
             <VenueCard
               venue={venueConfig}
+              targetDate={invitation.targetDate}
               badgeText={invitation.badgeText}
               slug={invitation.slug}
               theme="k-pop"

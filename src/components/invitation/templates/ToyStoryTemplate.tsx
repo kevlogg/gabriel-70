@@ -210,6 +210,7 @@ export default function ToyStoryTemplate({ invitation }: TemplateProps) {
             </div>
             <VenueCard
               venue={venueConfig}
+              targetDate={invitation.targetDate}
               badgeText={invitation.badgeText}
               slug={invitation.slug}
               theme="toy-story"
