@@ -8,6 +8,7 @@ import GiftCard from "@/components/invitation/GiftCard";
 import RsvpForm from "@/components/invitation/RsvpForm";
 import AudioController from "@/components/invitation/AudioController";
 import PhotoCarousel, { parseCarouselSlides } from "@/components/invitation/PhotoCarousel";
+import FloatingRing3D from "@/components/invitation/FloatingRing3D";
 import { Sun, Heart } from "lucide-react";
 
 interface TemplateProps {
@@ -75,6 +76,9 @@ export default function BodaBohoTemplate({ invitation }: TemplateProps) {
       {invitation.audioTrackPath && (
         <AudioController src={invitation.audioTrackPath} isEnabled={isOpened} />
       )}
+
+      {/* 3D Floating Diamond Ring (Falls and rotates on scroll) */}
+      {isOpened && <FloatingRing3D theme="boda-boho" />}
 
       {/* ─── MAIN BOHO SUNSET CONTENT ─── */}
       <main
