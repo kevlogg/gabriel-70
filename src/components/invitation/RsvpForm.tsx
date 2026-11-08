@@ -217,40 +217,66 @@ export default function RsvpForm({
               <div
                 className={`flex items-center rounded-2xl border-2 p-1 ${
                   isKpop
-                    ? "border-pink-500/40 bg-white/10"
+                    ? "border-pink-500/40 bg-white/10 text-white"
                     : isToyStory
-                    ? "border-blue-300 bg-sky-50"
+                    ? "border-blue-300 bg-sky-50 text-blue-950"
                     : isPrincess
-                    ? "border-pink-300 bg-pink-50/50"
+                    ? "border-pink-300 bg-pink-50/50 text-pink-950"
                     : isFootball
-                    ? "border-emerald-400 bg-emerald-50/50"
-                    : "border-[rgba(197,155,39,0.35)] bg-white"
+                    ? "border-emerald-400 bg-emerald-50/50 text-emerald-950"
+                    : isClasica
+                    ? "border-[#D4AF37]/50 bg-black/70 text-[#FAF5EE] shadow-[0_0_12px_rgba(212,175,55,0.2)]"
+                    : isBotanica
+                    ? "border-[#556B2F]/30 bg-white text-[#2D3E1E]"
+                    : isBoho
+                    ? "border-[#C86D51]/30 bg-white text-[#6D2B19]"
+                    : "border-[rgba(197,155,39,0.35)] bg-white text-[var(--dark-brown)]"
                 }`}
               >
                 <button
                   type="button"
                   onClick={() => setCompanionsCount((prev) => Math.max(0, prev - 1))}
                   disabled={companionsCount === 0}
-                  className="w-10 h-10 flex items-center justify-center font-bold text-lg rounded-xl hover:bg-black/10 disabled:opacity-30 cursor-pointer disabled:cursor-not-allowed"
+                  className={`w-10 h-10 flex items-center justify-center font-bold text-lg rounded-xl transition-all cursor-pointer disabled:cursor-not-allowed disabled:opacity-30 ${
+                    isClasica
+                      ? "text-[#D4AF37] hover:bg-white/10 active:scale-95"
+                      : isBotanica
+                      ? "text-[#556B2F] hover:bg-black/5"
+                      : isBoho
+                      ? "text-[#C86D51] hover:bg-black/5"
+                      : "hover:bg-black/10"
+                  }`}
                   aria-label="Restar integrante"
                 >
                   <Minus size={18} />
                 </button>
-                <div className="w-10 text-center font-black text-lg select-none">
+                <div
+                  className={`w-10 text-center font-black text-lg select-none ${
+                    isClasica ? "text-[#FAF5EE]" : ""
+                  }`}
+                >
                   {companionsCount}
                 </div>
                 <button
                   type="button"
                   onClick={() => setCompanionsCount((prev) => Math.min(10, prev + 1))}
                   disabled={companionsCount === 10}
-                  className="w-10 h-10 flex items-center justify-center font-bold text-lg rounded-xl hover:bg-black/10 disabled:opacity-30 cursor-pointer disabled:cursor-not-allowed"
+                  className={`w-10 h-10 flex items-center justify-center font-bold text-lg rounded-xl transition-all cursor-pointer disabled:cursor-not-allowed disabled:opacity-30 ${
+                    isClasica
+                      ? "text-[#D4AF37] hover:bg-white/10 active:scale-95"
+                      : isBotanica
+                      ? "text-[#556B2F] hover:bg-black/5"
+                      : isBoho
+                      ? "text-[#C86D51] hover:bg-black/5"
+                      : "hover:bg-black/10"
+                  }`}
                   aria-label="Sumar integrante"
                 >
                   <Plus size={18} />
                 </button>
               </div>
 
-              <span className="text-xs sm:text-sm font-bold opacity-90">
+              <span className={`text-xs sm:text-sm font-bold ${isClasica ? "text-[#FAF5EE]" : "opacity-90"}`}>
                 {companionsCount === 0
                   ? "Asistiré solo/a"
                   : companionsCount === 1
@@ -264,14 +290,20 @@ export default function RsvpForm({
               <div
                 className={`flex flex-col gap-3 p-4 rounded-2xl border animate-scale-in ${
                   isKpop
-                    ? "bg-purple-950/40 border-pink-500/30"
+                    ? "bg-purple-950/40 border-pink-500/30 text-white"
                     : isToyStory
-                    ? "bg-amber-50/70 border-amber-300"
+                    ? "bg-amber-50/70 border-amber-300 text-blue-950"
                     : isPrincess
-                    ? "bg-pink-50/70 border-pink-200"
+                    ? "bg-pink-50/70 border-pink-200 text-pink-950"
                     : isFootball
-                    ? "bg-emerald-50/70 border-emerald-300"
-                    : "bg-[rgba(197,155,39,0.08)] border-[rgba(197,155,39,0.3)]"
+                    ? "bg-emerald-50/70 border-emerald-300 text-emerald-950"
+                    : isClasica
+                    ? "bg-black/60 border-[#D4AF37]/40 text-[#FAF5EE]"
+                    : isBotanica
+                    ? "bg-[#556B2F]/10 border-[#556B2F]/30 text-[#2D3E1E]"
+                    : isBoho
+                    ? "bg-[#C86D51]/10 border-[#C86D51]/30 text-[#6D2B19]"
+                    : "bg-[rgba(197,155,39,0.08)] border-[rgba(197,155,39,0.3)] text-[var(--dark-brown)]"
                 }`}
               >
                 <div className="flex items-center gap-1.5 pb-1 border-b border-gray-200/40 text-xs font-bold uppercase tracking-wider">

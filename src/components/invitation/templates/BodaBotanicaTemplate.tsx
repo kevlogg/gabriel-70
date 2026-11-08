@@ -89,14 +89,59 @@ export default function BodaBotanicaTemplate({ invitation }: TemplateProps) {
         }}
         aria-label={`Invitación de Boda de ${invitation.personName}`}
       >
-        {/* Subtle decorative floating leaves background */}
-        <div aria-hidden="true" className="absolute inset-0 pointer-events-none overflow-hidden opacity-35">
-          <BotanicalLeaf top="4%" left="3%" rotation={25} size={70} />
-          <BotanicalLeaf top="12%" right="4%" rotation={-45} size={85} />
-          <BotanicalLeaf top="28%" left="2%" rotation={60} size={75} />
-          <BotanicalLeaf top="42%" right="2%" rotation={-20} size={90} />
-          <BotanicalLeaf top="65%" left="4%" rotation={35} size={80} />
-          <BotanicalLeaf top="82%" right="5%" rotation={-50} size={75} />
+        {/* ─── BOTANICAL WATERCOLOR BACKGROUND DECORATIONS (IMAGES) ─── */}
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 pointer-events-none overflow-hidden select-none"
+        >
+          {/* Top-left foliage corner */}
+          <img
+            src="/images/wedding/botanical-leaves.jpg"
+            alt=""
+            className="absolute -top-12 -left-12 sm:-top-16 sm:-left-16 w-64 sm:w-80 md:w-[420px] max-w-none object-contain pointer-events-none mix-blend-multiply opacity-40 transform rotate-12"
+          />
+
+          {/* Top-right foliage corner */}
+          <img
+            src="/images/wedding/botanical-leaves.jpg"
+            alt=""
+            className="absolute -top-12 -right-12 sm:-top-16 sm:-right-16 w-64 sm:w-80 md:w-[420px] max-w-none object-contain pointer-events-none mix-blend-multiply opacity-40 transform -scale-x-100 -rotate-12"
+          />
+
+          {/* Upper-mid left floating sprig */}
+          <img
+            src="/images/wedding/botanical-leaves.jpg"
+            alt=""
+            className="absolute top-[26%] -left-16 sm:-left-10 w-52 sm:w-72 md:w-80 max-w-none object-contain pointer-events-none mix-blend-multiply opacity-30 transform rotate-45"
+          />
+
+          {/* Mid-right floating sprig */}
+          <img
+            src="/images/wedding/botanical-leaves.jpg"
+            alt=""
+            className="absolute top-[48%] -right-16 sm:-right-10 w-52 sm:w-72 md:w-80 max-w-none object-contain pointer-events-none mix-blend-multiply opacity-30 transform -scale-x-100 -rotate-35"
+          />
+
+          {/* Lower-mid left floating sprig */}
+          <img
+            src="/images/wedding/botanical-leaves.jpg"
+            alt=""
+            className="absolute top-[72%] -left-14 sm:-left-8 w-48 sm:w-64 md:w-72 max-w-none object-contain pointer-events-none mix-blend-multiply opacity-30 transform rotate-20"
+          />
+
+          {/* Bottom-right corner foliage */}
+          <img
+            src="/images/wedding/botanical-leaves.jpg"
+            alt=""
+            className="absolute -bottom-12 -right-12 sm:-bottom-16 sm:-right-16 w-64 sm:w-80 md:w-[400px] max-w-none object-contain pointer-events-none mix-blend-multiply opacity-40 transform -scale-x-100 -scale-y-100 -rotate-12"
+          />
+
+          {/* Bottom-left corner foliage */}
+          <img
+            src="/images/wedding/botanical-leaves.jpg"
+            alt=""
+            className="absolute -bottom-12 -left-12 sm:-bottom-16 sm:-left-16 w-64 sm:w-80 md:w-[400px] max-w-none object-contain pointer-events-none mix-blend-multiply opacity-40 transform -scale-y-100 rotate-12"
+          />
         </div>
 
         {/* Delicate botanical header banner line */}
@@ -219,8 +264,6 @@ export default function BodaBotanicaTemplate({ invitation }: TemplateProps) {
             <PhotoCarousel
               slides={parseCarouselSlides(invitation.carouselImages)}
               theme="boda-botanica"
-              title="Momentos Inolvidables"
-              subtitle="Cada paso juntos nos trajo hasta este gran día"
             />
           </section>
 
@@ -359,60 +402,7 @@ function BotanicaSectionHeading({
   );
 }
 
-// ─── FLOATING BOTANICAL LEAF SVG ───
-function BotanicalLeaf({
-  top,
-  left,
-  right,
-  rotation,
-  size,
-}: {
-  top: string;
-  left?: string;
-  right?: string;
-  rotation: number;
-  size: number;
-}) {
-  return (
-    <div
-      style={{
-        position: "absolute",
-        top,
-        left,
-        right,
-        transform: `rotate(${rotation}deg)`,
-        width: `${size}px`,
-        height: `${size}px`,
-      }}
-    >
-      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path
-          d="M20 80 Q35 30 80 20 Q70 65 20 80 Z"
-          fill="#556B2F"
-          fillOpacity="0.25"
-        />
-        <path
-          d="M20 80 Q45 50 80 20"
-          stroke="#4A5D23"
-          strokeWidth="1.5"
-          strokeOpacity="0.35"
-        />
-        <path
-          d="M40 60 Q50 55 58 62"
-          stroke="#4A5D23"
-          strokeWidth="1"
-          strokeOpacity="0.25"
-        />
-        <path
-          d="M55 45 Q65 40 72 46"
-          stroke="#4A5D23"
-          strokeWidth="1"
-          strokeOpacity="0.25"
-        />
-      </svg>
-    </div>
-  );
-}
+
 
 // ─── BOTANICAL ENVELOPE MODAL ───
 function BotanicaEnvelopeModal({

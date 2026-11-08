@@ -89,23 +89,59 @@ export default function BodaClasicaTemplate({ invitation }: TemplateProps) {
         }}
         aria-label={`Invitación de Boda Clásica de ${invitation.personName}`}
       >
-        {/* Subtle starlight gold particle backdrop */}
-        <div aria-hidden="true" className="absolute inset-0 pointer-events-none overflow-hidden opacity-40">
-          {[...Array(16)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute rounded-full"
-              style={{
-                width: `${2 + (i % 3) * 2}px`,
-                height: `${2 + (i % 3) * 2}px`,
-                background: "#D4AF37",
-                top: `${(i * 13) % 95}%`,
-                left: `${(i * 19) % 95}%`,
-                opacity: 0.2 + (i % 5) * 0.15,
-                boxShadow: "0 0 8px rgba(212, 175, 55, 0.6)",
-              }}
-            />
-          ))}
+        {/* ─── LUXURY GOLD FILIGREE BACKGROUND DECORATIONS (IMAGES) ─── */}
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 pointer-events-none overflow-hidden select-none"
+        >
+          {/* Top-left gold filigree corner */}
+          <img
+            src="/images/wedding/gold-filigree.jpg"
+            alt=""
+            className="absolute -top-14 -left-14 sm:-top-20 sm:-left-20 w-72 sm:w-96 md:w-[460px] max-w-none object-contain pointer-events-none mix-blend-screen opacity-35 transform rotate-6"
+          />
+
+          {/* Top-right gold filigree corner */}
+          <img
+            src="/images/wedding/gold-filigree.jpg"
+            alt=""
+            className="absolute -top-14 -right-14 sm:-top-20 sm:-right-20 w-72 sm:w-96 md:w-[460px] max-w-none object-contain pointer-events-none mix-blend-screen opacity-35 transform -scale-x-100 -rotate-6"
+          />
+
+          {/* Upper-mid left floating filigree */}
+          <img
+            src="/images/wedding/gold-filigree.jpg"
+            alt=""
+            className="absolute top-[28%] -left-20 sm:-left-12 w-60 sm:w-80 md:w-96 max-w-none object-contain pointer-events-none mix-blend-screen opacity-25 transform rotate-45"
+          />
+
+          {/* Mid-right floating filigree */}
+          <img
+            src="/images/wedding/gold-filigree.jpg"
+            alt=""
+            className="absolute top-[52%] -right-20 sm:-right-12 w-60 sm:w-80 md:w-96 max-w-none object-contain pointer-events-none mix-blend-screen opacity-25 transform -scale-x-100 -rotate-30"
+          />
+
+          {/* Lower-mid left floating filigree */}
+          <img
+            src="/images/wedding/gold-filigree.jpg"
+            alt=""
+            className="absolute top-[74%] -left-16 sm:-left-10 w-56 sm:w-72 md:w-80 max-w-none object-contain pointer-events-none mix-blend-screen opacity-25 transform rotate-15"
+          />
+
+          {/* Bottom-right corner */}
+          <img
+            src="/images/wedding/gold-filigree.jpg"
+            alt=""
+            className="absolute -bottom-14 -right-14 sm:-bottom-20 sm:-right-20 w-72 sm:w-96 md:w-[440px] max-w-none object-contain pointer-events-none mix-blend-screen opacity-35 transform -scale-x-100 -scale-y-100 -rotate-6"
+          />
+
+          {/* Bottom-left corner */}
+          <img
+            src="/images/wedding/gold-filigree.jpg"
+            alt=""
+            className="absolute -bottom-14 -left-14 sm:-bottom-20 sm:-left-20 w-72 sm:w-96 md:w-[440px] max-w-none object-contain pointer-events-none mix-blend-screen opacity-35 transform -scale-y-100 rotate-6"
+          />
         </div>
 
         {/* Top Gold Foil Bar */}
@@ -228,8 +264,6 @@ export default function BodaClasicaTemplate({ invitation }: TemplateProps) {
             <PhotoCarousel
               slides={parseCarouselSlides(invitation.carouselImages)}
               theme="boda-clasica"
-              title="Momentos Inolvidables"
-              subtitle="El camino recorrido para llegar a este instante"
             />
           </section>
 

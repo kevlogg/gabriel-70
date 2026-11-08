@@ -20,9 +20,9 @@ export default function BodaBohoTemplate({ invitation }: TemplateProps) {
 
   const hasGifts = Boolean(
     invitation.giftAlias?.trim() ||
-      invitation.giftCbu?.trim() ||
-      (invitation.giftBankName?.trim() &&
-        invitation.giftBankName !== "Banco / Billetera Virtual")
+    invitation.giftCbu?.trim() ||
+    (invitation.giftBankName?.trim() &&
+      invitation.giftBankName !== "Banco / Billetera Virtual")
   );
 
   const handleEnvelopeOpen = useCallback(() => {
@@ -89,14 +89,59 @@ export default function BodaBohoTemplate({ invitation }: TemplateProps) {
         }}
         aria-label={`Invitación de Boda Boho de ${invitation.personName}`}
       >
-        {/* Subtle decorative pampas warm elements background */}
-        <div aria-hidden="true" className="absolute inset-0 pointer-events-none overflow-hidden opacity-30">
-          <PampasIllustration top="5%" left="2%" rotation={20} size={80} />
-          <PampasIllustration top="14%" right="3%" rotation={-35} size={95} />
-          <PampasIllustration top="32%" left="1%" rotation={45} size={85} />
-          <PampasIllustration top="48%" right="2%" rotation={-25} size={90} />
-          <PampasIllustration top="66%" left="3%" rotation={30} size={80} />
-          <PampasIllustration top="84%" right="4%" rotation={-40} size={75} />
+        {/* ─── BOHO PAMPAS & DRIED FLORALS BACKGROUND DECORATIONS (IMAGES) ─── */}
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 pointer-events-none overflow-hidden select-none"
+        >
+          {/* Top-left boho corner */}
+          <img
+            src="/images/wedding/boho-pampas.jpg"
+            alt=""
+            className="absolute -top-10 -left-10 sm:-top-16 sm:-left-16 w-64 sm:w-84 md:w-[420px] max-w-none object-contain pointer-events-none mix-blend-multiply opacity-40 transform rotate-6"
+          />
+
+          {/* Top-right boho corner */}
+          <img
+            src="/images/wedding/boho-pampas.jpg"
+            alt=""
+            className="absolute -top-10 -right-10 sm:-top-16 sm:-right-16 w-64 sm:w-84 md:w-[420px] max-w-none object-contain pointer-events-none mix-blend-multiply opacity-40 transform -scale-x-100 -rotate-6"
+          />
+
+          {/* Upper-mid left floating arrangement */}
+          <img
+            src="/images/wedding/boho-pampas.jpg"
+            alt=""
+            className="absolute top-[28%] -left-16 sm:-left-10 w-52 sm:w-72 md:w-80 max-w-none object-contain pointer-events-none mix-blend-multiply opacity-30 transform rotate-35"
+          />
+
+          {/* Mid-right floating arrangement */}
+          <img
+            src="/images/wedding/boho-pampas.jpg"
+            alt=""
+            className="absolute top-[50%] -right-16 sm:-right-10 w-52 sm:w-72 md:w-80 max-w-none object-contain pointer-events-none mix-blend-multiply opacity-30 transform -scale-x-100 -rotate-25"
+          />
+
+          {/* Lower-mid left floating arrangement */}
+          <img
+            src="/images/wedding/boho-pampas.jpg"
+            alt=""
+            className="absolute top-[72%] -left-14 sm:-left-8 w-48 sm:w-64 md:w-72 max-w-none object-contain pointer-events-none mix-blend-multiply opacity-30 transform rotate-15"
+          />
+
+          {/* Bottom-right corner */}
+          <img
+            src="/images/wedding/boho-pampas.jpg"
+            alt=""
+            className="absolute -bottom-10 -right-10 sm:-bottom-16 sm:-right-16 w-64 sm:w-84 md:w-[400px] max-w-none object-contain pointer-events-none mix-blend-multiply opacity-40 transform -scale-x-100 -scale-y-100 -rotate-6"
+          />
+
+          {/* Bottom-left corner */}
+          <img
+            src="/images/wedding/boho-pampas.jpg"
+            alt=""
+            className="absolute -bottom-10 -left-10 sm:-bottom-16 sm:-left-16 w-64 sm:w-84 md:w-[400px] max-w-none object-contain pointer-events-none mix-blend-multiply opacity-40 transform -scale-y-100 rotate-6"
+          />
         </div>
 
         {/* Top Terracotta Ombre Bar */}
@@ -219,8 +264,6 @@ export default function BodaBohoTemplate({ invitation }: TemplateProps) {
             <PhotoCarousel
               slides={parseCarouselSlides(invitation.carouselImages)}
               theme="boda-boho"
-              title="Momentos Únicos"
-              subtitle="Bajo el sol y las estrellas, nuestro amor crece cada día"
             />
           </section>
 
@@ -359,62 +402,7 @@ function BohoSectionHeading({
   );
 }
 
-// ─── PAMPAS SVG DECORATION ───
-function PampasIllustration({
-  top,
-  left,
-  right,
-  rotation,
-  size,
-}: {
-  top: string;
-  left?: string;
-  right?: string;
-  rotation: number;
-  size: number;
-}) {
-  return (
-    <div
-      style={{
-        position: "absolute",
-        top,
-        left,
-        right,
-        transform: `rotate(${rotation}deg)`,
-        width: `${size}px`,
-        height: `${size}px`,
-      }}
-    >
-      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path
-          d="M50 90 Q48 50 50 10"
-          stroke="#C86D51"
-          strokeWidth="1.5"
-          strokeOpacity="0.4"
-        />
-        <path
-          d="M50 60 Q35 45 30 30"
-          stroke="#A8583E"
-          strokeWidth="1"
-          strokeOpacity="0.3"
-        />
-        <path
-          d="M50 50 Q65 35 70 20"
-          stroke="#A8583E"
-          strokeWidth="1"
-          strokeOpacity="0.3"
-        />
-        <path
-          d="M50 35 Q40 25 38 15"
-          stroke="#A8583E"
-          strokeWidth="1"
-          strokeOpacity="0.3"
-        />
-        <circle cx="50" cy="10" r="3" fill="#C86D51" fillOpacity="0.3" />
-      </svg>
-    </div>
-  );
-}
+
 
 // ─── BOHO ENVELOPE MODAL ───
 function BohoEnvelopeModal({
